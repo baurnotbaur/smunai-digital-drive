@@ -80,6 +80,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "author", content: "С-Мунай" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { title: "С-Мунай — сеть АЗС в Жезказгане, Сатпаеве и Астане" },
+      { property: "og:title", content: "С-Мунай — сеть АЗС в Жезказгане, Сатпаеве и Астане" },
+      { name: "twitter:title", content: "С-Мунай — сеть АЗС в Жезказгане, Сатпаеве и Астане" },
+      { name: "description", content: "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Сатпаеве и Астане с 1996 года: качественное топливо, магазин и кофе с собой." },
+      { property: "og:description", content: "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Сатпаеве и Астане с 1996 года: качественное топливо, магазин и кофе с собой." },
+      { name: "twitter:description", content: "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Сатпаеве и Астане с 1996 года: качественное топливо, магазин и кофе с собой." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/198522ec-efeb-434a-b981-7876e0d9b3cd/id-preview-c4cea230--59eeb293-96df-41d7-95a9-607edab5076d.lovable.app-1785768443057.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/198522ec-efeb-434a-b981-7876e0d9b3cd/id-preview-c4cea230--59eeb293-96df-41d7-95a9-607edab5076d.lovable.app-1785768443057.png" },
     ],
     links: [
       {
