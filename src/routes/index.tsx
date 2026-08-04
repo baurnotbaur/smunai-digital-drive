@@ -40,6 +40,7 @@ type Station = {
   number: number;
   address: string;
   hours: string;
+  services: ("fuel" | "shop" | "coffee")[];
 };
 
 type CityGroup = {
@@ -47,31 +48,34 @@ type CityGroup = {
   stations: Station[];
 };
 
+const ALL_SERVICES: Station["services"] = ["fuel", "shop", "coffee"];
+const FUEL_ONLY: Station["services"] = ["fuel"];
+
 const CITY_STATIONS: CityGroup[] = [
   {
     city: "Жезказган",
     stations: [
-      { number: 1, address: "мира 39", hours: "[Часы работы]" },
-      { number: 3, address: "мира 39", hours: "[Часы работы]" },
-      { number: 4, address: "мира 39", hours: "[Часы работы]" },
+      { number: 1, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
+      { number: 3, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
+      { number: 4, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
     ],
   },
   {
     city: "Улытау",
-    stations: [{ number: 2, address: "[Адрес]", hours: "[Часы работы]" }],
+    stations: [{ number: 2, address: "[Адрес]", hours: "[Часы работы]", services: FUEL_ONLY }],
   },
   {
     city: "Сатпаев",
     stations: [
-      { number: 5, address: "Улытауская, 114", hours: "Круглосуточно" },
-      { number: 6, address: "мира 39", hours: "[Часы работы]" },
+      { number: 5, address: "Улытауская, 114", hours: "Круглосуточно", services: ALL_SERVICES },
+      { number: 6, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
     ],
   },
   {
     city: "Астана",
     stations: [
-      { number: 7, address: "мира 39", hours: "[Часы работы]" },
-      { number: 8, address: "мира 39", hours: "[Часы работы]" },
+      { number: 7, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
+      { number: 8, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
     ],
   },
 ];
