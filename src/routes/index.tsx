@@ -52,10 +52,13 @@ const CITY_STATIONS: CityGroup[] = [
     city: "Жезказган",
     stations: [
       { number: 1, address: "мира 39", hours: "[Часы работы]" },
-      { number: 2, address: "мира 39", hours: "[Часы работы]" },
       { number: 3, address: "мира 39", hours: "[Часы работы]" },
       { number: 4, address: "мира 39", hours: "[Часы работы]" },
     ],
+  },
+  {
+    city: "Улытау",
+    stations: [{ number: 2, address: "[Адрес]", hours: "[Часы работы]" }],
   },
   {
     city: "Сатпаев",
