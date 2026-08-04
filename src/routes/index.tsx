@@ -247,20 +247,20 @@ function Index() {
             </p>
           </Reveal>
 
-          {CITIES.map((group) => (
+          {CITY_STATIONS.map((group) => (
             <Reveal key={group.city} className="mt-10">
               <h3 className="text-lg font-semibold text-terracotta">{group.city}</h3>
               <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {group.stations.map((n) => (
-                  <article key={n} className="soft-card p-5">
-                    <h4 className="font-display text-base font-bold text-primary">АЗС №{n}</h4>
+                {group.stations.map((station) => (
+                  <article key={station.number} className="soft-card p-5">
+                    <h4 className="font-display text-base font-bold text-primary">АЗС №{station.number}</h4>
                     <p className="mt-3 flex items-start gap-2 text-sm text-foreground/75">
                       <MapPin className="mt-0.5 size-4 shrink-0 text-terracotta" aria-hidden="true" />
-                      мира 39
+                      {station.address}
                     </p>
                     <p className="mt-2 flex items-start gap-2 text-sm text-foreground/75">
                       <Clock className="mt-0.5 size-4 shrink-0 text-terracotta" aria-hidden="true" />
-                      [Часы работы]
+                      {station.hours}
                     </p>
                     <ul className="mt-4 flex flex-wrap gap-2">
                       {SERVICES.map(({ icon: Icon, label }) => (
@@ -480,10 +480,10 @@ function Index() {
               <div className="soft-card p-6">
                 <h3 className="text-base font-bold text-primary">Все станции</h3>
                 <ul className="mt-4 space-y-2 text-sm text-foreground/75">
-                  {CITIES.flatMap((group) =>
-                    group.stations.map((n) => (
-                      <li key={`${group.city}-${n}`}>
-                        {group.city} — АЗС №{n} — мира 39
+                  {CITY_STATIONS.flatMap((group) =>
+                    group.stations.map((station) => (
+                      <li key={`${group.city}-${station.number}`}>
+                        {group.city} — АЗС №{station.number} — {station.address}
                       </li>
                     )),
                   )}
