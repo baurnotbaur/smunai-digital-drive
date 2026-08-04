@@ -150,11 +150,14 @@ function PriceTotem() {
   );
 }
 
-const SERVICES = [
-  { icon: Fuel, label: "Топливо" },
-  { icon: ShoppingBag, label: "Магазин" },
-  { icon: Coffee, label: "Кофе" },
-];
+const SERVICE_META: Record<
+  Station["services"][number],
+  { icon: typeof Fuel; label: string }
+> = {
+  fuel: { icon: Fuel, label: "Топливо" },
+  shop: { icon: ShoppingBag, label: "Магазин" },
+  coffee: { icon: Coffee, label: "Кофе" },
+};
 
 function Index() {
   return (
