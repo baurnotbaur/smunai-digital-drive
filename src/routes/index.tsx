@@ -40,6 +40,7 @@ type Station = {
   number: number;
   address: string;
   hours: string;
+  services: ("fuel" | "shop" | "coffee")[];
 };
 
 type CityGroup = {
@@ -47,31 +48,34 @@ type CityGroup = {
   stations: Station[];
 };
 
+const ALL_SERVICES: Station["services"] = ["fuel", "shop", "coffee"];
+const FUEL_ONLY: Station["services"] = ["fuel"];
+
 const CITY_STATIONS: CityGroup[] = [
   {
     city: "Жезказган",
     stations: [
-      { number: 1, address: "мира 39", hours: "[Часы работы]" },
-      { number: 3, address: "мира 39", hours: "[Часы работы]" },
-      { number: 4, address: "мира 39", hours: "[Часы работы]" },
+      { number: 1, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
+      { number: 3, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
+      { number: 4, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
     ],
   },
   {
     city: "Улытау",
-    stations: [{ number: 2, address: "[Адрес]", hours: "[Часы работы]" }],
+    stations: [{ number: 2, address: "[Адрес]", hours: "[Часы работы]", services: FUEL_ONLY }],
   },
   {
     city: "Сатпаев",
     stations: [
-      { number: 5, address: "Улытауская, 114", hours: "Круглосуточно" },
-      { number: 6, address: "мира 39", hours: "[Часы работы]" },
+      { number: 5, address: "Улытауская, 114", hours: "Круглосуточно", services: ALL_SERVICES },
+      { number: 6, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
     ],
   },
   {
     city: "Астана",
     stations: [
-      { number: 7, address: "мира 39", hours: "[Часы работы]" },
-      { number: 8, address: "мира 39", hours: "[Часы работы]" },
+      { number: 7, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
+      { number: 8, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
     ],
   },
 ];
@@ -146,11 +150,14 @@ function PriceTotem() {
   );
 }
 
-const SERVICES = [
-  { icon: Fuel, label: "Топливо" },
-  { icon: ShoppingBag, label: "Магазин" },
-  { icon: Coffee, label: "Кофе" },
-];
+const SERVICE_META: Record<
+  Station["services"][number],
+  { icon: typeof Fuel; label: string }
+> = {
+  fuel: { icon: Fuel, label: "Топливо" },
+  shop: { icon: ShoppingBag, label: "Магазин" },
+  coffee: { icon: Coffee, label: "Кофе" },
+};
 
 function Index() {
   return (
@@ -266,15 +273,18 @@ function Index() {
                       {station.hours}
                     </p>
                     <ul className="mt-4 flex flex-wrap gap-2">
-                      {SERVICES.map(({ icon: Icon, label }) => (
-                        <li
-                          key={label}
-                          className="inline-flex items-center gap-1.5 rounded-lg bg-primary/5 px-2.5 py-1 text-xs font-medium text-primary"
-                        >
-                          <Icon className="size-3.5" aria-hidden="true" />
-                          {label}
-                        </li>
-                      ))}
+                      {station.services.map((key) => {
+                        const { icon: Icon, label } = SERVICE_META[key];
+                        return (
+                          <li
+                            key={label}
+                            className="inline-flex items-center gap-1.5 rounded-lg bg-primary/5 px-2.5 py-1 text-xs font-medium text-primary"
+                          >
+                            <Icon className="size-3.5" aria-hidden="true" />
+                            {label}
+                          </li>
+                        );
+                      })}
                     </ul>
                   </article>
                 ))}
