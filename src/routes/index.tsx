@@ -273,15 +273,18 @@ function Index() {
                       {station.hours}
                     </p>
                     <ul className="mt-4 flex flex-wrap gap-2">
-                      {SERVICES.map(({ icon: Icon, label }) => (
-                        <li
-                          key={label}
-                          className="inline-flex items-center gap-1.5 rounded-lg bg-primary/5 px-2.5 py-1 text-xs font-medium text-primary"
-                        >
-                          <Icon className="size-3.5" aria-hidden="true" />
-                          {label}
-                        </li>
-                      ))}
+                      {station.services.map((key) => {
+                        const { icon: Icon, label } = SERVICE_META[key];
+                        return (
+                          <li
+                            key={label}
+                            className="inline-flex items-center gap-1.5 rounded-lg bg-primary/5 px-2.5 py-1 text-xs font-medium text-primary"
+                          >
+                            <Icon className="size-3.5" aria-hidden="true" />
+                            {label}
+                          </li>
+                        );
+                      })}
                     </ul>
                   </article>
                 ))}
