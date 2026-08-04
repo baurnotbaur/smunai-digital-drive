@@ -56,7 +56,6 @@ const CITY_STATIONS: CityGroup[] = [
     city: "Жезказган",
     stations: [
       { number: 1, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
-      { number: 3, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
       { number: 4, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
     ],
   },
@@ -67,6 +66,7 @@ const CITY_STATIONS: CityGroup[] = [
   {
     city: "Сатпаев",
     stations: [
+      { number: 3, address: "Ердена, 226", hours: "[Часы работы]", services: ALL_SERVICES },
       { number: 5, address: "Улытауская, 114", hours: "Круглосуточно", services: ALL_SERVICES },
       { number: 6, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
     ],
