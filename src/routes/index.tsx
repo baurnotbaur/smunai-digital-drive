@@ -36,10 +36,41 @@ const NAV = [
   { href: "#contacts", label: "Контакты" },
 ];
 
-const CITIES = [
-  { city: "Жезказган", stations: [1, 2, 3, 4] },
-  { city: "Сатпаев", stations: [5, 6] },
-  { city: "Астана", stations: [7, 8] },
+type Station = {
+  number: number;
+  address: string;
+  hours: string;
+};
+
+type CityGroup = {
+  city: string;
+  stations: Station[];
+};
+
+const CITY_STATIONS: CityGroup[] = [
+  {
+    city: "Жезказган",
+    stations: [
+      { number: 1, address: "мира 39", hours: "[Часы работы]" },
+      { number: 2, address: "мира 39", hours: "[Часы работы]" },
+      { number: 3, address: "мира 39", hours: "[Часы работы]" },
+      { number: 4, address: "мира 39", hours: "[Часы работы]" },
+    ],
+  },
+  {
+    city: "Сатпаев",
+    stations: [
+      { number: 5, address: "Улытауская, 114", hours: "Круглосуточно" },
+      { number: 6, address: "мира 39", hours: "[Часы работы]" },
+    ],
+  },
+  {
+    city: "Астана",
+    stations: [
+      { number: 7, address: "мира 39", hours: "[Часы работы]" },
+      { number: 8, address: "мира 39", hours: "[Часы работы]" },
+    ],
+  },
 ];
 
 function Reveal({ children, className = "" }: { children: ReactNode; className?: string }) {
