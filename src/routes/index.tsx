@@ -201,7 +201,7 @@ function Index() {
                 1996–2026 · 30 лет
               </span>
               <h1 className="mt-5 text-3xl leading-tight font-bold text-primary sm:text-4xl md:text-5xl">
-                Заправляем Жезказган, Сатпаев и Астану уже 30 лет
+                Заправляем Жезказган, Улытау, Сатпаев и Астану уже 30 лет
               </h1>
               <p className="mt-5 max-w-xl text-base text-foreground/75 sm:text-lg">
                 8 собственных АЗС · качественное топливо · магазин и кофе с собой
@@ -225,7 +225,7 @@ function Index() {
               {[
                 ["30 лет", "на рынке"],
                 ["8", "АЗС"],
-                ["3", "города"],
+                ["4", "города"],
               ].map(([value, label]) => (
                 <div key={label} className="soft-card px-6 py-5">
                   <dt className="sr-only">{label}</dt>
