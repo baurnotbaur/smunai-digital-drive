@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { Gauge, Wallet, FileCheck2 } from "lucide-react";
 import { Station3DViewer } from "@/components/site/Station3DViewer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { submitLead } from "@/lib/leads";
 
 export const Route = createFileRoute("/cards")({
   head: () => ({
@@ -42,8 +43,33 @@ const FEATURES = [
   },
 ];
 
+type SubmitState = "idle" | "sending" | "sent" | "error";
+
 function CardsPage() {
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<SubmitState>("idle");
+  const [error, setError] = useState("");
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    setStatus("sending");
+    setError("");
+    try {
+      await submitLead({
+        name: String(data.get("name") || ""),
+        phone: String(data.get("phone") || ""),
+        comment: `Организация: ${data.get("org") || ""}`,
+        form_id: "cards-b2b",
+      });
+      setStatus("sent");
+      form.reset();
+    } catch (err) {
+      setStatus("error");
+      setError(err instanceof Error ? err.message : "Не удалось отправить заявку");
+    }
+  }
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
@@ -154,13 +180,7 @@ function CardsPage() {
               <p className="mt-2 text-sm text-primary-foreground/70">
                 Перезвоним в рабочее время и подберём условия для вашего автопарка.
               </p>
-              <form
-                className="mt-7 space-y-4"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setSent(true);
-                }}
-              >
+              <form className="mt-7 space-y-4" onSubmit={handleSubmit}>
                 <div className="space-y-2">
                   <Label htmlFor="cards-name" className="text-primary-foreground/80">
                     Имя
@@ -169,6 +189,7 @@ function CardsPage() {
                     id="cards-name"
                     name="name"
                     required
+                    disabled={status === "sending"}
                     className="border-primary-foreground/20 bg-primary/40 text-primary-foreground placeholder:text-primary-foreground/40"
                   />
                 </div>
@@ -181,6 +202,7 @@ function CardsPage() {
                     name="phone"
                     type="tel"
                     required
+                    disabled={status === "sending"}
                     placeholder="+7 ___ ___ __ __"
                     className="border-primary-foreground/20 bg-primary/40 text-primary-foreground placeholder:text-primary-foreground/40"
                   />
@@ -193,15 +215,23 @@ function CardsPage() {
                     id="cards-org"
                     name="org"
                     required
+                    disabled={status === "sending"}
                     placeholder="ТОО / ИП"
                     className="border-primary-foreground/20 bg-primary/40 text-primary-foreground placeholder:text-primary-foreground/40"
                   />
                 </div>
-                <button type="submit" className="btn-base btn-gold w-full">
-                  Отправить заявку
+                <button
+                  type="submit"
+                  disabled={status === "sending"}
+                  className="btn-base btn-gold w-full disabled:opacity-60"
+                >
+                  {status === "sending" ? "Отправляем…" : "Отправить заявку"}
                 </button>
-                <p aria-live="polite" className="min-h-5 text-sm text-gold">
-                  {sent ? "Заявка отправлена. Мы свяжемся с вами в рабочее время." : ""}
+                <p aria-live="polite" className="min-h-5 text-sm">
+                  {status === "sent" && (
+                    <span className="text-gold">Заявка отправлена. Мы свяжемся с вами в рабочее время.</span>
+                  )}
+                  {status === "error" && <span className="text-red-300">{error}</span>}
                 </p>
               </form>
             </div>
