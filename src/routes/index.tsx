@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, type ReactNode } from "react";
 import { Fuel, ShoppingBag, Coffee, Instagram, MapPin, Clock } from "lucide-react";
 import { B2BDialog } from "@/components/site/B2BDialog";
@@ -35,6 +35,8 @@ const NAV = [
   { href: "#jobs", label: "Вакансии" },
   { href: "#contacts", label: "Контакты" },
 ];
+
+const CARDS_PAGE_LINK = { to: "/cards", label: "Карты и 3D-станция" };
 
 type Station = {
   number: number;
@@ -176,6 +178,11 @@ function Index() {
                   </a>
                 </li>
               ))}
+              <li>
+                <Link className="transition-colors hover:text-primary" to={CARDS_PAGE_LINK.to}>
+                  {CARDS_PAGE_LINK.label}
+                </Link>
+              </li>
             </ul>
           </nav>
           <a
@@ -195,6 +202,9 @@ function Index() {
                 <a href={item.href}>{item.label}</a>
               </li>
             ))}
+            <li className="whitespace-nowrap">
+              <Link to={CARDS_PAGE_LINK.to}>{CARDS_PAGE_LINK.label}</Link>
+            </li>
           </ul>
         </nav>
       </header>
