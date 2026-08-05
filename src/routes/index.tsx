@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, type ReactNode } from "react";
 import { Fuel, ShoppingBag, Coffee, Instagram, MapPin, Clock } from "lucide-react";
-import { B2BDialog } from "@/components/site/B2BDialog";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -405,18 +404,21 @@ function Index() {
           <Reveal>
             <div className="soft-card grid gap-8 p-7 sm:p-10 lg:grid-cols-2">
               <div>
-                <SectionTitle>Топливные карты для бизнеса</SectionTitle>
+                <SectionTitle>Топливные карты и талоны для бизнеса</SectionTitle>
                 <p className="mt-4 text-foreground/75">
-                  Заправляйте автопарк по безналичному расчёту: контроль расходов по каждой машине,
-                  закрывающие документы, персональные условия для компаний Жезказгана, Улытау,
-                  Сатпаева и Астаны.
+                  Заправляйте автопарк по безналичному расчёту: топливные карты и талоны, контроль
+                  расходов по каждой машине, закрывающие документы, персональные условия для
+                  компаний Жезказгана, Улытау, Сатпаева и Астаны.
                 </p>
                 <div className="mt-7">
-                  <B2BDialog />
+                  <Link to="/cards" className="btn-base btn-gold">
+                    Топливные карты и талоны
+                  </Link>
                 </div>
               </div>
               <ul className="space-y-3 self-center">
                 {[
+                  "Топливные карты и талоны",
                   "Безналичный расчёт и договор",
                   "Отчёты по каждой карте",
                   "Закрывающие документы",
