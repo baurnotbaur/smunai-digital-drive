@@ -64,7 +64,8 @@ function CardsPage() {
       await submitLead({
         name: String(data.get("name") || ""),
         phone: String(data.get("phone") || ""),
-        comment: `Организация: ${data.get("org") || ""}`,
+        org: String(data.get("org") || ""),
+        consent: data.get("consent") === "on",
         form_id: "cards-b2b",
       });
       setStatus("sent");
@@ -226,6 +227,15 @@ function CardsPage() {
                     className="border-primary-foreground/20 bg-primary/40 text-primary-foreground placeholder:text-primary-foreground/40"
                   />
                 </div>
+                <label className="flex cursor-pointer items-start gap-2.5 text-sm text-primary-foreground/70">
+                  <input
+                    type="checkbox"
+                    name="consent"
+                    disabled={isBusy}
+                    className="mt-0.5 size-4 shrink-0 accent-gold"
+                  />
+                  <span>Согласен получать новости об акциях и специальных условиях</span>
+                </label>
                 <button
                   type="submit"
                   disabled={isBusy}

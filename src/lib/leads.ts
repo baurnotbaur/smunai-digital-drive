@@ -9,7 +9,11 @@ const SITE_KEY = import.meta.env["VITE_LEAD_SITE_KEY"] || DEFAULT_SITE_KEY;
 export type LeadPayload = {
   name: string;
   phone: string;
+  /** Организация: по ней CRM склеивает заявки одного клиента в карточку компании. */
+  org?: string;
   comment?: string;
+  /** Согласие на рекламные рассылки — без него клиент не попадёт в рассылки. */
+  consent?: boolean;
   form_id: string;
 };
 
