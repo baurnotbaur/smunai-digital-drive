@@ -43,11 +43,14 @@ const FEATURES = [
   },
 ];
 
-type SubmitState = "idle" | "sending" | "sent" | "error";
+type SubmitState = "idle" | "sending" | "waking" | "sent" | "error";
+
+const WAKE_HINT_DELAY_MS = 4000;
 
 function CardsPage() {
   const [status, setStatus] = useState<SubmitState>("idle");
   const [error, setError] = useState("");
+  const isBusy = status === "sending" || status === "waking";
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -56,6 +59,7 @@ function CardsPage() {
 
     setStatus("sending");
     setError("");
+    const wakeTimer = setTimeout(() => setStatus("waking"), WAKE_HINT_DELAY_MS);
     try {
       await submitLead({
         name: String(data.get("name") || ""),
@@ -68,6 +72,8 @@ function CardsPage() {
     } catch (err) {
       setStatus("error");
       setError(err instanceof Error ? err.message : "Не удалось отправить заявку");
+    } finally {
+      clearTimeout(wakeTimer);
     }
   }
 
@@ -189,7 +195,7 @@ function CardsPage() {
                     id="cards-name"
                     name="name"
                     required
-                    disabled={status === "sending"}
+                    disabled={isBusy}
                     className="border-primary-foreground/20 bg-primary/40 text-primary-foreground placeholder:text-primary-foreground/40"
                   />
                 </div>
@@ -202,7 +208,7 @@ function CardsPage() {
                     name="phone"
                     type="tel"
                     required
-                    disabled={status === "sending"}
+                    disabled={isBusy}
                     placeholder="+7 ___ ___ __ __"
                     className="border-primary-foreground/20 bg-primary/40 text-primary-foreground placeholder:text-primary-foreground/40"
                   />
@@ -215,19 +221,24 @@ function CardsPage() {
                     id="cards-org"
                     name="org"
                     required
-                    disabled={status === "sending"}
+                    disabled={isBusy}
                     placeholder="ТОО / ИП"
                     className="border-primary-foreground/20 bg-primary/40 text-primary-foreground placeholder:text-primary-foreground/40"
                   />
                 </div>
                 <button
                   type="submit"
-                  disabled={status === "sending"}
+                  disabled={isBusy}
                   className="btn-base btn-gold w-full disabled:opacity-60"
                 >
-                  {status === "sending" ? "Отправляем…" : "Отправить заявку"}
+                  {isBusy ? "Отправляем…" : "Отправить заявку"}
                 </button>
                 <p aria-live="polite" className="min-h-5 text-sm">
+                  {status === "waking" && (
+                    <span className="text-primary-foreground/70">
+                      Сервер просыпается, это может занять до минуты…
+                    </span>
+                  )}
                   {status === "sent" && (
                     <span className="text-gold">Заявка отправлена. Мы свяжемся с вами в рабочее время.</span>
                   )}
