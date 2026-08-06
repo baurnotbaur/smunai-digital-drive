@@ -1,7 +1,7 @@
 // public_key is safe to expose client-side by design (see lead-service/public/embed.js) —
 // it only grants permission to submit leads for this site, rate-limited server-side.
 const DEFAULT_SERVICE_URL = "https://smunai-lead-service.onrender.com";
-const DEFAULT_SITE_KEY = "FLlIQxN6IAkKjgiF7ooxSbE9h-F4aasy";
+const DEFAULT_SITE_KEY = "JFJQaqC0Gg-H0oAoNwZRL_qvJvDUaojH";
 
 const SERVICE_URL = import.meta.env["VITE_LEAD_SERVICE_URL"] || DEFAULT_SERVICE_URL;
 const SITE_KEY = import.meta.env["VITE_LEAD_SITE_KEY"] || DEFAULT_SITE_KEY;
