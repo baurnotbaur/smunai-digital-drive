@@ -1,146 +1,133 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
-import { Gauge, Wallet, FileCheck2 } from "lucide-react";
+import { useState } from "react";
+import { Gauge, Wallet, FileCheck2, Ticket, Droplets, Zap, ShieldCheck, CreditCard, Sparkles } from "lucide-react";
 import { Station3DViewer } from "@/components/site/Station3DViewer";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { submitLead } from "@/lib/leads";
+import { B2BLeadForm } from "@/components/site/B2BLeadForm";
+import { useLanguage, LanguageSwitcher } from "@/lib/i18n";
 
 export const Route = createFileRoute("/cards")({
   head: () => ({
     meta: [
-      { title: "Топливные карты для бизнеса — С-Мунай" },
+      { title: "Топливные карты и талоны для бизнеса — С-Мунай" },
       {
         name: "description",
         content:
-          "Топливные карты С-Мунай для таксопарков, грузоперевозчиков и ИП: лимиты по водителям, единый счёт, закрывающие документы. Станция в 3D.",
+          "Топливные карты и талоны С-Мунай для таксопарков, грузоперевозчиков и ИП: лимиты по водителям, фиксация цен, единый счёт, закрывающие документы. Станция в 3D.",
       },
     ],
   }),
   component: CardsPage,
 });
 
-const NAV = [
-  { href: "#station", label: "Станция в 3D" },
-  { href: "#cards", label: "Топливные карты" },
-];
-
-const FEATURES = [
-  {
-    icon: Gauge,
-    title: "Лимиты по водителям",
-    text: "Суточный и месячный лимит, ограничение по виду топлива для каждого водителя.",
-  },
-  {
-    icon: Wallet,
-    title: "Единый счёт",
-    text: "Все карты автопарка оплачиваются с одного счёта, пополнение онлайн.",
-  },
-  {
-    icon: FileCheck2,
-    title: "Закрывающие документы",
-    text: "Счёт-фактура, акт и полный отчёт каждый месяц.",
-  },
-];
-
-type SubmitState = "idle" | "sending" | "waking" | "sent" | "error";
-
-const WAKE_HINT_DELAY_MS = 4000;
-
 function CardsPage() {
-  const [status, setStatus] = useState<SubmitState>("idle");
-  const [error, setError] = useState("");
-  const isBusy = status === "sending" || status === "waking";
+  const [activeTab, setActiveTab] = useState<"cards" | "vouchers">("cards");
+  const { t } = useLanguage();
+  const cp = t.cardsPage;
+  const v = t.vouchersSection;
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const data = new FormData(form);
+  const cardFeatures = [
+    {
+      icon: Gauge,
+      title: cp.f1Title,
+      text: cp.f1Desc,
+    },
+    {
+      icon: Wallet,
+      title: cp.f2Title,
+      text: cp.f2Desc,
+    },
+    {
+      icon: FileCheck2,
+      title: cp.f3Title,
+      text: cp.f3Desc,
+    },
+  ];
 
-    setStatus("sending");
-    setError("");
-    const wakeTimer = setTimeout(() => setStatus("waking"), WAKE_HINT_DELAY_MS);
-    try {
-      await submitLead({
-        name: String(data.get("name") || ""),
-        phone: String(data.get("phone") || ""),
-        org: String(data.get("org") || ""),
-        consent: data.get("consent") === "on",
-        form_id: "cards-b2b",
-      });
-      setStatus("sent");
-      form.reset();
-    } catch (err) {
-      setStatus("error");
-      setError(err instanceof Error ? err.message : "Не удалось отправить заявку");
-    } finally {
-      clearTimeout(wakeTimer);
-    }
-  }
+  const voucherFeatures = [
+    {
+      icon: Zap,
+      title: v.b1Title,
+      text: v.b1Desc,
+    },
+    {
+      icon: CreditCard,
+      title: v.b2Title,
+      text: v.b2Desc,
+    },
+    {
+      icon: ShieldCheck,
+      title: v.b3Title,
+      text: v.b3Desc,
+    },
+  ];
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <header className="sticky top-0 z-40 border-b border-primary/10 bg-background/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center gap-4 px-5 py-4">
-          <Link to="/" className="font-display text-lg font-bold tracking-wide text-primary">
-            С-МУНАЙ
+        <div className="mx-auto flex max-w-6xl items-center gap-4 px-5 py-3 sm:py-3.5">
+          <Link to="/" className="flex items-center transition-opacity hover:opacity-90">
+            <img
+              src="/images/logo-navbar.svg"
+              alt="С-МУНАЙ"
+              className="h-8 w-auto object-contain sm:h-9"
+            />
           </Link>
           <nav aria-label="Основная навигация" className="ml-auto hidden lg:block">
             <ul className="flex items-center gap-6 text-sm font-medium">
-              {NAV.map((item) => (
-                <li key={item.href}>
-                  <a className="transition-colors hover:text-primary" href={item.href}>
-                    {item.label}
-                  </a>
-                </li>
-              ))}
               <li>
-                <Link className="transition-colors hover:text-primary" to="/">
-                  На главную
+                <a className="transition-colors hover:text-primary" href="#station">
+                  3D
+                </a>
+              </li>
+              <li>
+                <a className="transition-colors hover:text-primary" href="#cards">
+                  {t.nav.b2b}
+                </a>
+              </li>
+              <li>
+                <Link className="transition-colors hover:text-primary font-semibold text-primary" to="/">
+                  {t.nav.toHome}
                 </Link>
               </li>
             </ul>
           </nav>
+          <div className="ml-auto lg:ml-2 flex items-center gap-2">
+            <LanguageSwitcher />
+          </div>
         </div>
         <nav aria-label="Разделы" className="border-t border-primary/10 lg:hidden">
-          <ul className="flex gap-5 overflow-x-auto px-5 py-3 text-sm font-medium">
-            {NAV.map((item) => (
-              <li key={item.href} className="whitespace-nowrap">
-                <a href={item.href}>{item.label}</a>
-              </li>
-            ))}
+          <ul className="flex gap-5 overflow-x-auto px-5 py-2.5 text-xs font-medium">
             <li className="whitespace-nowrap">
-              <Link to="/">На главную</Link>
+              <a href="#station">3D</a>
+            </li>
+            <li className="whitespace-nowrap">
+              <a href="#cards">{t.nav.b2b}</a>
+            </li>
+            <li className="whitespace-nowrap">
+              <Link to="/" className="font-semibold text-primary">{t.nav.toHome}</Link>
             </li>
           </ul>
         </nav>
       </header>
 
       <main>
-        {/* Hero + 3D station */}
-        <section id="station" className="scroll-mt-28 bg-primary px-5 pt-12 pb-16 text-primary-foreground sm:pt-20 sm:pb-20">
-          <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+        {/* 3D Viewer hero */}
+        <section id="station" className="mx-auto max-w-6xl scroll-mt-28 px-5 pt-10 sm:pt-14">
+          <div className="grid items-center gap-8 rounded-3xl bg-primary p-7 text-primary-foreground sm:p-10 lg:grid-cols-[1.1fr_0.9fr] lg:p-12">
             <div>
-              <span className="inline-flex items-center rounded-full bg-gold/20 px-3 py-1 text-xs font-semibold text-gold">
-                Топливные карты · для бизнеса
+              <span className="inline-flex items-center rounded-full bg-gold/20 px-3.5 py-1 text-xs font-semibold text-gold">
+                {cp.heroBadge}
               </span>
-              <h1 className="mt-5 text-3xl leading-tight font-bold sm:text-4xl md:text-5xl">
-                Заправляем автопарки Жезказгана, Улытау, Сатпаева и Астаны
+              <h1 className="mt-5 text-3xl leading-tight font-bold sm:text-4xl md:text-5xl font-display">
+                {cp.heroTitle}
               </h1>
               <p className="mt-5 max-w-xl text-base text-primary-foreground/80 sm:text-lg">
-                Топливные карты для таксопарков, грузоперевозчиков и ИП — лимиты по водителям,
-                единый счёт и закрывающие документы каждый месяц.
+                {cp.heroDesc}
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <a href="#cards" className="btn-base btn-gold">
-                  Оставить заявку
+                <a href="#cards" className="btn-base btn-gold font-bold">
+                  {cp.heroOrderBtn}
                 </a>
-                <Link
-                  to="/"
-                  className="btn-base border border-primary-foreground/25 text-primary-foreground hover:bg-primary-foreground/10"
-                >
-                  На главную
-                </Link>
               </div>
             </div>
             <Station3DViewer />
@@ -151,119 +138,127 @@ function CardsPage() {
           <div className="road-stripe my-14 sm:my-20" />
         </div>
 
-        {/* Client fuel cards */}
+        {/* Client fuel cards & vouchers */}
         <section id="cards" className="mx-auto max-w-6xl scroll-mt-28 px-5 pb-20">
-          <div className="grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-start">
+          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
             <div>
-              <h2 className="text-2xl font-bold text-primary sm:text-3xl">
-                Топливные карты для бизнеса
-              </h2>
-              <p className="mt-3 max-w-xl text-foreground/75">
-                Для таксопарков, грузоперевозчиков и индивидуальных предпринимателей: своя карта
-                каждому водителю, оплата с одного счёта, ежемесячный отчёт.
-              </p>
-              <div className="mt-8 space-y-5">
-                {FEATURES.map((feature) => (
-                  <div
-                    key={feature.title}
-                    className="flex items-start gap-4 border-t border-primary/10 pt-5 first:border-t-0 first:pt-0"
-                  >
-                    <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                      <feature.icon className="size-4.5" aria-hidden="true" />
-                    </span>
-                    <div>
-                      <h3 className="font-semibold text-foreground">{feature.title}</h3>
-                      <p className="mt-1 text-sm text-foreground/70">{feature.text}</p>
-                    </div>
-                  </div>
-                ))}
+              <div className="flex items-center gap-2 border-b border-primary/10 pb-4">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("cards")}
+                  className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition-all ${
+                    activeTab === "cards"
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "bg-primary/5 text-foreground/75 hover:bg-primary/10"
+                  }`}
+                >
+                  <CreditCard className="size-4" />
+                  {t.form.productCards}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("vouchers")}
+                  className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition-all ${
+                    activeTab === "vouchers"
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "bg-primary/5 text-foreground/75 hover:bg-primary/10"
+                  }`}
+                >
+                  <Ticket className="size-4" />
+                  {t.form.productVouchers}
+                </button>
               </div>
+
+              {activeTab === "cards" ? (
+                <div className="mt-6">
+                  <h2 className="text-2xl font-bold text-primary font-display sm:text-3xl">
+                    {cp.featuresTitle}
+                  </h2>
+                  <p className="mt-3 max-w-xl text-foreground/75">
+                    {cp.featuresSubtitle}
+                  </p>
+                  <div className="mt-8 space-y-5">
+                    {cardFeatures.map((feature) => (
+                      <div
+                        key={feature.title}
+                        className="flex items-start gap-4 border-t border-primary/10 pt-5 first:border-t-0 first:pt-0"
+                      >
+                        <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                          <feature.icon className="size-4.5" aria-hidden="true" />
+                        </span>
+                        <div>
+                          <h3 className="font-semibold text-foreground">{feature.title}</h3>
+                          <p className="mt-1 text-sm text-foreground/70">{feature.text}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="mt-6">
+                  <h2 className="text-2xl font-bold text-primary font-display sm:text-3xl">
+                    {v.title}
+                  </h2>
+                  <p className="mt-3 max-w-xl text-foreground/75">
+                    {v.subtitle}
+                  </p>
+
+                  <div className="mt-6 flex flex-wrap gap-2.5">
+                    {[v.denom10, v.denom20, v.denom50].map((denom) => (
+                      <span
+                        key={denom}
+                        className="inline-flex items-center gap-1.5 rounded-xl border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-xs font-bold text-primary"
+                      >
+                        <Droplets className="size-3.5 text-gold" />
+                        {denom}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="mt-8 space-y-5">
+                    {voucherFeatures.map((feature) => (
+                      <div
+                        key={feature.title}
+                        className="flex items-start gap-4 border-t border-primary/10 pt-5 first:border-t-0 first:pt-0"
+                      >
+                        <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gold/20 text-gold-foreground">
+                          <feature.icon className="size-4.5 text-gold" aria-hidden="true" />
+                        </span>
+                        <div>
+                          <h3 className="font-semibold text-foreground">{feature.title}</h3>
+                          <p className="mt-1 text-sm text-foreground/70">{feature.text}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
-            <div className="rounded-2xl bg-primary p-7 text-primary-foreground sm:p-9">
-              <h3 className="font-display text-xl font-bold tracking-wide uppercase">
-                Оставьте заявку
-              </h3>
-              <p className="mt-2 text-sm text-primary-foreground/70">
-                Перезвоним в рабочее время и подберём условия для вашего автопарка.
-              </p>
-              <form className="mt-7 space-y-4" onSubmit={handleSubmit}>
-                <div className="space-y-2">
-                  <Label htmlFor="cards-name" className="text-primary-foreground/80">
-                    Имя
-                  </Label>
-                  <Input
-                    id="cards-name"
-                    name="name"
-                    required
-                    disabled={isBusy}
-                    className="border-primary-foreground/20 bg-primary/40 text-primary-foreground placeholder:text-primary-foreground/40"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="cards-phone" className="text-primary-foreground/80">
-                    Телефон
-                  </Label>
-                  <Input
-                    id="cards-phone"
-                    name="phone"
-                    type="tel"
-                    required
-                    disabled={isBusy}
-                    placeholder="+7 ___ ___ __ __"
-                    className="border-primary-foreground/20 bg-primary/40 text-primary-foreground placeholder:text-primary-foreground/40"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="cards-org" className="text-primary-foreground/80">
-                    Организация
-                  </Label>
-                  <Input
-                    id="cards-org"
-                    name="org"
-                    required
-                    disabled={isBusy}
-                    placeholder="ТОО / ИП"
-                    className="border-primary-foreground/20 bg-primary/40 text-primary-foreground placeholder:text-primary-foreground/40"
-                  />
-                </div>
-                <label className="flex cursor-pointer items-start gap-2.5 text-sm text-primary-foreground/70">
-                  <input
-                    type="checkbox"
-                    name="consent"
-                    disabled={isBusy}
-                    className="mt-0.5 size-4 shrink-0 accent-gold"
-                  />
-                  <span>Согласен получать новости об акциях и специальных условиях</span>
-                </label>
-                <button
-                  type="submit"
-                  disabled={isBusy}
-                  className="btn-base btn-gold w-full disabled:opacity-60"
-                >
-                  {isBusy ? "Отправляем…" : "Отправить заявку"}
-                </button>
-                <p aria-live="polite" className="min-h-5 text-sm">
-                  {status === "waking" && (
-                    <span className="text-primary-foreground/70">
-                      Сервер просыпается, это может занять до минуты…
-                    </span>
-                  )}
-                  {status === "sent" && (
-                    <span className="text-gold">Заявка отправлена. Мы свяжемся с вами в рабочее время.</span>
-                  )}
-                  {status === "error" && <span className="text-red-300">{error}</span>}
-                </p>
-              </form>
+            <div>
+              <B2BLeadForm
+                formId="cards-b2b"
+                darkTheme
+                defaultProduct={activeTab === "cards" ? "cards" : "vouchers"}
+              />
             </div>
           </div>
         </section>
       </main>
 
       <footer className="border-t border-primary/10 py-8">
-        <p className="mx-auto max-w-6xl px-5 text-sm text-foreground/60">
-          © С-Мунай, 1996–2026. Все права защищены.
-        </p>
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 sm:flex-row">
+          <Link to="/" className="flex items-center transition-opacity hover:opacity-80">
+            <img
+              src="/images/logo-navbar.svg"
+              alt="С-МУНАЙ"
+              className="h-7 w-auto object-contain opacity-80"
+            />
+          </Link>
+          <p className="text-sm text-foreground/60">
+            {t.footer.rights}
+          </p>
+        </div>
       </footer>
     </div>
   );

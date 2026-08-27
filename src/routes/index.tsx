@@ -1,20 +1,41 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useRef, type ReactNode } from "react";
-import { Fuel, ShoppingBag, Coffee, Instagram, MapPin, Clock } from "lucide-react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  Fuel,
+  ShoppingBag,
+  Coffee,
+  Instagram,
+  MapPin,
+  Clock,
+  Navigation,
+  ExternalLink,
+  Ticket,
+  ShieldCheck,
+  Zap,
+  CheckCircle2,
+  Gauge,
+  CreditCard,
+  Droplets,
+  Wind,
+  QrCode,
+} from "lucide-react";
+import { LeafletMap } from "@/components/site/LeafletMap";
+import { B2BLeadForm } from "@/components/site/B2BLeadForm";
+import { useLanguage, LanguageSwitcher } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "С-Мунай — сеть АЗС в Жезказгане, Улытау, Сатпаеве и Астане" },
+      { title: "С-Мунай — сеть АЗС в Жезказгане, Сатпаеве и Астане" },
       {
         name: "description",
         content:
-          "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Улытау, Сатпаеве и Астане с 1996 года: качественное топливо, магазин и кофе с собой.",
+          "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Сатпаеве и Астане с 1996 года: качественное топливо, талоны, магазин и кофе с собой.",
       },
-      { property: "og:title", content: "С-Мунай — сеть АЗС в Жезказгане, Улытау, Сатпаеве и Астане" },
+      { property: "og:title", content: "С-Мунай — сеть АЗС в Жезказгане, Сатпаеве и Астане" },
       {
         property: "og:description",
-        content: "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Улытау, Сатпаеве и Астане с 1996 года: качественное топливо, магазин и кофе с собой.",
+        content: "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Сатпаеве и Астане с 1996 года: качественное топливо, талоны, магазин и кофе с собой.",
       },
     ],
   }),
@@ -22,30 +43,28 @@ export const Route = createFileRoute("/")({
 });
 
 const INSTAGRAM_URL = "https://www.instagram.com/azs_smunai?igsh=MWRnOHhrcGM1MHk4dg==";
-const EMAIL = "EMAIL";
-const PHONE = "87770000000";
 
-const NAV = [
-  { href: "#azs", label: "АЗС" },
-  { href: "#fuel", label: "Топливо" },
-  { href: "#promo", label: "Акции" },
-  { href: "#b2b", label: "Бизнесу" },
-  { href: "#about", label: "О нас" },
-  { href: "#jobs", label: "Вакансии" },
-  { href: "#contacts", label: "Контакты" },
-];
-
-const CARDS_PAGE_LINK = { to: "/cards", label: "Карты и 3D-станция" };
-
-type Station = {
+export type Station = {
   number: number;
+  city: string;
+  cityKz: string;
+  cityEn: string;
   address: string;
+  addressKz: string;
+  addressEn: string;
   hours: string;
+  hoursKz: string;
+  hoursEn: string;
   services: ("fuel" | "shop" | "coffee")[];
+  coords: { lat: number; lng: number };
+  gisUrl: string;
 };
 
 type CityGroup = {
   city: string;
+  cityKz: string;
+  cityEn: string;
+  gisBranchesUrl: string;
   stations: Station[];
 };
 
@@ -55,28 +74,146 @@ const FUEL_ONLY: Station["services"] = ["fuel"];
 const CITY_STATIONS: CityGroup[] = [
   {
     city: "Жезказган",
+    cityKz: "Жезқазған",
+    cityEn: "Zhezkazgan",
+    gisBranchesUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
     stations: [
-      { number: 1, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
-      { number: 4, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
+      {
+        number: 1,
+        city: "Жезказган",
+        cityKz: "Жезқазған",
+        cityEn: "Zhezkazgan",
+        address: "проспект Мира, 39",
+        addressKz: "Бейбітшілік даңғылы, 39",
+        addressEn: "39 Mira Avenue",
+        hours: "Круглосуточно",
+        hoursKz: "Тәулік бойы",
+        hoursEn: "24/7 (All Day)",
+        services: FUEL_ONLY,
+        coords: { lat: 47.802055, lng: 67.714752 },
+        gisUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
+      },
+      {
+        number: 4,
+        city: "Жезказган",
+        cityKz: "Жезқазған",
+        cityEn: "Zhezkazgan",
+        address: "улица Улытау, 4/2",
+        addressKz: "Ұлытау көшесі, 4/2",
+        addressEn: "4/2 Ulytau Street",
+        hours: "Круглосуточно",
+        hoursKz: "Тәулік бойы",
+        hoursEn: "24/7 (All Day)",
+        services: ALL_SERVICES,
+        coords: { lat: 47.783971, lng: 67.696561 },
+        gisUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
+      },
+      {
+        number: 2,
+        city: "Жезказган",
+        cityKz: "Жезқазған",
+        cityEn: "Zhezkazgan",
+        address: "улица Улытау, 5",
+        addressKz: "Ұлытау көшесі, 5",
+        addressEn: "5 Ulytau Street",
+        hours: "Круглосуточно",
+        hoursKz: "Тәулік бойы",
+        hoursEn: "24/7 (All Day)",
+        services: FUEL_ONLY,
+        coords: { lat: 47.784135, lng: 67.694417 },
+        gisUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
+      },
     ],
   },
   {
-    city: "Улытау",
-    stations: [{ number: 2, address: "[Адрес]", hours: "[Часы работы]", services: FUEL_ONLY }],
-  },
-  {
     city: "Сатпаев",
+    cityKz: "Сәтбаев",
+    cityEn: "Satpayev",
+    gisBranchesUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
     stations: [
-      { number: 3, address: "Ердена, 226", hours: "[Часы работы]", services: ALL_SERVICES },
-      { number: 5, address: "Улытауская, 114", hours: "Круглосуточно", services: ALL_SERVICES },
-      { number: 6, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
+      {
+        number: 3,
+        city: "Сатпаев",
+        cityKz: "Сәтбаев",
+        cityEn: "Satpayev",
+        address: "улица Ердена, 226",
+        addressKz: "Ерден көшесі, 226",
+        addressEn: "226 Yerden Street",
+        hours: "Круглосуточно",
+        hoursKz: "Тәулік бойы",
+        hoursEn: "24/7 (All Day)",
+        services: ALL_SERVICES,
+        coords: { lat: 47.914004, lng: 67.531064 },
+        gisUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
+      },
+      {
+        number: 5,
+        city: "Сатпаев",
+        cityKz: "Сәтбаев",
+        cityEn: "Satpayev",
+        address: "улица Улытауская, 114",
+        addressKz: "Ұлытау көшесі, 114",
+        addressEn: "114 Ulytauskaya Street",
+        hours: "Круглосуточно",
+        hoursKz: "Тәулік бойы",
+        hoursEn: "24/7 (All Day)",
+        services: ALL_SERVICES,
+        coords: { lat: 47.901277, lng: 67.517376 },
+        gisUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
+      },
+      {
+        number: 6,
+        city: "Сатпаев",
+        cityKz: "Сәтбаев",
+        cityEn: "Satpayev",
+        address: "улица Улытауская, 15",
+        addressKz: "Ұлытау көшесі, 15",
+        addressEn: "15 Ulytauskaya Street",
+        hours: "Круглосуточно",
+        hoursKz: "Тәулік бойы",
+        hoursEn: "24/7 (All Day)",
+        services: ALL_SERVICES,
+        coords: { lat: 47.898436, lng: 67.528117 },
+        gisUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
+      },
     ],
   },
   {
     city: "Астана",
+    cityKz: "Астана",
+    cityEn: "Astana",
+    gisBranchesUrl: "https://2gis.kz/astana/branches/70000001023880614",
     stations: [
-      { number: 7, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
-      { number: 8, address: "мира 39", hours: "[Часы работы]", services: ALL_SERVICES },
+      {
+        number: 7,
+        city: "Астана",
+        cityKz: "Астана",
+        cityEn: "Astana",
+        address: "шоссе Каркаралы, 7",
+        addressKz: "Қарқаралы тас жолы, 7",
+        addressEn: "7 Karkaraly Highway",
+        hours: "Круглосуточно",
+        hoursKz: "Тәулік бойы",
+        hoursEn: "24/7 (All Day)",
+        services: ALL_SERVICES,
+        coords: { lat: 51.065141, lng: 71.392492 },
+        gisUrl: "https://2gis.kz/astana/branches/70000001023880614",
+      },
+      {
+        number: 8,
+        city: "Астана",
+        cityKz: "Астана",
+        cityEn: "Astana",
+        address: "шоссе Ондирис, 42",
+        addressKz: "Өндіріс тас жолы, 42",
+        addressEn: "42 Ondiris Highway",
+        hours: "Круглосуточно",
+        hoursKz: "Тәулік бойы",
+        hoursEn: "24/7 (All Day)",
+        services: ALL_SERVICES,
+        coords: { lat: 51.232479, lng: 71.384983 },
+        gisUrl: "https://2gis.kz/astana/branches/70000001023880614",
+      },
     ],
   },
 ];
@@ -118,59 +255,293 @@ function Stripe() {
 }
 
 function SectionTitle({ children }: { children: ReactNode }) {
-  return <h2 className="text-2xl font-bold text-primary sm:text-3xl">{children}</h2>;
+  return <h2 className="text-2xl font-bold text-primary sm:text-3xl font-display">{children}</h2>;
 }
 
-function PriceTotem() {
-  const rows = [
-    { label: "АИ-92", price: "___ ₸" },
-    { label: "АИ-95", price: "___ ₸" },
-    { label: "ДТ", price: "___ ₸" },
-  ];
+function HeroFeatureCard() {
+  const { t } = useLanguage();
+  const h = t.hero;
 
   return (
-    <div className="mx-auto w-full max-w-xs rounded-2xl bg-primary p-5 text-primary-foreground shadow-[0_28px_50px_-30px_rgba(13,108,137,0.8)] lg:mx-0">
-      <p className="text-center font-display text-sm font-semibold tracking-[0.2em] text-gold">
-        С-МУНАЙ
-      </p>
-      <div className="mt-4 space-y-2">
-        {rows.map((row) => (
-          <div
-            key={row.label}
-            className="flex items-center justify-between rounded-xl bg-black/20 px-4 py-3"
-          >
-            <span className="text-sm font-medium opacity-90">{row.label}</span>
-            <span className="font-mono text-xl font-bold tabular-nums text-gold">{row.price}</span>
-          </div>
-        ))}
+    <div className="mx-auto w-full max-w-sm rounded-2xl bg-primary p-7 text-primary-foreground shadow-[0_28px_50px_-30px_rgba(13,108,137,0.8)] lg:mx-0">
+      <div className="flex items-center justify-between border-b border-primary-foreground/15 pb-4">
+        <img
+          src="/images/logo-white.svg"
+          alt="С-МУНАЙ"
+          className="h-7 w-auto object-contain"
+        />
+        <span className="rounded-full bg-gold/20 px-2.5 py-0.5 text-xs font-semibold text-gold">
+          1996–2026
+        </span>
       </div>
-      <p className="mt-4 text-center text-xs leading-relaxed opacity-75">
-        Актуальные цены уточняйте на АЗС
-      </p>
+      <div className="mt-5 space-y-4">
+        <div className="flex items-center gap-3">
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-gold/20 text-gold">
+            <Fuel className="size-4" aria-hidden="true" />
+          </span>
+          <div>
+            <p className="text-sm font-bold">{h.feature1}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-gold/20 text-gold">
+            <Coffee className="size-4" aria-hidden="true" />
+          </span>
+          <div>
+            <p className="text-sm font-bold">{h.feature2}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-gold/20 text-gold">
+            <MapPin className="size-4" aria-hidden="true" />
+          </span>
+          <div>
+            <p className="text-sm font-bold">{h.feature3}</p>
+          </div>
+        </div>
+      </div>
+      <div className="mt-6 border-t border-primary-foreground/15 pt-4">
+        <p className="text-center font-display text-xs font-semibold tracking-wide text-gold">
+          {h.slogan}
+        </p>
+      </div>
     </div>
   );
 }
 
-const SERVICE_META: Record<
-  Station["services"][number],
-  { icon: typeof Fuel; label: string }
-> = {
-  fuel: { icon: Fuel, label: "Топливо" },
-  shop: { icon: ShoppingBag, label: "Магазин" },
-  coffee: { icon: Coffee, label: "Кофе" },
+type StationsMapSectionProps = {
+  selectedCity: string;
+  setSelectedCity: (city: string) => void;
+  selectedStationNum: number;
+  setSelectedStationNum: (num: number) => void;
 };
 
+function StationsMapSection({
+  selectedCity,
+  setSelectedCity,
+  selectedStationNum,
+  setSelectedStationNum,
+}: StationsMapSectionProps) {
+  const { lang, t } = useLanguage();
+  const s = t.stations;
+
+  const cityData = CITY_STATIONS.find((c) => c.city === selectedCity) || CITY_STATIONS[0];
+  const activeStation =
+    cityData.stations.find((st) => st.number === selectedStationNum) || cityData.stations[0];
+
+  function getCityName(c: CityGroup) {
+    if (lang === "kz") return c.cityKz;
+    if (lang === "en") return c.cityEn;
+    return c.city;
+  }
+
+  function getAddress(st: Station) {
+    if (lang === "kz") return st.addressKz;
+    if (lang === "en") return st.addressEn;
+    return st.address;
+  }
+
+  function getHours(st: Station) {
+    if (lang === "kz") return st.hoursKz;
+    if (lang === "en") return st.hoursEn;
+    return st.hours;
+  }
+
+  const serviceMeta: Record<Station["services"][number], { icon: typeof Fuel; label: string }> = {
+    fuel: { icon: Fuel, label: s.serviceFuel },
+    shop: { icon: ShoppingBag, label: s.serviceShop },
+    coffee: { icon: Coffee, label: s.serviceCoffee },
+  };
+
+  return (
+    <div id="stations-map" className="soft-card scroll-mt-28 overflow-hidden">
+      {/* Header with City Selector */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-primary/10 bg-primary/5 p-4 sm:px-6">
+        <div className="flex items-center gap-2">
+          <MapPin className="size-4 text-terracotta" />
+          <span className="font-bold text-primary">{s.mapTitle}</span>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          {CITY_STATIONS.map((c) => (
+            <button
+              key={c.city}
+              type="button"
+              onClick={() => {
+                setSelectedCity(c.city);
+                setSelectedStationNum(c.stations[0].number);
+              }}
+              className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all ${
+                selectedCity === c.city
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "bg-background text-foreground/75 hover:bg-primary/10 hover:text-primary"
+              }`}
+            >
+              {getCityName(c)} ({c.stations.length})
+            </button>
+          ))}
+          <a
+            href={cityData.gisBranchesUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1 rounded-full border border-primary/20 bg-background px-3 py-1 text-xs font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+          >
+            <ExternalLink className="size-3" />
+            2ГИС {getCityName(cityData)}
+          </a>
+        </div>
+      </div>
+
+      <div className="grid lg:grid-cols-[1.1fr_1.9fr]">
+        {/* Stations list with 2GIS buttons */}
+        <div className="max-h-[440px] divide-y divide-primary/5 overflow-y-auto p-3 sm:p-4">
+          {cityData.stations.map((st) => {
+            const isCurrent = st.number === activeStation.number;
+            return (
+              <div
+                key={st.number}
+                onClick={() => setSelectedStationNum(st.number)}
+                className={`cursor-pointer rounded-xl p-3.5 transition-all ${
+                  isCurrent
+                    ? "border border-primary/20 bg-primary/10 shadow-sm"
+                    : "hover:bg-primary/5"
+                }`}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+                      {st.number}
+                    </span>
+                    <h4 className="font-bold text-primary font-display">АЗС №{st.number}</h4>
+                  </div>
+                  <span className="rounded bg-gold/20 px-2 py-0.5 text-[11px] font-semibold text-gold-foreground">
+                    24/7
+                  </span>
+                </div>
+                <p className="mt-2 text-sm font-medium text-foreground/85">{getAddress(st)}</p>
+                {lang !== "kz" && <p className="text-xs text-foreground/50">{st.addressKz}</p>}
+
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex gap-1.5 text-xs">
+                    {st.services.map((srv) => (
+                      <span
+                        key={srv}
+                        className="inline-flex items-center gap-1 rounded bg-primary/5 px-2 py-0.5 text-[11px] font-medium text-primary"
+                      >
+                        {serviceMeta[srv].label}
+                      </span>
+                    ))}
+                  </div>
+
+                  <a
+                    href={st.gisUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+                  >
+                    <Navigation className="size-3" />
+                    2ГИС
+                  </a>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Real Interactive Leaflet Map */}
+        <div className="relative min-h-[380px] border-t border-primary/10 bg-primary/5 lg:border-t-0 lg:border-l">
+          <LeafletMap
+            stations={cityData.stations}
+            activeStationNum={activeStation.number}
+            onStationSelect={setSelectedStationNum}
+          />
+          <div className="absolute bottom-3 left-3 right-3 z-[400] flex flex-wrap items-center justify-between gap-2 rounded-xl border border-primary/15 bg-background/95 p-3 shadow-lg backdrop-blur">
+            <div>
+              <p className="text-xs font-bold text-primary">
+                АЗС №{activeStation.number} · {getAddress(activeStation)}
+              </p>
+              <p className="text-[11px] text-foreground/60">{getHours(activeStation)}</p>
+            </div>
+            <a
+              href={activeStation.gisUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="btn-base btn-gold inline-flex items-center gap-1.5 !px-3.5 !py-1.5 !text-xs font-bold"
+            >
+              <Navigation className="size-3.5" />
+              {s.route2gis}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Index() {
+  const [selectedCity, setSelectedCity] = useState<string>("Жезказган");
+  const [selectedStationNum, setSelectedStationNum] = useState<number>(4);
+  const { lang, t } = useLanguage();
+
+  const navItems = [
+    { href: "#azs", label: t.nav.azs },
+    { href: "#fuel", label: t.nav.fuel },
+    { href: "#vouchers", label: t.nav.vouchers },
+    { href: "#services", label: t.nav.services },
+    { href: "#promo", label: t.nav.promo },
+    { href: "#b2b", label: t.nav.b2b },
+    { href: "#about", label: t.nav.about },
+    { href: "#contacts", label: t.nav.contacts },
+  ];
+
+  function getCityName(c: CityGroup) {
+    if (lang === "kz") return c.cityKz;
+    if (lang === "en") return c.cityEn;
+    return c.city;
+  }
+
+  function getAddress(st: Station) {
+    if (lang === "kz") return st.addressKz;
+    if (lang === "en") return st.addressEn;
+    return st.address;
+  }
+
+  function getHours(st: Station) {
+    if (lang === "kz") return st.hoursKz;
+    if (lang === "en") return st.hoursEn;
+    return st.hours;
+  }
+
+  const serviceMeta: Record<Station["services"][number], { icon: typeof Fuel; label: string }> = {
+    fuel: { icon: Fuel, label: t.stations.serviceFuel },
+    shop: { icon: ShoppingBag, label: t.stations.serviceShop },
+    coffee: { icon: Coffee, label: t.stations.serviceCoffee },
+  };
+
+  function handleStationCardClick(city: string, stationNum: number) {
+    setSelectedCity(city);
+    setSelectedStationNum(stationNum);
+    const mapEl = document.getElementById("stations-map");
+    if (mapEl) {
+      mapEl.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <header className="sticky top-0 z-40 border-b border-primary/10 bg-background/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center gap-4 px-5 py-4">
-          <a href="#top" className="font-display text-lg font-bold tracking-wide text-primary">
-            С-МУНАЙ
+        <div className="mx-auto flex max-w-6xl items-center gap-3 sm:gap-4 px-5 py-3 sm:py-3.5">
+          <a href="#top" className="flex items-center transition-opacity hover:opacity-90">
+            <img
+              src="/images/logo-navbar.svg"
+              alt="С-МУНАЙ"
+              className="h-8 w-auto object-contain sm:h-9"
+            />
           </a>
+
           <nav aria-label="Основная навигация" className="ml-auto hidden lg:block">
-            <ul className="flex items-center gap-6 text-sm font-medium">
-              {NAV.map((item) => (
+            <ul className="flex items-center gap-4 xl:gap-5 text-sm font-medium">
+              {navItems.map((item) => (
                 <li key={item.href}>
                   <a className="transition-colors hover:text-primary" href={item.href}>
                     {item.label}
@@ -178,31 +549,36 @@ function Index() {
                 </li>
               ))}
               <li>
-                <Link className="transition-colors hover:text-primary" to={CARDS_PAGE_LINK.to}>
-                  {CARDS_PAGE_LINK.label}
+                <Link className="transition-colors hover:text-primary font-semibold text-primary" to="/cards">
+                  {t.nav.cards3d}
                 </Link>
               </li>
             </ul>
           </nav>
-          <a
-            href={INSTAGRAM_URL}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Instagram С-Мунай"
-            className="ml-auto rounded-full border border-primary/20 p-2 text-terracotta transition-colors hover:bg-primary/5 lg:ml-0"
-          >
-            <Instagram className="size-5" aria-hidden="true" />
-          </a>
+
+          <div className="ml-auto lg:ml-2 flex items-center gap-2">
+            <LanguageSwitcher />
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Instagram С-Мунай"
+              className="rounded-full border border-primary/20 p-2 text-terracotta transition-colors hover:bg-primary/5"
+            >
+              <Instagram className="size-4.5" aria-hidden="true" />
+            </a>
+          </div>
         </div>
+
         <nav aria-label="Разделы" className="border-t border-primary/10 lg:hidden">
-          <ul className="flex gap-5 overflow-x-auto px-5 py-3 text-sm font-medium">
-            {NAV.map((item) => (
+          <ul className="flex gap-4 overflow-x-auto px-5 py-2.5 text-xs font-medium">
+            {navItems.map((item) => (
               <li key={item.href} className="whitespace-nowrap">
                 <a href={item.href}>{item.label}</a>
               </li>
             ))}
             <li className="whitespace-nowrap">
-              <Link to={CARDS_PAGE_LINK.to}>{CARDS_PAGE_LINK.label}</Link>
+              <Link to="/cards" className="font-semibold text-primary">{t.nav.cards3d}</Link>
             </li>
           </ul>
         </nav>
@@ -213,35 +589,39 @@ function Index() {
         <section className="mx-auto max-w-6xl px-5 pt-12 sm:pt-20">
           <div className="grid items-center gap-10 lg:grid-cols-[1.2fr_0.8fr]">
             <Reveal>
-              <span className="inline-flex items-center rounded-full bg-gold/20 px-3 py-1 text-xs font-semibold text-gold-foreground">
-                1996–2026 · 30 лет
+              <span className="inline-flex items-center rounded-full bg-gold/20 px-3.5 py-1 text-xs font-semibold text-gold-foreground">
+                {t.hero.badge}
               </span>
-              <h1 className="mt-5 text-3xl leading-tight font-bold text-primary sm:text-4xl md:text-5xl">
-                Заправляем Жезказган, Улытау, Сатпаев и Астану уже 30 лет
+              <h1 className="mt-5 text-3xl leading-tight font-bold text-primary font-display sm:text-4xl md:text-5xl">
+                {t.hero.title}
               </h1>
               <p className="mt-5 max-w-xl text-base text-foreground/75 sm:text-lg">
-                8 собственных АЗС · качественное топливо · магазин и кофе с собой
+                {t.hero.subtitle}
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <a href="#azs" className="btn-base btn-gold">
-                  Найти АЗС
+                <a href="#azs" className="btn-base btn-gold font-bold">
+                  {t.hero.findStation}
                 </a>
-                <a href="#promo" className="btn-base btn-teal-outline">
-                  Акции
+                <a href="#vouchers" className="btn-base border border-primary/30 text-primary hover:bg-primary/10 font-semibold inline-flex items-center gap-1.5">
+                  <Ticket className="size-4" />
+                  {t.nav.vouchers}
+                </a>
+                <a href="#promo" className="btn-base btn-teal-outline font-semibold">
+                  {t.hero.promosBtn}
                 </a>
               </div>
             </Reveal>
             <Reveal>
-              <PriceTotem />
+              <HeroFeatureCard />
             </Reveal>
           </div>
 
           <Reveal className="mt-14">
             <dl className="grid gap-4 sm:grid-cols-3">
               {[
-                ["30 лет", "на рынке"],
-                ["8", "АЗС"],
-                ["4", "города"],
+                [t.hero.yearsMetric, t.hero.yearsLabel],
+                [t.hero.stationsMetric, t.hero.stationsLabel],
+                [t.hero.citiesMetric, t.hero.citiesLabel],
               ].map(([value, label]) => (
                 <div key={label} className="soft-card px-6 py-5">
                   <dt className="sr-only">{label}</dt>
@@ -260,93 +640,317 @@ function Index() {
         {/* Наши АЗС */}
         <section id="azs" className="mx-auto max-w-6xl scroll-mt-28 px-5">
           <Reveal>
-            <SectionTitle>Наши АЗС</SectionTitle>
+            <SectionTitle>{t.stations.title}</SectionTitle>
             <p className="mt-3 max-w-2xl text-foreground/75">
-              Выберите ближайшую станцию — мы работаем для вас каждый день.
+              {t.stations.subtitle}
             </p>
           </Reveal>
 
           {CITY_STATIONS.map((group) => (
             <Reveal key={group.city} className="mt-10">
-              <h3 className="text-lg font-semibold text-terracotta">{group.city}</h3>
+              <h3 className="text-lg font-semibold text-terracotta font-display">{getCityName(group)}</h3>
               <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {group.stations.map((station) => (
-                  <article key={station.number} className="soft-card p-5">
-                    <h4 className="font-display text-base font-bold text-primary">АЗС №{station.number}</h4>
-                    <p className="mt-3 flex items-start gap-2 text-sm text-foreground/75">
-                      <MapPin className="mt-0.5 size-4 shrink-0 text-terracotta" aria-hidden="true" />
-                      {station.address}
-                    </p>
-                    <p className="mt-2 flex items-start gap-2 text-sm text-foreground/75">
-                      <Clock className="mt-0.5 size-4 shrink-0 text-terracotta" aria-hidden="true" />
-                      {station.hours}
-                    </p>
-                    <ul className="mt-4 flex flex-wrap gap-2">
-                      {station.services.map((key) => {
-                        const { icon: Icon, label } = SERVICE_META[key];
-                        return (
-                          <li
-                            key={label}
-                            className="inline-flex items-center gap-1.5 rounded-lg bg-primary/5 px-2.5 py-1 text-xs font-medium text-primary"
-                          >
-                            <Icon className="size-3.5" aria-hidden="true" />
-                            {label}
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </article>
-                ))}
+                {group.stations.map((station) => {
+                  const isSelected = station.number === selectedStationNum;
+                  return (
+                    <article
+                      key={station.number}
+                      onClick={() => handleStationCardClick(group.city, station.number)}
+                      className={`soft-card cursor-pointer p-5 transition-all hover:border-primary/40 hover:shadow-md ${
+                        isSelected
+                          ? "border-primary bg-primary/[0.04] ring-2 ring-gold"
+                          : ""
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-display text-base font-bold text-primary">
+                          АЗС №{station.number}
+                        </h4>
+                        <span className="text-[11px] font-medium text-primary/70 hover:underline">
+                          {t.stations.showOnMap}
+                        </span>
+                      </div>
+                      <p className="mt-3 flex items-start gap-2 text-sm text-foreground/75 font-medium">
+                        <MapPin className="mt-0.5 size-4 shrink-0 text-terracotta" aria-hidden="true" />
+                        {getAddress(station)}
+                      </p>
+                      <p className="mt-2 flex items-start gap-2 text-xs text-foreground/60">
+                        <Clock className="mt-0.5 size-3.5 shrink-0 text-terracotta" aria-hidden="true" />
+                        {getHours(station)}
+                      </p>
+                      <div className="mt-4 flex items-center justify-between gap-2 border-t border-primary/5 pt-3">
+                        <ul className="flex flex-wrap gap-1.5">
+                          {station.services.map((key) => {
+                            const { icon: Icon, label } = serviceMeta[key];
+                            return (
+                              <li
+                                key={label}
+                                className="inline-flex items-center gap-1 rounded-lg bg-primary/5 px-2 py-0.5 text-xs font-medium text-primary"
+                              >
+                                <Icon className="size-3" aria-hidden="true" />
+                                {label}
+                              </li>
+                            );
+                          })}
+                        </ul>
+                        <a
+                          href={station.gisUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-1 rounded-lg bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+                        >
+                          <Navigation className="size-3" />
+                          2ГИС
+                        </a>
+                      </div>
+                    </article>
+                  );
+                })}
               </div>
             </Reveal>
           ))}
 
           <Reveal className="mt-10">
-            <figure className="soft-card overflow-hidden">
-              <div className="flex h-56 items-center justify-center bg-primary/5 text-sm text-primary/60 sm:h-72">
-                Карта станций
-              </div>
-              <figcaption className="px-5 py-3 text-sm text-foreground/70">Карта станций</figcaption>
-            </figure>
+            <StationsMapSection
+              selectedCity={selectedCity}
+              setSelectedCity={setSelectedCity}
+              selectedStationNum={selectedStationNum}
+              setSelectedStationNum={setSelectedStationNum}
+            />
           </Reveal>
         </section>
 
         <Stripe />
 
-        {/* Топливо и сервис */}
+        {/* Топливо */}
         <section id="fuel" className="mx-auto max-w-6xl scroll-mt-28 px-5">
           <Reveal>
-            <SectionTitle>Топливо и сервис</SectionTitle>
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <SectionTitle>{t.fuelSection.title}</SectionTitle>
+                <p className="mt-2 text-foreground/70">{t.fuelSection.subtitle}</p>
+              </div>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-gold/20 px-3.5 py-1 text-xs font-bold text-gold-foreground">
+                <Sparkles className="size-3.5 text-gold" />
+                {t.fuelSection.hitechBadge}
+              </span>
+            </div>
           </Reveal>
+
+          {/* Hi-Tech инновационная линейка */}
           <Reveal className="mt-8">
-            <div className="grid gap-4 sm:grid-cols-3">
-              {["АИ-92", "АИ-95", "ДТ"].map((fuel) => (
-                <article key={fuel} className="soft-card p-6">
-                  <Fuel className="size-5 text-terracotta" aria-hidden="true" />
-                  <h3 className="mt-3 font-display text-xl font-bold text-primary">{fuel}</h3>
-                  <p className="mt-2 text-sm text-foreground/75">
-                    Топливо с контролем качества на каждой поставке
-                  </p>
+            <div className="grid gap-5 md:grid-cols-2">
+              {/* АИ-95 Hi-Tech */}
+              <article className="rounded-3xl border-2 border-gold/40 bg-linear-to-br from-primary via-primary to-primary/95 p-7 text-primary-foreground shadow-lg transition-all hover:border-gold hover:shadow-xl">
+                <div className="flex items-center justify-between">
+                  <span className="flex size-11 items-center justify-center rounded-2xl bg-gold/20 text-gold">
+                    <Zap className="size-6 text-gold" />
+                  </span>
+                  <span className="rounded-full bg-gold px-3 py-1 text-xs font-bold text-gold-foreground shadow-xs">
+                    {t.fuelSection.ai95HitechBadge}
+                  </span>
+                </div>
+                <h3 className="mt-5 font-display text-2xl sm:text-3xl font-bold text-white tracking-wide">
+                  {t.fuelSection.ai95HitechTitle}
+                </h3>
+                <p className="mt-2.5 text-sm sm:text-base leading-relaxed text-primary-foreground/85">
+                  {t.fuelSection.ai95HitechDesc}
+                </p>
+                <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs text-gold">
+                  <span className="inline-flex items-center gap-1.5 font-semibold">
+                    <ShieldCheck className="size-4" />
+                    Модификатор трения и защита цилиндров
+                  </span>
+                  <span className="rounded bg-white/10 px-2 py-0.5 text-white/80 font-mono">
+                    RON 95+
+                  </span>
+                </div>
+              </article>
+
+              {/* АИ-92 Hi-Tech */}
+              <article className="rounded-3xl border-2 border-gold/40 bg-linear-to-br from-primary via-primary to-primary/95 p-7 text-primary-foreground shadow-lg transition-all hover:border-gold hover:shadow-xl">
+                <div className="flex items-center justify-between">
+                  <span className="flex size-11 items-center justify-center rounded-2xl bg-gold/20 text-gold">
+                    <Sparkles className="size-6 text-gold" />
+                  </span>
+                  <span className="rounded-full bg-gold px-3 py-1 text-xs font-bold text-gold-foreground shadow-xs">
+                    {t.fuelSection.ai92HitechBadge}
+                  </span>
+                </div>
+                <h3 className="mt-5 font-display text-2xl sm:text-3xl font-bold text-white tracking-wide">
+                  {t.fuelSection.ai92HitechTitle}
+                </h3>
+                <p className="mt-2.5 text-sm sm:text-base leading-relaxed text-primary-foreground/85">
+                  {t.fuelSection.ai92HitechDesc}
+                </p>
+                <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs text-gold">
+                  <span className="inline-flex items-center gap-1.5 font-semibold">
+                    <ShieldCheck className="size-4" />
+                    Моющий комплекс и очистка форсунок
+                  </span>
+                  <span className="rounded bg-white/10 px-2 py-0.5 text-white/80 font-mono">
+                    RON 92+
+                  </span>
+                </div>
+              </article>
+            </div>
+          </Reveal>
+
+          {/* Классическая линейка */}
+          <Reveal className="mt-5">
+            <div className="grid gap-5 sm:grid-cols-3">
+              {[
+                {
+                  title: t.fuelSection.ai95Title,
+                  desc: t.fuelSection.ai95Desc,
+                  badge: t.fuelSection.ai95Badge,
+                },
+                {
+                  title: t.fuelSection.ai92Title,
+                  desc: t.fuelSection.ai92Desc,
+                  badge: t.fuelSection.ai92Badge,
+                },
+                {
+                  title: t.fuelSection.dtTitle,
+                  desc: t.fuelSection.dtDesc,
+                  badge: t.fuelSection.dtBadge,
+                },
+              ].map((fuel) => (
+                <article key={fuel.title} className="soft-card p-6 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                        <Fuel className="size-5" aria-hidden="true" />
+                      </span>
+                      <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-semibold text-primary">
+                        {fuel.badge}
+                      </span>
+                    </div>
+                    <h3 className="mt-4 font-display text-2xl font-bold text-primary">{fuel.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-foreground/75">
+                      {fuel.desc}
+                    </p>
+                  </div>
+                  <div className="mt-6 pt-4 border-t border-primary/5 flex items-center gap-2 text-xs text-foreground/60">
+                    <ShieldCheck className="size-4 text-gold" />
+                    <span>Лабораторный контроль каждой партии</span>
+                  </div>
                 </article>
               ))}
             </div>
           </Reveal>
-          <Reveal className="mt-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <article className="soft-card p-6">
-                <ShoppingBag className="size-5 text-terracotta" aria-hidden="true" />
-                <h3 className="mt-3 text-lg font-bold text-primary">Магазин на АЗС</h3>
-                <p className="mt-2 text-sm text-foreground/75">
-                  Всё нужное в дорогу: снеки, напитки, автотовары.
-                </p>
-              </article>
-              <article className="soft-card p-6">
-                <Coffee className="size-5 text-terracotta" aria-hidden="true" />
-                <h3 className="mt-3 text-lg font-bold text-primary">Кофе с собой</h3>
-                <p className="mt-2 text-sm text-foreground/75">
-                  Свежий кофе на каждой станции — заправьтесь и вы.
-                </p>
-              </article>
+        </section>
+
+        <Stripe />
+
+        {/* Топливные талоны */}
+        <section id="vouchers" className="mx-auto max-w-6xl scroll-mt-28 px-5">
+          <Reveal>
+            <div className="rounded-3xl bg-linear-to-br from-primary via-primary to-primary/95 p-7 text-primary-foreground sm:p-10 lg:p-12 shadow-xl">
+              <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+                <div>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-gold/20 px-3.5 py-1 text-xs font-semibold text-gold">
+                    <Ticket className="size-3.5" />
+                    {t.vouchersSection.badge}
+                  </span>
+                  <h2 className="mt-4 font-display text-2xl sm:text-3xl md:text-4xl font-bold leading-tight">
+                    {t.vouchersSection.title}
+                  </h2>
+                  <p className="mt-4 text-sm sm:text-base text-primary-foreground/80 leading-relaxed max-w-xl">
+                    {t.vouchersSection.subtitle}
+                  </p>
+
+                  {/* Номиналы */}
+                  <div className="mt-7">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-gold">
+                      {t.vouchersSection.denominationsTitle}
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2.5">
+                      {[t.vouchersSection.denom10, t.vouchersSection.denom20, t.vouchersSection.denom50].map(
+                        (denom) => (
+                          <span
+                            key={denom}
+                            className="inline-flex items-center gap-1.5 rounded-xl border border-primary-foreground/25 bg-white/10 px-4 py-2 text-sm font-bold backdrop-blur"
+                          >
+                            <Droplets className="size-4 text-gold" />
+                            {denom}
+                          </span>
+                        ),
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mt-8 flex flex-wrap gap-3">
+                    <a href="#b2b" className="btn-base btn-gold font-bold">
+                      {t.vouchersSection.orderVouchersBtn}
+                    </a>
+                  </div>
+                </div>
+
+                {/* 4 преимущества талонов */}
+                <div className="grid gap-3.5 sm:grid-cols-2">
+                  {[
+                    { title: t.vouchersSection.b1Title, desc: t.vouchersSection.b1Desc, icon: Zap },
+                    { title: t.vouchersSection.b2Title, desc: t.vouchersSection.b2Desc, icon: CreditCard },
+                    { title: t.vouchersSection.b3Title, desc: t.vouchersSection.b3Desc, icon: ShieldCheck },
+                    { title: t.vouchersSection.b4Title, desc: t.vouchersSection.b4Desc, icon: MapPin },
+                  ].map((b) => (
+                    <div
+                      key={b.title}
+                      className="rounded-2xl border border-primary-foreground/15 bg-white/5 p-4.5 backdrop-blur"
+                    >
+                      <span className="flex size-8 items-center justify-center rounded-lg bg-gold/20 text-gold">
+                        <b.icon className="size-4" />
+                      </span>
+                      <h4 className="mt-3 text-sm font-bold text-primary-foreground">{b.title}</h4>
+                      <p className="mt-1 text-xs leading-relaxed text-primary-foreground/75">{b.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </section>
+
+        <Stripe />
+
+        {/* Сервис и комфорт */}
+        <section id="services" className="mx-auto max-w-6xl scroll-mt-28 px-5">
+          <Reveal>
+            <div className="text-center max-w-2xl mx-auto">
+              <span className="inline-flex items-center rounded-full bg-gold/20 px-3.5 py-1 text-xs font-semibold text-gold-foreground">
+                {t.servicesSection.badge}
+              </span>
+              <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-primary font-display">
+                {t.servicesSection.title}
+              </h2>
+              <p className="mt-2 text-sm sm:text-base text-foreground/70">
+                {t.servicesSection.subtitle}
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal className="mt-10">
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {[
+                { title: t.servicesSection.s1Title, desc: t.servicesSection.s1Desc, icon: Gauge },
+                { title: t.servicesSection.s2Title, desc: t.servicesSection.s2Desc, icon: ShoppingBag },
+                { title: t.servicesSection.s3Title, desc: t.servicesSection.s3Desc, icon: Coffee },
+                { title: t.servicesSection.s4Title, desc: t.servicesSection.s4Desc, icon: Droplets },
+                { title: t.servicesSection.s5Title, desc: t.servicesSection.s5Desc, icon: Wind },
+                { title: t.servicesSection.s6Title, desc: t.servicesSection.s6Desc, icon: QrCode },
+              ].map((srv) => (
+                <article key={srv.title} className="soft-card p-6 transition-all hover:border-primary/30">
+                  <span className="flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                    <srv.icon className="size-5.5 text-primary" aria-hidden="true" />
+                  </span>
+                  <h3 className="mt-4 font-display text-base font-bold text-primary">{srv.title}</h3>
+                  <p className="mt-2 text-xs sm:text-sm leading-relaxed text-foreground/75">
+                    {srv.desc}
+                  </p>
+                </article>
+              ))}
             </div>
           </Reveal>
         </section>
@@ -356,43 +960,41 @@ function Index() {
         {/* Акции */}
         <section id="promo" className="mx-auto max-w-6xl scroll-mt-28 px-5">
           <Reveal>
-            <SectionTitle>Акции и бонусы</SectionTitle>
+            <SectionTitle>{t.promo.title}</SectionTitle>
+            <p className="mt-2 text-foreground/70">{t.promo.subtitle}</p>
           </Reveal>
           <Reveal className="mt-8">
-            <div className="rounded-2xl bg-gold p-7 sm:p-9">
-              <p className="max-w-3xl font-display text-base leading-relaxed font-semibold text-primary sm:text-lg">
-                Нам 30 лет! Празднуем юбилей вместе с Днём работников нефтегазовой промышленности —
-                следите за акциями и розыгрышами в нашем Instagram.
+            <div className="rounded-2xl bg-gold p-7 sm:p-9 text-gold-foreground">
+              <p className="max-w-3xl font-display text-base leading-relaxed font-semibold sm:text-lg">
+                {t.promo.card1Desc}
               </p>
               <a
                 href={INSTAGRAM_URL}
                 target="_blank"
                 rel="noreferrer"
-                className="btn-base mt-6 bg-primary text-primary-foreground"
+                className="btn-base mt-6 bg-primary text-primary-foreground font-semibold inline-flex items-center gap-2"
               >
                 <Instagram className="size-4" aria-hidden="true" />
-                Мы в Instagram
+                {t.promo.openInstagram}
               </a>
             </div>
           </Reveal>
           <Reveal className="mt-4">
-            <div className="grid gap-4 sm:grid-cols-3">
-              {[
-                [
-                  "Бонусные топливные карты",
-                  "Участвуйте в акциях и выигрывайте карты с бесплатным топливом.",
-                ],
-                ["Акция месяца", "[Описание акции]"],
-                [
-                  "Промокоды в Instagram",
-                  "Следите за сторис — ловите промокоды на кофе и покупки в магазине.",
-                ],
-              ].map(([title, text]) => (
-                <article key={title} className="soft-card p-6">
-                  <h3 className="text-base font-bold text-primary">{title}</h3>
-                  <p className="mt-2 text-sm text-foreground/75">{text}</p>
-                </article>
-              ))}
+            <div className="grid gap-4 sm:grid-cols-2">
+              <article className="soft-card p-6">
+                <span className="inline-flex items-center rounded-full bg-gold/20 px-2.5 py-0.5 text-xs font-semibold text-gold-foreground">
+                  {t.promo.card1Badge}
+                </span>
+                <h3 className="mt-3 text-base font-bold text-primary font-display">{t.promo.card1Title}</h3>
+                <p className="mt-2 text-sm text-foreground/75">{t.promo.card1Desc}</p>
+              </article>
+              <article className="soft-card p-6">
+                <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+                  {t.promo.card2Badge}
+                </span>
+                <h3 className="mt-3 text-base font-bold text-primary font-display">{t.promo.card2Title}</h3>
+                <p className="mt-2 text-sm text-foreground/75">{t.promo.card2Desc}</p>
+              </article>
             </div>
           </Reveal>
         </section>
@@ -402,37 +1004,45 @@ function Index() {
         {/* Бизнесу */}
         <section id="b2b" className="mx-auto max-w-6xl scroll-mt-28 px-5">
           <Reveal>
-            <div className="soft-card grid gap-8 p-7 sm:p-10 lg:grid-cols-2">
-              <div>
-                <SectionTitle>Топливные карты и талоны для бизнеса</SectionTitle>
-                <p className="mt-4 text-foreground/75">
-                  Заправляйте автопарк по безналичному расчёту: топливные карты и талоны, контроль
-                  расходов по каждой машине, закрывающие документы, персональные условия для
-                  компаний Жезказгана, Улытау, Сатпаева и Астаны.
-                </p>
-                <div className="mt-7">
-                  <Link to="/cards" className="btn-base btn-gold">
-                    Топливные карты и талоны
-                  </Link>
+            <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+              <div className="soft-card flex flex-col justify-between p-7 sm:p-9 h-full">
+                <div>
+                  <span className="inline-flex items-center rounded-full bg-gold/20 px-3 py-1 text-xs font-semibold text-gold-foreground">
+                    {t.b2b.badge}
+                  </span>
+                  <h2 className="mt-4 font-display text-2xl sm:text-3xl font-bold text-primary">
+                    {t.b2b.title}
+                  </h2>
+                  <p className="mt-4 text-sm sm:text-base leading-relaxed text-foreground/75">
+                    {t.b2b.desc}
+                  </p>
+
+                  <ul className="mt-6 space-y-3">
+                    {[t.b2b.f1, t.b2b.f2, t.b2b.f3, t.b2b.f4].map((item) => (
+                      <li key={item} className="flex items-start gap-3 text-sm text-foreground/85">
+                        <CheckCircle2 className="mt-0.5 size-4.5 shrink-0 text-gold" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="mt-8 pt-6 border-t border-primary/10 flex flex-wrap items-center justify-between gap-4">
+                  <div>
+                    <p className="text-xs text-foreground/60">{t.b2b.see3d}</p>
+                    <Link
+                      to="/cards"
+                      className="font-semibold text-sm text-primary hover:text-gold transition-colors inline-flex items-center gap-1 mt-0.5"
+                    >
+                      {t.b2b.linkCards3d}
+                    </Link>
+                  </div>
                 </div>
               </div>
-              <ul className="space-y-3 self-center">
-                {[
-                  "Топливные карты и талоны",
-                  "Безналичный расчёт и договор",
-                  "Отчёты по каждой карте",
-                  "Закрывающие документы",
-                  "Персональный менеджер",
-                ].map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm text-foreground/85">
-                    <span
-                      className="mt-1.5 size-2 shrink-0 rounded-full bg-gold"
-                      aria-hidden="true"
-                    />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+
+              <div>
+                <B2BLeadForm formId="b2b_home_form" />
+              </div>
             </div>
           </Reveal>
         </section>
@@ -442,14 +1052,12 @@ function Index() {
         {/* О нас */}
         <section id="about" className="mx-auto max-w-6xl scroll-mt-28 px-5">
           <Reveal>
-            <SectionTitle>О нас</SectionTitle>
-            <p className="mt-4 max-w-3xl text-foreground/80">
-              С 1996 года мы развиваем собственную сеть АЗС в Улытауской области и Астане. Начинали
-              с одной станции — сегодня нас восемь. Мы местная команда: знаем свои города, своих
-              клиентов и отвечаем за качество топлива репутацией, заработанной за 30 лет.
+            <SectionTitle>{t.about.title}</SectionTitle>
+            <p className="mt-4 max-w-3xl text-foreground/80 leading-relaxed">
+              {t.about.text}
             </p>
             <span className="mt-6 inline-flex items-center rounded-full bg-gold px-4 py-1.5 text-sm font-semibold text-gold-foreground">
-              1996–2026 · 30 лет
+              {t.about.badge}
             </span>
           </Reveal>
         </section>
@@ -459,13 +1067,18 @@ function Index() {
         {/* Вакансии */}
         <section id="jobs" className="mx-auto max-w-6xl scroll-mt-28 px-5">
           <Reveal>
-            <SectionTitle>Вакансии</SectionTitle>
-            <p className="mt-4 max-w-3xl text-foreground/80">
-              Присоединяйтесь к команде С-Мунай — нам нужны внимательные и доброжелательные люди:
-              кассиры, операторы, бариста. Напишите нам, и мы расскажем о свободных позициях.
+            <SectionTitle>{t.jobs.title}</SectionTitle>
+            <p className="mt-4 max-w-3xl text-foreground/80 leading-relaxed">
+              {t.jobs.text}
             </p>
-            <a href={`mailto:${EMAIL}`} className="btn-base btn-gold mt-6">
-              Написать нам
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="btn-base btn-gold mt-6 inline-flex items-center gap-2 font-semibold"
+            >
+              <Instagram className="size-4" aria-hidden="true" />
+              {t.jobs.writeInsta}
             </a>
           </Reveal>
         </section>
@@ -475,40 +1088,50 @@ function Index() {
         {/* Контакты */}
         <section id="contacts" className="mx-auto max-w-6xl scroll-mt-28 px-5 pb-4">
           <Reveal>
-            <SectionTitle>Контакты</SectionTitle>
+            <SectionTitle>{t.contacts.title}</SectionTitle>
             <div className="mt-6 grid gap-8 lg:grid-cols-2">
-              <ul className="space-y-3 text-foreground/85">
-                <li>
-                  Телефон:{" "}
-                  <a className="font-medium text-primary hover:underline" href={`tel:${PHONE}`}>
-                    {PHONE}
-                  </a>
-                </li>
-                <li>
-                  Instagram:{" "}
+              <div className="soft-card flex flex-col justify-between p-6 sm:p-8">
+                <div>
+                  <div className="flex items-center gap-3">
+                    <span className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                      <Instagram className="size-5" aria-hidden="true" />
+                    </span>
+                    <div>
+                      <h3 className="font-bold text-primary font-display">{t.contacts.instaCardTitle}</h3>
+                      <p className="text-xs text-foreground/60">{t.contacts.instaHandle}</p>
+                    </div>
+                  </div>
+                  <p className="mt-4 text-sm leading-relaxed text-foreground/80">
+                    {t.contacts.instaDesc}
+                  </p>
+                </div>
+                <div className="mt-6">
                   <a
-                    className="font-medium break-all text-primary hover:underline"
                     href={INSTAGRAM_URL}
                     target="_blank"
                     rel="noreferrer"
+                    className="btn-base btn-gold inline-flex items-center gap-2 font-semibold"
                   >
-                    {INSTAGRAM_URL}
+                    <Instagram className="size-4" aria-hidden="true" />
+                    {t.contacts.instaBtn}
                   </a>
-                </li>
-                <li>
-                  Почта:{" "}
-                  <a className="font-medium text-primary hover:underline" href={`mailto:${EMAIL}`}>
-                    {EMAIL}
-                  </a>
-                </li>
-              </ul>
-              <div className="soft-card p-6">
-                <h3 className="text-base font-bold text-primary">Все станции</h3>
-                <ul className="mt-4 space-y-2 text-sm text-foreground/75">
+                </div>
+              </div>
+
+              <div className="soft-card p-6 sm:p-8">
+                <h3 className="text-base font-bold text-primary font-display">{t.contacts.geoTitle}</h3>
+                <p className="mt-1 text-xs text-foreground/60">{t.contacts.geoSubtitle}</p>
+                <ul className="mt-4 divide-y divide-primary/5 text-sm text-foreground/75">
                   {CITY_STATIONS.flatMap((group) =>
                     group.stations.map((station) => (
-                      <li key={`${group.city}-${station.number}`}>
-                        {group.city} — АЗС №{station.number} — {station.address}
+                      <li
+                        key={`${group.city}-${station.number}`}
+                        className="flex items-center justify-between py-2 first:pt-0 last:pb-0"
+                      >
+                        <span className="font-medium text-foreground/90">
+                          {getCityName(group)} — АЗС №{station.number}
+                        </span>
+                        <span className="text-xs text-foreground/60">{getAddress(station)}</span>
                       </li>
                     )),
                   )}
@@ -520,9 +1143,18 @@ function Index() {
       </main>
 
       <footer className="mt-16 border-t border-primary/10 py-8">
-        <p className="mx-auto max-w-6xl px-5 text-sm text-foreground/60">
-          © С-Мунай, 1996–2026. Все права защищены.
-        </p>
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 sm:flex-row">
+          <a href="#top" className="flex items-center transition-opacity hover:opacity-80">
+            <img
+              src="/images/logo-navbar.svg"
+              alt="С-МУНАЙ"
+              className="h-7 w-auto object-contain opacity-80"
+            />
+          </a>
+          <p className="text-sm text-foreground/60">
+            {t.footer.rights}
+          </p>
+        </div>
       </footer>
     </div>
   );
