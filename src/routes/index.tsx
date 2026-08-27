@@ -18,6 +18,7 @@ import {
   Droplets,
   UserCheck,
   QrCode,
+  Sparkles,
 } from "lucide-react";
 import { LeafletMap } from "@/components/site/LeafletMap";
 import { B2BLeadForm } from "@/components/site/B2BLeadForm";
