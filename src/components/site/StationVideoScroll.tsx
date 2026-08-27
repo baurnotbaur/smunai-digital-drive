@@ -10,6 +10,12 @@ const DESKTOP_ZOOM = 0.3;
 const MOBILE_SCALE = 1.45;
 const DESKTOP_MQ = "(min-width: 768px)";
 
+// Два варианта ролика: на телефон уходит вчетверо более лёгкий файл.
+// Источник выставляется из JS после монтирования, поэтому сервер отдаёт
+// <video> без src и браузер не успевает скачать лишнюю версию.
+const DESKTOP_SRC = "/videos/station.webm";
+const MOBILE_SRC = "/videos/station-mobile.webm";
+
 export function StationVideoScroll({ children }: { children?: ReactNode }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -23,6 +29,11 @@ export function StationVideoScroll({ children }: { children?: ReactNode }) {
     let lastProgress = -1;
 
     const mq = window.matchMedia(DESKTOP_MQ);
+
+    // выбираем версию ролика один раз при монтировании: менять источник на
+    // лету нельзя — перезагрузка сбросила бы позицию прокрутки
+    const video0 = videoRef.current;
+    if (video0 && !video0.src) video0.src = mq.matches ? DESKTOP_SRC : MOBILE_SRC;
     // при смене брейкпоинта пересчитываем масштаб даже без прокрутки
     const onMqChange = () => {
       lastProgress = -1;
@@ -94,7 +105,6 @@ export function StationVideoScroll({ children }: { children?: ReactNode }) {
         )}
         <video
           ref={videoRef}
-          src="/videos/station.webm"
           muted
           playsInline
           preload="auto"

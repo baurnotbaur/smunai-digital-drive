@@ -21,8 +21,8 @@ import puppeteer from 'puppeteer';
 // ─── Настройки ──────────────────────────────────────────────────────────────
 const WIDTH = 1920;
 const HEIGHT = 1080;
-const FPS = 60;
-const DURATION_SEC = 3.5; // полный оборот за 3,5 с → 210 кадров
+const FPS = 30;
+const DURATION_SEC = 4; // 120 кадров: для скролл-скраббинга этого хватает
 const TOTAL_FRAMES = Math.round(FPS * DURATION_SEC);
 
 // '#327f99' — сплошной фон; 'transparent' — webm с альфа-каналом (VP9 умеет)
@@ -68,11 +68,21 @@ const MATERIAL_OVERRIDES = {
 // true → каждый кадр ключевой (-g 1): браузер мгновенно перематывает видео при
 // скролле (scroll-scrubbing). Файл крупнее; для автовоспроизведения — false.
 const ALL_INTRA = true;
-const CRF = 32; // качество VP9: меньше — лучше и тяжелее (диапазон ~15–45)
+
+// Выходные версии. Рендерим один раз в 1920x1080, затем ужимаем в два файла:
+// уменьшение кадра работает как суперсэмплинг, поэтому битрейт можно опустить
+// заметно сильнее без видимой потери качества.
+const VARIANTS = [
+  // десктоп: все 120 кадров
+  { file: 'station.webm', width: 1280, height: 720, crf: 36 },
+  // телефон: половина кадров (60) — на маленьком экране разницы не видно,
+  // зато файл вдвое легче и декодер меньше нагружен при перемотке
+  { file: 'station-mobile.webm', width: 854, height: 480, crf: 40, fps: FPS / 2 },
+];
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MODEL_PATH = path.join(__dirname, 'public', 'models', 'station.glb');
-const OUTPUT_PATH = path.join(__dirname, 'public', 'videos', 'station.webm');
+const VIDEO_DIR = path.join(__dirname, 'public', 'videos');
 const FRAMES_DIR = path.join(__dirname, '.render-frames');
 const THREE_MODULE = path.join(__dirname, 'node_modules', 'three', 'build', 'three.module.js');
 const THREE_JSM_DIR = path.join(__dirname, 'node_modules', 'three', 'examples', 'jsm');
@@ -601,16 +611,20 @@ async function captureFrames(pageUrl) {
 }
 
 // ─── Сборка webm через ffmpeg ───────────────────────────────────────────────
-function encodeVideo() {
+function encodeVideo(variant) {
+  const outputPath = path.join(VIDEO_DIR, variant.file);
   const args = [
     '-y',
     '-framerate', String(FPS),
     '-i', path.join(FRAMES_DIR, 'frame_%04d.png'),
-    // лёгкая «камерная» цветокоррекция: контраст, насыщенность, микрорезкость
-    '-vf', 'eq=contrast=1.05:saturation=1.12,unsharp=5:5:0.25',
+    // масштабирование + лёгкая «камерная» цветокоррекция и микрорезкость
+    '-vf',
+    `scale=${variant.width}:${variant.height}:flags=lanczos,` +
+      'eq=contrast=1.05:saturation=1.12,unsharp=5:5:0.25' +
+      (variant.fps ? `,fps=${variant.fps}` : ''),
     '-c:v', 'libvpx-vp9',
     '-b:v', '0',
-    '-crf', String(CRF),
+    '-crf', String(variant.crf),
     '-pix_fmt', TRANSPARENT ? 'yuva420p' : 'yuv420p',
     // альфа-канал VP9 несовместим с alt-ref кадрами
     ...(TRANSPARENT ? ['-auto-alt-ref', '0'] : []),
@@ -619,13 +633,13 @@ function encodeVideo() {
     '-cpu-used', '2',
     '-row-mt', '1',
     '-an',
-    OUTPUT_PATH,
+    outputPath,
   ];
   return new Promise((resolve, reject) => {
-    const ff = spawn(ffmpegPath, args, { stdio: ['ignore', 'inherit', 'inherit'] });
+    const ff = spawn(ffmpegPath, args, { stdio: ['ignore', 'pipe', 'pipe'] });
     ff.on('error', reject);
     ff.on('close', (code) =>
-      code === 0 ? resolve() : reject(new Error(`ffmpeg завершился с кодом ${code}`)),
+      code === 0 ? resolve(outputPath) : reject(new Error(`ffmpeg завершился с кодом ${code}`)),
     );
   });
 }
@@ -641,7 +655,7 @@ async function main() {
 
   fs.rmSync(FRAMES_DIR, { recursive: true, force: true });
   fs.mkdirSync(FRAMES_DIR, { recursive: true });
-  fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
+  fs.mkdirSync(VIDEO_DIR, { recursive: true });
 
   const server = await startServer();
   const { port } = server.address();
@@ -652,11 +666,12 @@ async function main() {
     );
     await captureFrames(`http://127.0.0.1:${port}/`);
 
-    console.log('Кодирование VP9 → webm…');
-    await encodeVideo();
-
-    const sizeMb = (fs.statSync(OUTPUT_PATH).size / 1024 / 1024).toFixed(2);
-    console.log(`Готово: ${OUTPUT_PATH} (${sizeMb} МБ)`);
+    for (const variant of VARIANTS) {
+      console.log(`Кодирование ${variant.file} (${variant.width}x${variant.height}, CRF ${variant.crf})…`);
+      const outputPath = await encodeVideo(variant);
+      const sizeMb = (fs.statSync(outputPath).size / 1024 / 1024).toFixed(2);
+      console.log(`  готово: ${variant.file} — ${sizeMb} МБ`);
+    }
   } finally {
     server.close();
     fs.rmSync(FRAMES_DIR, { recursive: true, force: true });
