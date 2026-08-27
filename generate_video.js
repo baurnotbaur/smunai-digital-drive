@@ -19,8 +19,10 @@ import ffmpegPath from 'ffmpeg-static';
 import puppeteer from 'puppeteer';
 
 // ─── Настройки ──────────────────────────────────────────────────────────────
-const WIDTH = 1920;
-const HEIGHT = 1080;
+// мастер снимается с запасом: при уменьшении до рабочих разрешений
+// кадр суперсэмплится и остаётся заметно чище
+const WIDTH = 2560;
+const HEIGHT = 1440;
 const FPS = 30;
 const DURATION_SEC = 4; // 120 кадров: для скролл-скраббинга этого хватает
 const TOTAL_FRAMES = Math.round(FPS * DURATION_SEC);
@@ -73,11 +75,11 @@ const ALL_INTRA = true;
 // уменьшение кадра работает как суперсэмплинг, поэтому битрейт можно опустить
 // заметно сильнее без видимой потери качества.
 const VARIANTS = [
-  // десктоп: все 120 кадров
-  { file: 'station.webm', width: 1280, height: 720, crf: 36 },
-  // телефон: половина кадров (60) — на маленьком экране разницы не видно,
-  // зато файл вдвое легче и декодер меньше нагружен при перемотке
-  { file: 'station-mobile.webm', width: 854, height: 480, crf: 40, fps: FPS / 2 },
+  // Три уровня качества. Страница всегда стартует с лёгкого, а затем
+  // догружает тяжёлый, если скорость соединения это позволяет.
+  { file: 'station-480.webm', width: 854, height: 480, crf: 38, fps: FPS / 2 },
+  { file: 'station-720.webm', width: 1280, height: 720, crf: 33 },
+  { file: 'station-1080.webm', width: 1920, height: 1080, crf: 31 },
 ];
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
+import { BASE_TIER, pickTier } from "@/lib/videoQuality";
+
 // Доля прокрутки сцены, на которой начинает и заканчивает проявляться текст
 const TEXT_REVEAL_START = 0.55;
 const TEXT_REVEAL_END = 0.85;
@@ -10,12 +12,6 @@ const DESKTOP_ZOOM = 0.3;
 const MOBILE_SCALE = 1.45;
 const DESKTOP_MQ = "(min-width: 768px)";
 
-// Два варианта ролика: на телефон уходит вчетверо более лёгкий файл.
-// Источник выставляется из JS после монтирования, поэтому сервер отдаёт
-// <video> без src и браузер не успевает скачать лишнюю версию.
-const DESKTOP_SRC = "/videos/station.webm";
-const MOBILE_SRC = "/videos/station-mobile.webm";
-
 export function StationVideoScroll({ children }: { children?: ReactNode }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -24,16 +20,93 @@ export function StationVideoScroll({ children }: { children?: ReactNode }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(false);
 
+  // ── Загрузка ролика: сначала лёгкий файл, затем апгрейд по скорости сети
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    let cancelled = false;
+    let objectUrl: string | undefined;
+
+    const revoke = () => {
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+      objectUrl = undefined;
+    };
+
+    /** Меняет источник, сохраняя текущий кадр — прокрутка не сбивается. */
+    const swapSource = (url: string) => {
+      const keepTime = video.currentTime;
+      const restore = () => {
+        // длительность у всех версий одинаковая, поэтому кадр совпадёт
+        if (Number.isFinite(video.duration)) video.currentTime = keepTime;
+      };
+      video.addEventListener("loadedmetadata", restore, { once: true });
+      video.src = url;
+    };
+
+    const upgrade = async (measuredMbps?: number) => {
+      const tier = pickTier(measuredMbps);
+      if (!tier || cancelled || tier.file === BASE_TIER.file) return;
+      try {
+        // качаем целиком: перемотка по скроллу должна попадать в буфер,
+        // иначе кадры подгружаются рывками
+        const res = await fetch(tier.file);
+        if (!res.ok || cancelled) return;
+        const blob = await res.blob();
+        if (cancelled) return;
+        const previous = objectUrl;
+        objectUrl = URL.createObjectURL(blob);
+        swapSource(objectUrl);
+        if (previous) URL.revokeObjectURL(previous);
+      } catch {
+        // не вышло — остаёмся на лёгкой версии, она уже играет
+      }
+    };
+
+    // 1. лёгкий файл: сцена появляется мгновенно на любой связи
+    video.src = BASE_TIER.file;
+
+    // 2. измеряем реальную скорость по тому, как быстро он приехал.
+    //    Берём данные из Resource Timing, а не из событий <video>: событие
+    //    canplaythrough не повторяется, если файл уже в кэше или элемент
+    //    успел загрузиться до подписки.
+    const measureAndUpgrade = () => {
+      const entry = performance
+        .getEntriesByType("resource")
+        .find((e) => e.name.endsWith(BASE_TIER.file)) as PerformanceResourceTiming | undefined;
+
+      let measuredMbps: number | undefined;
+      // transferSize 0 — файл пришёл из кэша, скорость по нему не измерить
+      if (entry && entry.transferSize > 0) {
+        // нижняя граница в 1 мс защищает от деления на ноль: мгновенный ответ
+        // сам по себе означает очень быстрый канал
+        const seconds = Math.max((entry.responseEnd - entry.responseStart) / 1000, 0.001);
+        measuredMbps = (entry.transferSize * 8) / seconds / 1e6;
+      }
+      void upgrade(measuredMbps);
+    };
+
+    // buffered: true — если запись уже появилась, обработчик вызовется сразу
+    const observer = new PerformanceObserver((list) => {
+      if (!list.getEntries().some((e) => e.name.endsWith(BASE_TIER.file))) return;
+      observer.disconnect();
+      measureAndUpgrade();
+    });
+    observer.observe({ type: "resource", buffered: true });
+
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+      revoke();
+    };
+  }, []);
+
   useEffect(() => {
     let animationFrameId: number;
     let lastProgress = -1;
 
     const mq = window.matchMedia(DESKTOP_MQ);
 
-    // выбираем версию ролика один раз при монтировании: менять источник на
-    // лету нельзя — перезагрузка сбросила бы позицию прокрутки
-    const video0 = videoRef.current;
-    if (video0 && !video0.src) video0.src = mq.matches ? DESKTOP_SRC : MOBILE_SRC;
     // при смене брейкпоинта пересчитываем масштаб даже без прокрутки
     const onMqChange = () => {
       lastProgress = -1;
