@@ -16,7 +16,7 @@ import {
   Gauge,
   CreditCard,
   Droplets,
-  Wind,
+  UserCheck,
   QrCode,
 } from "lucide-react";
 import { LeafletMap } from "@/components/site/LeafletMap";
@@ -938,7 +938,7 @@ function Index() {
                 { title: t.servicesSection.s2Title, desc: t.servicesSection.s2Desc, icon: ShoppingBag },
                 { title: t.servicesSection.s3Title, desc: t.servicesSection.s3Desc, icon: Coffee },
                 { title: t.servicesSection.s4Title, desc: t.servicesSection.s4Desc, icon: Droplets },
-                { title: t.servicesSection.s5Title, desc: t.servicesSection.s5Desc, icon: Wind },
+                { title: t.servicesSection.s5Title, desc: t.servicesSection.s5Desc, icon: UserCheck },
                 { title: t.servicesSection.s6Title, desc: t.servicesSection.s6Desc, icon: QrCode },
               ].map((srv) => (
                 <article key={srv.title} className="soft-card p-6 transition-all hover:border-primary/30">
