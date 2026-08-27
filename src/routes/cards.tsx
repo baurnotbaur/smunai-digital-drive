@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Gauge, Wallet, FileCheck2, Ticket, Droplets, Zap, ShieldCheck, CreditCard, Sparkles } from "lucide-react";
-import { Station3DViewer } from "@/components/site/Station3DViewer";
+import { StationVideoScroll } from "@/components/site/StationVideoScroll";
 import { B2BLeadForm } from "@/components/site/B2BLeadForm";
 import { useLanguage, LanguageSwitcher } from "@/lib/i18n";
 
@@ -111,10 +111,10 @@ function CardsPage() {
       </header>
 
       <main>
-        {/* 3D Viewer hero */}
-        <section id="station" className="mx-auto max-w-6xl scroll-mt-28 px-5 pt-10 sm:pt-14">
-          <div className="grid items-center gap-8 rounded-3xl bg-primary p-7 text-primary-foreground sm:p-10 lg:grid-cols-[1.1fr_0.9fr] lg:p-12">
-            <div>
+        {/* Полноэкранная 3D-сцена: станция вращается при прокрутке, текст проявляется в конце */}
+        <section id="station">
+          <StationVideoScroll>
+            <div className="max-w-xl text-primary-foreground">
               <span className="inline-flex items-center rounded-full bg-gold/20 px-3.5 py-1 text-xs font-semibold text-gold">
                 {cp.heroBadge}
               </span>
@@ -130,8 +130,7 @@ function CardsPage() {
                 </a>
               </div>
             </div>
-            <Station3DViewer />
-          </div>
+          </StationVideoScroll>
         </section>
 
         <div className="mx-auto max-w-6xl px-5">
