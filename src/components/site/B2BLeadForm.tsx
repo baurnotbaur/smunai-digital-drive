@@ -227,6 +227,9 @@ export function B2BLeadForm({
             required
             disabled={isBusy}
             placeholder={f.phonePlaceholder}
+            onInput={(e) => {
+              e.currentTarget.value = e.currentTarget.value.replace(/[^\d+ ()-]/g, '');
+            }}
             className={
               darkTheme
                 ? "border-primary-foreground/20 bg-primary/40 text-primary-foreground placeholder:text-primary-foreground/40 focus:border-gold"

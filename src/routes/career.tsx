@@ -152,7 +152,15 @@ function CareerPage() {
                     <FormItem>
                       <FormLabel className="text-foreground/90 font-medium">Телефон</FormLabel>
                       <FormControl>
-                        <Input placeholder="+7 (707) 000-00-00" className="bg-background/50 focus-visible:ring-primary/30" {...field} />
+                        <Input 
+                          placeholder="+7 (707) 000-00-00" 
+                          className="bg-background/50 focus-visible:ring-primary/30" 
+                          {...field}
+                          onChange={(e) => {
+                            const val = e.target.value.replace(/[^\d+ ()-]/g, '');
+                            field.onChange(val);
+                          }}
+                        />
                       </FormControl>
                       <FormMessage className="text-red-500/90 text-xs" />
                     </FormItem>
