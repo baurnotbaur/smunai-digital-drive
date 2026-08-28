@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { submitLead } from "@/lib/leads";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Link } from "@tanstack/react-router";
 import { PrivacyPolicyModal } from "@/components/site/PrivacyPolicyModal";
 import { CheckCircle2, AlertCircle, Loader2, Send, CreditCard, Ticket, Sparkles } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
@@ -296,19 +297,14 @@ export function B2BLeadForm({
               type="checkbox"
               name="dataConsent"
               required
-              defaultChecked
+              defaultChecked={false}
               disabled={isBusy}
               className="mt-0.5 size-4 shrink-0 rounded accent-gold"
             />
             <span
               className={darkTheme ? "text-primary-foreground/85" : "text-foreground/80"}
             >
-              {f.dataConsentText}{" "}
-              <PrivacyPolicyModal
-                triggerText={f.privacyLink}
-                className={darkTheme ? "text-gold font-medium" : "text-primary font-medium"}
-              />
-              . <span className="text-terracotta">*</span>
+              Я даю согласие ТОО «С-Мунай» на сбор и обработку моих персональных данных в соответствии с <Link to="/privacy" className={darkTheme ? "text-gold font-medium underline" : "text-primary font-medium underline"}>Политикой конфиденциальности</Link>. <span className="text-terracotta">*</span>
             </span>
           </label>
 

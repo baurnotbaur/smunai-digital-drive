@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CardsRouteImport } from './routes/cards'
 import { Route as CareerRouteImport } from './routes/career'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as AdminAuthRouteImport } from './routes/admin/auth'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +30,11 @@ const CareerRoute = CareerRouteImport.update({
   path: '/career',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminAuthRoute = AdminAuthRouteImport.update({
   id: '/admin/auth',
   path: '/admin/auth',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cards': typeof CardsRoute
   '/career': typeof CareerRoute
+  '/privacy': typeof PrivacyRoute
   '/admin/auth': typeof AdminAuthRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cards': typeof CardsRoute
   '/career': typeof CareerRoute
+  '/privacy': typeof PrivacyRoute
   '/admin/auth': typeof AdminAuthRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/cards': typeof CardsRoute
   '/career': typeof CareerRoute
+  '/privacy': typeof PrivacyRoute
   '/admin/auth': typeof AdminAuthRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cards' | '/career' | '/admin/auth'
+  fullPaths: '/' | '/cards' | '/career' | '/privacy' | '/admin/auth'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cards' | '/career' | '/admin/auth'
-  id: '__root__' | '/' | '/cards' | '/career' | '/admin/auth'
+  to: '/' | '/cards' | '/career' | '/privacy' | '/admin/auth'
+  id: '__root__' | '/' | '/cards' | '/career' | '/privacy' | '/admin/auth'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CardsRoute: typeof CardsRoute
   CareerRoute: typeof CareerRoute
+  PrivacyRoute: typeof PrivacyRoute
   AdminAuthRoute: typeof AdminAuthRoute
 }
 
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CareerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/auth': {
       id: '/admin/auth'
       path: '/admin/auth'
@@ -106,6 +123,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CardsRoute: CardsRoute,
   CareerRoute: CareerRoute,
+  PrivacyRoute: PrivacyRoute,
   AdminAuthRoute: AdminAuthRoute,
 }
 export const routeTree = rootRouteImport

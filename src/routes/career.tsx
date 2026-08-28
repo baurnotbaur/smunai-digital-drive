@@ -42,6 +42,7 @@ const formSchema = z.object({
   phone: z.string().min(10, { message: "Введите корректный номер телефона." }),
   position: z.string({ required_error: "Пожалуйста, выберите желаемую должность." }),
   experience: z.string().optional(),
+  consent: z.boolean().refine(val => val === true, "Необходимо согласие на обработку данных"),
 });
 
 function CareerPage() {
@@ -54,6 +55,7 @@ function CareerPage() {
       phone: "",
       position: "",
       experience: "",
+      consent: false,
     },
   });
 
@@ -208,6 +210,29 @@ function CareerPage() {
                         />
                       </FormControl>
                       <FormMessage className="text-red-500/90 text-xs" />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="consent"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-2.5 space-y-0 p-1">
+                      <FormControl>
+                        <input
+                          type="checkbox"
+                          checked={field.value}
+                          onChange={field.onChange}
+                          className="mt-0.5 size-4 shrink-0 rounded accent-gold cursor-pointer"
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-tight">
+                        <FormLabel className="text-xs font-normal text-foreground/80 cursor-pointer">
+                          Я даю согласие ТОО «С-Мунай» на сбор и обработку моих персональных данных в соответствии с <Link to="/privacy" className="text-primary font-medium underline hover:text-primary/80">Политикой конфиденциальности</Link>. <span className="text-red-500">*</span>
+                        </FormLabel>
+                        <FormMessage className="text-red-500/90 text-xs" />
+                      </div>
                     </FormItem>
                   )}
                 />
