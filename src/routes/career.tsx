@@ -159,7 +159,9 @@ function CareerPage() {
                           maxLength={18}
                           {...field}
                           onChange={(e) => {
-                            field.onChange(formatKzPhone(e.target.value));
+                            const formatted = formatKzPhone(e.target.value);
+                            e.target.value = formatted; // Force DOM update for React Hook Form bug
+                            field.onChange(formatted);
                           }}
                         />
                       </FormControl>
