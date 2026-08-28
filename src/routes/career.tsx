@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
+import { submitLead } from "@/lib/leads";
 import { ChevronLeft, Briefcase, Send } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -55,33 +56,23 @@ function CareerPage() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>, e?: React.BaseSyntheticEvent) {
     try {
       setIsSubmitting(true);
       
-      const payload = {
+      const hp = e?.target?._hp?.value || "";
+      
+      await submitLead({
         name: values.name,
         phone: values.phone,
         comment: values.experience ? `Опыт работы: ${values.experience}` : "Опыт работы: не указан",
         extra: {
           position: values.position,
         },
-        type: "hr"
-      };
-
-      const API_URL = import.meta.env.DEV ? "http://localhost:4000/api/leads" : "https://smunai-lead-service.vercel.app/api/leads";
-
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
+        type: "hr",
+        form_id: "hr_career_form",
+        _hp: hp
       });
-
-      if (!response.ok) {
-        throw new Error("Ошибка при отправке заявки");
-      }
 
       toast.success("Ваша заявка успешно отправлена!", {
         description: "Наш HR-менеджер свяжется с вами в ближайшее время.",
@@ -136,6 +127,10 @@ function CareerPage() {
           <div className="soft-card p-6 sm:p-8 bg-background/80 backdrop-blur-md shadow-xl border-primary/10">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                
+                {/* Honeypot field for bot protection */}
+                <input type="text" name="_hp" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
+
                 <FormField
                   control={form.control}
                   name="name"

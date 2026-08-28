@@ -15,6 +15,9 @@ export type LeadPayload = {
   /** Согласие на рекламные рассылки — без него клиент не попадёт в рассылки. */
   consent?: boolean;
   form_id: string;
+  type?: "sales" | "hr";
+  extra?: Record<string, any>;
+  _hp?: string;
 };
 
 export async function submitLead(payload: LeadPayload): Promise<void> {

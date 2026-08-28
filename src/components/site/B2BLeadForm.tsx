@@ -38,6 +38,7 @@ export function B2BLeadForm({
     const phone = String(formData.get("phone") || "").trim();
     const org = String(formData.get("org") || "").trim();
     const userComment = String(formData.get("comment") || "").trim();
+    const hp = String(formData.get("_hp") || "").trim();
     const marketingConsent = formData.get("marketingConsent") === "on";
     const dataConsent = formData.get("dataConsent") === "on";
 
@@ -63,6 +64,7 @@ export function B2BLeadForm({
         comment: fullComment,
         consent: marketingConsent,
         form_id: formId,
+        _hp: hp
       });
 
       setSuccess(true);
@@ -259,6 +261,7 @@ export function B2BLeadForm({
 
         {/* Дополнительно */}
         <div className="space-y-1.5">
+          <input type="text" name="_hp" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
           <Label
             htmlFor={`${formId}-comment`}
             className={`text-xs font-semibold uppercase tracking-wider ${
