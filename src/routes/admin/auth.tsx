@@ -33,25 +33,56 @@ function AdminAuthPage() {
     e.preventDefault();
     setIsBusy(true);
     setMessage(null);
-    setTimeout(() => {
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    
+    try {
+      const SERVICE_URL = import.meta.env.VITE_LEAD_SERVICE_URL || "https://smunai-lead-service.vercel.app";
+      const res = await fetch(`${SERVICE_URL}/api/auth/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      setMessage({ type: res.ok ? "success" : "error", text: data.message || "Ошибка сервера" });
+    } catch (err) {
+      setMessage({ type: "error", text: "Сетевая ошибка" });
+    } finally {
       setIsBusy(false);
-      setMessage({ type: "success", text: "Ссылка для сброса отправлена на ваш email." });
-    }, 1500);
+    }
   }
 
   async function handleReset(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsBusy(true);
     setMessage(null);
-    setTimeout(() => {
+    const formData = new FormData(e.currentTarget);
+    const newPassword = formData.get("newPassword") as string;
+    
+    try {
+      const SERVICE_URL = import.meta.env.VITE_LEAD_SERVICE_URL || "https://smunai-lead-service.vercel.app";
+      const res = await fetch(`${SERVICE_URL}/api/auth/confirm-reset`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: urlToken, newPassword }),
+      });
+      const data = await res.json();
+      
+      if (res.ok) {
+        setMessage({ type: "success", text: "Пароль успешно изменен. Теперь вы можете войти." });
+        setTimeout(() => {
+          navigate({ search: {} });
+          setView("login");
+          setMessage(null);
+        }, 2000);
+      } else {
+        setMessage({ type: "error", text: data.message || "Ошибка сервера" });
+      }
+    } catch (err) {
+      setMessage({ type: "error", text: "Сетевая ошибка" });
+    } finally {
       setIsBusy(false);
-      setMessage({ type: "success", text: "Пароль успешно изменен. Теперь вы можете войти." });
-      setTimeout(() => {
-        navigate({ search: {} });
-        setView("login");
-        setMessage(null);
-      }, 2000);
-    }, 1500);
+    }
   }
 
   return (
@@ -111,7 +142,7 @@ function AdminAuthPage() {
           <form onSubmit={handleForgot} className="space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="forgot-email">Email</Label>
-              <Input id="forgot-email" type="email" required disabled={isBusy} placeholder="admin@smunai.kz" />
+              <Input id="forgot-email" name="email" type="email" required disabled={isBusy} placeholder="admin@smunai.kz" />
             </div>
             <button type="submit" disabled={isBusy} className="btn-base bg-primary text-primary-foreground w-full mt-2 inline-flex items-center justify-center gap-2">
               {isBusy && <Loader2 className="size-4 animate-spin" />}
@@ -132,7 +163,7 @@ function AdminAuthPage() {
           <form onSubmit={handleReset} className="space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="reset-password">Новый пароль</Label>
-              <Input id="reset-password" type="password" required disabled={isBusy} placeholder="Минимум 8 символов" minLength={8} />
+              <Input id="reset-password" name="newPassword" type="password" required disabled={isBusy} placeholder="Минимум 8 символов" minLength={8} />
             </div>
             <button type="submit" disabled={isBusy} className="btn-base bg-primary text-primary-foreground w-full mt-2 inline-flex items-center justify-center gap-2">
               {isBusy && <Loader2 className="size-4 animate-spin" />}
