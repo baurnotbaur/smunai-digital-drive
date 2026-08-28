@@ -489,7 +489,6 @@ function Index() {
     { href: "#fuel", label: t.nav.fuel },
     { href: "#vouchers", label: t.nav.vouchers },
     { href: "#services", label: t.nav.services },
-    { href: "#promo", label: t.nav.promo },
     { href: "#b2b", label: t.nav.b2b },
     { href: "#about", label: t.nav.about },
     { href: "#contacts", label: t.nav.contacts },
@@ -606,9 +605,6 @@ function Index() {
                 <a href="#vouchers" className="btn-base border border-primary/30 text-primary hover:bg-primary/10 font-semibold inline-flex items-center gap-1.5">
                   <Ticket className="size-4" />
                   {t.nav.vouchers}
-                </a>
-                <a href="#promo" className="btn-base btn-teal-outline font-semibold">
-                  {t.hero.promosBtn}
                 </a>
               </div>
             </Reveal>
@@ -958,49 +954,6 @@ function Index() {
 
         <Stripe />
 
-        {/* Акции */}
-        <section id="promo" className="mx-auto max-w-6xl scroll-mt-28 px-5">
-          <Reveal>
-            <SectionTitle>{t.promo.title}</SectionTitle>
-            <p className="mt-2 text-foreground/70">{t.promo.subtitle}</p>
-          </Reveal>
-          <Reveal className="mt-8">
-            <div className="rounded-2xl bg-gold p-7 sm:p-9 text-gold-foreground">
-              <p className="max-w-3xl font-display text-base leading-relaxed font-semibold sm:text-lg">
-                {t.promo.card1Desc}
-              </p>
-              <a
-                href={INSTAGRAM_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="btn-base mt-6 bg-primary text-primary-foreground font-semibold inline-flex items-center gap-2"
-              >
-                <Instagram className="size-4" aria-hidden="true" />
-                {t.promo.openInstagram}
-              </a>
-            </div>
-          </Reveal>
-          <Reveal className="mt-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <article className="soft-card p-6">
-                <span className="inline-flex items-center rounded-full bg-gold/20 px-2.5 py-0.5 text-xs font-semibold text-gold-foreground">
-                  {t.promo.card1Badge}
-                </span>
-                <h3 className="mt-3 text-base font-bold text-primary font-display">{t.promo.card1Title}</h3>
-                <p className="mt-2 text-sm text-foreground/75">{t.promo.card1Desc}</p>
-              </article>
-              <article className="soft-card p-6">
-                <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
-                  {t.promo.card2Badge}
-                </span>
-                <h3 className="mt-3 text-base font-bold text-primary font-display">{t.promo.card2Title}</h3>
-                <p className="mt-2 text-sm text-foreground/75">{t.promo.card2Desc}</p>
-              </article>
-            </div>
-          </Reveal>
-        </section>
-
-        <Stripe />
 
         {/* Бизнесу */}
         <section id="b2b" className="mx-auto max-w-6xl scroll-mt-28 px-5">

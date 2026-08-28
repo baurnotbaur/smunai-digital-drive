@@ -3,8 +3,8 @@
 const DEFAULT_SERVICE_URL = "https://smunai-lead-service.vercel.app";
 const DEFAULT_SITE_KEY = "iwteRIh9b9Eiu-Z4GIcBiYEinUzw4xgW";
 
-const SERVICE_URL = import.meta.env["VITE_LEAD_SERVICE_URL"] || DEFAULT_SERVICE_URL;
-const SITE_KEY = import.meta.env["VITE_LEAD_SITE_KEY"] || DEFAULT_SITE_KEY;
+const SERVICE_URL = import.meta.env.VITE_LEAD_SERVICE_URL || DEFAULT_SERVICE_URL;
+const SITE_KEY = import.meta.env.VITE_LEAD_SITE_KEY || DEFAULT_SITE_KEY;
 
 export type LeadPayload = {
   name: string;

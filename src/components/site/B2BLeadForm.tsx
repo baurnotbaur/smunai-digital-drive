@@ -221,6 +221,7 @@ export function B2BLeadForm({
             id={`${formId}-phone`}
             name="phone"
             type="tel"
+            pattern="[\+0-9\s\-\(\)]+"
             required
             disabled={isBusy}
             placeholder={f.phonePlaceholder}

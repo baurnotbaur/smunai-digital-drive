@@ -18,16 +18,16 @@ function NotFoundComponent() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">Бет табылмады / Страница не найдена</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+          Сіз іздеген бет жоқ немесе жылжытылған. / Запрашиваемая страница не существует или была перемещена.
         </p>
         <div className="mt-6">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Go home
+            Басты бетке / На главную
           </Link>
         </div>
       </div>
@@ -46,10 +46,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
+          Қате кетті / Произошла ошибка
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+          Бетті қайта жүктеп көріңіз немесе басты бетке оралыңыз. / Попробуйте обновить страницу или вернуться на главную.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -59,14 +59,14 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Try again
+            Қайталау / Повторить
           </button>
-          <a
-            href="/"
+          <Link
+            to="/"
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
-            Go home
-          </a>
+            Басты бетке / На главную
+          </Link>
         </div>
       </div>
     </div>
@@ -81,9 +81,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "author", content: "С-Мунай" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { title: "С-Мунай — сеть АЗС в Жезказгане, Сатпаеве и Астане" },
-      { property: "og:title", content: "С-Мунай — сеть АЗС в Жезказгане, Сатпаеве и Астане" },
-      { name: "twitter:title", content: "С-Мунай — сеть АЗС в Жезказгане, Сатпаеве и Астане" },
+      { title: "С-Мунай — сеть АЗС в Жезказгане, Сатпаеве, Улытау и Астане" },
+      { property: "og:title", content: "С-Мунай — сеть АЗС в Жезказгане, Сатпаеве, Улытау и Астане" },
+      { name: "twitter:title", content: "С-Мунай — сеть АЗС в Жезказгане, Сатпаеве, Улытау и Астане" },
       { name: "description", content: "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Сатпаеве и Астане с 1996 года: качественное топливо, магазин и кофе с собой." },
       { property: "og:description", content: "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Сатпаеве и Астане с 1996 года: качественное топливо, магазин и кофе с собой." },
       { name: "twitter:description", content: "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Сатпаеве и Астане с 1996 года: качественное топливо, магазин и кофе с собой." },
@@ -113,7 +113,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="kk">
       <head>
         <HeadContent />
       </head>
