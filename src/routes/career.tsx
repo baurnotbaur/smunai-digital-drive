@@ -120,7 +120,7 @@ function CareerPage() {
 
       <main className="flex-1 flex items-center justify-center p-5 py-12">
         <div className="w-full max-w-xl">
-          <div className="text-center mb-10 reveal">
+          <div className="text-center mb-10">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-gold/20 px-3 py-1 text-xs font-bold text-gold-foreground mb-4">
               <Briefcase className="size-3.5" />
               Команда С-Мунай
@@ -133,7 +133,7 @@ function CareerPage() {
             </p>
           </div>
 
-          <div className="soft-card p-6 sm:p-8 bg-background/80 backdrop-blur-md shadow-xl border-primary/10 reveal" style={{ animationDelay: "100ms" }}>
+          <div className="soft-card p-6 sm:p-8 bg-background/80 backdrop-blur-md shadow-xl border-primary/10">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <FormField
