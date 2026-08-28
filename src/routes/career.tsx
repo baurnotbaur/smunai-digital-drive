@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
 import { submitLead } from "@/lib/leads";
+import { formatKzPhone } from "@/lib/utils";
 import { ChevronLeft, Briefcase, Send } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -155,10 +156,10 @@ function CareerPage() {
                         <Input 
                           placeholder="+7 (707) 000-00-00" 
                           className="bg-background/50 focus-visible:ring-primary/30" 
+                          maxLength={18}
                           {...field}
                           onChange={(e) => {
-                            const val = e.target.value.replace(/[^\d+ ()-]/g, '');
-                            field.onChange(val);
+                            field.onChange(formatKzPhone(e.target.value));
                           }}
                         />
                       </FormControl>

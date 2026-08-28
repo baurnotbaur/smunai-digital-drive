@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { PrivacyPolicyModal } from "@/components/site/PrivacyPolicyModal";
 import { CheckCircle2, AlertCircle, Loader2, Send, CreditCard, Ticket, Sparkles } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
+import { formatKzPhone } from "@/lib/utils";
 
 type B2BLeadFormProps = {
   formId?: string;
@@ -228,8 +229,9 @@ export function B2BLeadForm({
             disabled={isBusy}
             placeholder={f.phonePlaceholder}
             onInput={(e) => {
-              e.currentTarget.value = e.currentTarget.value.replace(/[^\d+ ()-]/g, '');
+              e.currentTarget.value = formatKzPhone(e.currentTarget.value);
             }}
+            maxLength={18}
             className={
               darkTheme
                 ? "border-primary-foreground/20 bg-primary/40 text-primary-foreground placeholder:text-primary-foreground/40 focus:border-gold"
