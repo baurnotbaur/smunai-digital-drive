@@ -553,6 +553,11 @@ function Index() {
                   {t.nav.cards3d}
                 </Link>
               </li>
+              <li>
+                <Link className="transition-colors hover:text-primary font-semibold text-primary" to="/career">
+                  Карьера
+                </Link>
+              </li>
             </ul>
           </nav>
 
@@ -579,6 +584,9 @@ function Index() {
             ))}
             <li className="whitespace-nowrap">
               <Link to="/cards" className="font-semibold text-primary">{t.nav.cards3d}</Link>
+            </li>
+            <li className="whitespace-nowrap">
+              <Link to="/career" className="font-semibold text-primary">Карьера</Link>
             </li>
           </ul>
         </nav>
