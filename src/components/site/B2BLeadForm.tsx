@@ -65,6 +65,7 @@ export function B2BLeadForm({
         org,
         comment: fullComment,
         consent: marketingConsent,
+        extra: { data_consent: dataConsent },
         form_id: formId,
         _hp: hp
       });

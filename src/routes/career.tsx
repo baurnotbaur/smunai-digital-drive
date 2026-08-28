@@ -40,7 +40,7 @@ export const Route = createFileRoute("/career")({
 const formSchema = z.object({
   name: z.string().min(2, { message: "Имя должно содержать минимум 2 символа." }),
   phone: z.string().min(10, { message: "Введите корректный номер телефона." }),
-  position: z.string({ required_error: "Пожалуйста, выберите желаемую должность." }),
+  position: z.string({ required_error: "Пожалуйста, выберите желаемую должность." }).min(1, { message: "Пожалуйста, выберите желаемую должность." }),
   experience: z.string().optional(),
   consent: z.boolean().refine(val => val === true, "Необходимо согласие на обработку данных"),
 });
@@ -71,6 +71,7 @@ function CareerPage() {
         comment: values.experience ? `Опыт работы: ${values.experience}` : "Опыт работы: не указан",
         extra: {
           position: values.position,
+          data_consent: values.consent,
         },
         type: "hr",
         form_id: "hr_career_form",
