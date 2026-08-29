@@ -21,6 +21,13 @@ export function CookieConsent() {
   const handleAccept = () => {
     try {
       localStorage.setItem("cookie_consent", "true");
+      // Send event to Google Analytics
+      if (typeof window !== "undefined" && (window as any).gtag) {
+        (window as any).gtag("event", "cookie_consent_accepted", {
+          event_category: "engagement",
+          event_label: "Cookie Banner",
+        });
+      }
     } catch (e) {
       console.warn("Could not save cookie consent to localStorage", e);
     }
