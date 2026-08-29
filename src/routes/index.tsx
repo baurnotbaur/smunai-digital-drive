@@ -80,7 +80,7 @@ const CITY_STATIONS: CityGroup[] = [
     gisBranchesUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
     stations: [
       {
-        number: 1,
+        number: 7,
         city: "Жезказган",
         cityKz: "Жезқазған",
         cityEn: "Zhezkazgan",
@@ -110,7 +110,7 @@ const CITY_STATIONS: CityGroup[] = [
         gisUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
       },
       {
-        number: 2,
+        number: 5,
         city: "Жезказган",
         cityKz: "Жезқазған",
         cityEn: "Zhezkazgan",
@@ -133,6 +133,21 @@ const CITY_STATIONS: CityGroup[] = [
     gisBranchesUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
     stations: [
       {
+        number: 1,
+        city: "Сатпаев",
+        cityKz: "Сәтбаев",
+        cityEn: "Satpayev",
+        address: "улица Улытауская, 115",
+        addressKz: "Ұлытау көшесі, 115",
+        addressEn: "115 Ulytauskaya Street",
+        hours: "Круглосуточно",
+        hoursKz: "Тәулік бойы",
+        hoursEn: "24/7 (All Day)",
+        services: ALL_SERVICES,
+        coords: { lat: 47.901277, lng: 67.517376 },
+        gisUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
+      },
+      {
         number: 3,
         city: "Сатпаев",
         cityKz: "Сәтбаев",
@@ -145,21 +160,6 @@ const CITY_STATIONS: CityGroup[] = [
         hoursEn: "24/7 (All Day)",
         services: ALL_SERVICES,
         coords: { lat: 47.914004, lng: 67.531064 },
-        gisUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
-      },
-      {
-        number: 5,
-        city: "Сатпаев",
-        cityKz: "Сәтбаев",
-        cityEn: "Satpayev",
-        address: "улица Улытауская, 114",
-        addressKz: "Ұлытау көшесі, 114",
-        addressEn: "114 Ulytauskaya Street",
-        hours: "Круглосуточно",
-        hoursKz: "Тәулік бойы",
-        hoursEn: "24/7 (All Day)",
-        services: ALL_SERVICES,
-        coords: { lat: 47.901277, lng: 67.517376 },
         gisUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
       },
       {
@@ -186,7 +186,7 @@ const CITY_STATIONS: CityGroup[] = [
     gisBranchesUrl: "https://2gis.kz/astana/branches/70000001023880614",
     stations: [
       {
-        number: 7,
+        number: 8,
         city: "Астана",
         cityKz: "Астана",
         cityEn: "Astana",
@@ -201,7 +201,7 @@ const CITY_STATIONS: CityGroup[] = [
         gisUrl: "https://2gis.kz/astana/branches/70000001023880614",
       },
       {
-        number: 8,
+        number: 9,
         city: "Астана",
         cityKz: "Астана",
         cityEn: "Astana",
@@ -1033,15 +1033,23 @@ function Index() {
             <p className="mt-4 max-w-3xl text-foreground/80 leading-relaxed">
               {t.jobs.text}
             </p>
-            <a
-              href={INSTAGRAM_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="btn-base btn-gold mt-6 inline-flex items-center gap-2 font-semibold"
-            >
-              <Instagram className="size-4" aria-hidden="true" />
-              {t.jobs.writeInsta}
-            </a>
+            <div className="mt-6 flex flex-wrap gap-4">
+              <Link
+                to="/career"
+                className="btn-base btn-primary inline-flex items-center gap-2 font-semibold"
+              >
+                {t.jobs.applyBtn}
+              </Link>
+              <a
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="btn-base btn-gold inline-flex items-center gap-2 font-semibold"
+              >
+                <Instagram className="size-4" aria-hidden="true" />
+                {t.jobs.writeInsta}
+              </a>
+            </div>
           </Reveal>
         </section>
 

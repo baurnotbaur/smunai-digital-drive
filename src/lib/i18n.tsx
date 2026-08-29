@@ -187,6 +187,7 @@ export type Translations = {
     title: string;
     text: string;
     writeInsta: string;
+    applyBtn: string;
   };
   contacts: {
     title: string;
@@ -242,7 +243,7 @@ export const DICTIONARY: Record<Lang, Translations> = {
       featureCardTitle: "С-МҰНАЙ ЖЕЛІСІ",
       featureSubtitle: "30 жыл бойы сенімді жанармай бекеттері",
       feature1: "Әрбір партияның сапасын қатаң зертханалық бақылау",
-      feature2: "Дүкен мен жаңа демделген кофе 24/7",
+      feature2: "Дүкен мен жаңа демделген кофе (негізгі станцияларда)",
       feature3: "Барлық станцияларда 24/7 үздіксіз қызмет көрсету",
       slogan: "Жанармай — көлікке, Ұлытау — жүректе",
       yearsMetric: "30 жыл",
@@ -279,7 +280,7 @@ export const DICTIONARY: Record<Lang, Translations> = {
       ai92HitechDesc: "Қозғалтқышты тазалайтын, клапандарды нагардан қорғайтын және отын шығынын үнемдейтін белсенді қоспалар кешені.",
       ai92HitechBadge: "Hi-Tech Формула",
       ai95HitechTitle: "АИ-95 Hi-Tech",
-      ai95HitechDesc: "Үйкелісті азайтып, қозғалтқыш қуаты мен динамикасын барынша арттыратын жоғары октанды премиум жанармай.",
+      ai95HitechDesc: "Қозғалтқышты тазалайтын, клапандарды нагардан қорғайтын және отын шығынын үнемдейтін белсенді қоспалар кешені.",
       ai95HitechBadge: "Hi-Tech Premium",
       ai92Title: "АИ-92",
       ai92Desc: "Қозғалтқыштың күнделікті бірқалыпты және сенімді жұмысына арналған тазаланған классикалық отын.",
@@ -293,7 +294,7 @@ export const DICTIONARY: Record<Lang, Translations> = {
       shopTitle: "ЖҚС жанындағы дүкен",
       shopDesc: "Жолға қажеттінің бәрі: сусындар, тіскебасарлар, сапалы автохимия және майлар.",
       coffeeTitle: "Жолға арналған ыстық кофе",
-      coffeeDesc: "Әрбір станцияда жаңа тартылған хош иісті кофе — көлігіңізбен бірге өзіңіз де қуаттаныңыз.",
+      coffeeDesc: "Негізгі станцияларда жаңа тартылған хош иісті кофе — көлігіңізбен бірге өзіңіз де қуаттаныңыз.",
     },
     vouchersSection: {
       badge: "Ыңғайлы есеп айырысу",
@@ -414,6 +415,7 @@ export const DICTIONARY: Record<Lang, Translations> = {
       title: "Бос жұмыс орындары",
       text: "С-Мұнай ұжымына қосылыңыз — бізге ұқыпты әрі мейірімді жандар қажет: кассирлер, операторлар, баристалар. Instagram Direct-ке жазыңыз, біз бос орындар туралы айтып береміз.",
       writeInsta: "Instagram-ға жазу",
+      applyBtn: "Өтініш беру",
     },
     contacts: {
       title: "Байланыс",
@@ -467,7 +469,7 @@ export const DICTIONARY: Record<Lang, Translations> = {
       featureCardTitle: "СЕТЬ С-МУНАЙ",
       featureSubtitle: "Надёжные автозаправки с 1996 года",
       feature1: "Лабораторный контроль качества каждой поставки",
-      feature2: "Магазин и свежий кофе с собой 24/7",
+      feature2: "Магазин и свежий кофе с собой (на основных АЗС)",
       feature3: "Круглосуточное обслуживание на всех станциях",
       slogan: "Жанармай — көлікке, Ұлытау — жүректе",
       yearsMetric: "30 лет",
@@ -504,7 +506,7 @@ export const DICTIONARY: Record<Lang, Translations> = {
       ai92HitechDesc: "Инновационный бензин с активным моющим комплексом: удаляет нагар с форсунок и клапанов, повышает приёмистость и снижает расход.",
       ai92HitechBadge: "Hi-Tech Формула",
       ai95HitechTitle: "АИ-95 Hi-Tech",
-      ai95HitechDesc: "Премиальное высокооктановое топливо с модификатором трения для максимальной динамики, мощности и защиты цилиндров от износа.",
+      ai95HitechDesc: "Инновационный бензин с активным моющим комплексом: удаляет нагар с форсунок и клапанов, повышает приёмистость и снижает расход.",
       ai95HitechBadge: "Hi-Tech Premium",
       ai92Title: "АИ-92",
       ai92Desc: "Качественный классический бензин ГОСТ для стабильной ежедневной работы двигателя в любых погодных условиях.",
@@ -518,7 +520,7 @@ export const DICTIONARY: Record<Lang, Translations> = {
       shopTitle: "Магазин на АЗС",
       shopDesc: "Всё нужное в дорогу: напитки, снеки, полезные автотовары и автомасла.",
       coffeeTitle: "Кофе с собой",
-      coffeeDesc: "Свежесваренный зерновой кофе на каждой станции — заправьтесь и вы.",
+      coffeeDesc: "Свежесваренный зерновой кофе на наших флагманских станциях — заправьтесь и вы.",
     },
     vouchersSection: {
       badge: "Простой и надёжный расчёт",
@@ -639,6 +641,7 @@ export const DICTIONARY: Record<Lang, Translations> = {
       title: "Вакансии",
       text: "Присоединяйтесь к команде С-Мунай — нам нужны внимательные и доброжелательные люди: кассиры, операторы, бариста. Напишите нам в Instagram Direct, и мы расскажем о свободных позициях.",
       writeInsta: "Написать в Instagram",
+      applyBtn: "Подать заявку",
     },
     contacts: {
       title: "Контакты",
@@ -864,6 +867,7 @@ export const DICTIONARY: Record<Lang, Translations> = {
       title: "Careers",
       text: "Join the S-Munai team — we are looking for attentive and friendly people: cashiers, fuel operators, baristas. Message us in Instagram Direct to learn about open positions.",
       writeInsta: "Message on Instagram",
+      applyBtn: "Apply Now",
     },
     contacts: {
       title: "Contacts",

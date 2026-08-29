@@ -187,7 +187,6 @@ function CareerPage() {
                         </FormControl>
                         <SelectContent>
                           <SelectItem value="Кассир">Кассир</SelectItem>
-                          <SelectItem value="Оператор АЗС">Оператор АЗС</SelectItem>
                           <SelectItem value="Водитель бензовоза">Водитель бензовоза</SelectItem>
                           <SelectItem value="Менеджер">Менеджер</SelectItem>
                         </SelectContent>
