@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Gauge, Wallet, FileCheck2, Ticket, Droplets, Zap, ShieldCheck, CreditCard, Sparkles } from "lucide-react";
-import { StationVideoScroll } from "@/components/site/StationVideoScroll";
 import { B2BLeadForm } from "@/components/site/B2BLeadForm";
 import { useLanguage, LanguageSwitcher } from "@/lib/i18n";
 
@@ -110,28 +109,29 @@ function CardsPage() {
         </nav>
       </header>
 
-      <main>
-        {/* Полноэкранная 3D-сцена: станция вращается при прокрутке, текст проявляется в конце */}
-        <section id="station">
-          <StationVideoScroll>
-            <div className="max-w-xl text-primary-foreground">
-              <span className="inline-flex items-center rounded-full bg-gold/20 px-3.5 py-1 text-xs font-semibold text-gold">
-                {cp.heroBadge}
-              </span>
-              <h1 className="mt-5 text-3xl leading-tight font-bold sm:text-4xl md:text-5xl font-display">
-                {cp.heroTitle}
-              </h1>
-              <p className="mt-5 max-w-xl text-base text-primary-foreground/80 sm:text-lg">
-                {cp.heroDesc}
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <a href="#cards" className="btn-base btn-gold font-bold">
-                  {cp.heroOrderBtn}
-                </a>
+        <main>
+          <section id="station" className="bg-primary px-5 py-20 sm:py-32 relative overflow-hidden">
+            {/* Optional background decoration */}
+            <div className="absolute inset-0 bg-primary opacity-90"></div>
+            <div className="mx-auto max-w-6xl relative z-10">
+              <div className="max-w-xl text-primary-foreground">
+                <span className="inline-flex items-center rounded-full bg-gold/20 px-3.5 py-1 text-xs font-semibold text-gold">
+                  {cp.heroBadge}
+                </span>
+                <h1 className="mt-5 text-3xl leading-tight font-bold sm:text-4xl md:text-5xl font-display">
+                  {cp.heroTitle}
+                </h1>
+                <p className="mt-5 max-w-xl text-base text-primary-foreground/80 sm:text-lg">
+                  {cp.heroDesc}
+                </p>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <a href="#cards" className="btn-base btn-gold font-bold">
+                    {cp.heroOrderBtn}
+                  </a>
+                </div>
               </div>
             </div>
-          </StationVideoScroll>
-        </section>
+          </section>
 
         <div className="mx-auto max-w-6xl px-5">
           <div className="road-stripe my-14 sm:my-20" />
