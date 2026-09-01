@@ -31,12 +31,12 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Сатпаеве и Астане с 1996 года: качественное топливо, талоны, магазин и кофе с собой.",
+          "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Сатпаеве и Астане: качественное топливо, талоны, магазин и кофе с собой.",
       },
       { property: "og:title", content: "С-Мунай — сеть АЗС в Жезказгане, Сатпаеве и Астане" },
       {
         property: "og:description",
-        content: "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Сатпаеве и Астане с 1996 года: качественное топливо, талоны, магазин и кофе с собой.",
+        content: "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Сатпаеве и Астане: качественное топливо, талоны, магазин и кофе с собой.",
       },
     ],
   }),
@@ -265,15 +265,12 @@ function HeroFeatureCard() {
 
   return (
     <div className="mx-auto w-full max-w-sm rounded-2xl bg-primary p-7 text-primary-foreground shadow-[0_28px_50px_-30px_rgba(13,108,137,0.8)] lg:mx-0">
-      <div className="flex items-center justify-between border-b border-primary-foreground/15 pb-4">
+      <div className="flex items-center border-b border-primary-foreground/15 pb-4">
         <img
           src="/images/logo-white.svg"
           alt="С-МУНАЙ"
           className="h-7 w-auto object-contain"
         />
-        <span className="rounded-full bg-gold/20 px-2.5 py-0.5 text-xs font-semibold text-gold">
-          1996–2026
-        </span>
       </div>
       <div className="mt-5 space-y-4">
         <div className="flex items-center gap-3">
