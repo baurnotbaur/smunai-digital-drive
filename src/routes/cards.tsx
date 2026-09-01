@@ -68,7 +68,7 @@ function CardsPage() {
             <img
               src="/images/logo-navbar.svg"
               alt="С-МУНАЙ"
-              className="h-8 w-auto object-contain sm:h-9"
+              className="h-8 w-auto object-contain sm:h-9 md:h-12 lg:h-14"
             />
           </Link>
           <nav aria-label="Основная навигация" className="ml-auto hidden lg:block">
@@ -246,14 +246,7 @@ function CardsPage() {
       </main>
 
       <footer className="border-t border-primary/10 py-8">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 sm:flex-row">
-          <Link to="/" className="flex items-center transition-opacity hover:opacity-80">
-            <img
-              src="/images/logo-navbar.svg"
-              alt="С-МУНАЙ"
-              className="h-7 w-auto object-contain opacity-80"
-            />
-          </Link>
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-4 px-5">
           <p className="text-sm text-foreground/60">
             {t.footer.rights}
           </p>
