@@ -97,7 +97,7 @@ export function SupportChat() {
                  if (leadMatch && leadMatch[1]) {
                    try {
                      const parsedLead = JSON.parse(leadMatch[1]);
-                     fetch("https://smunai-lead-service.vercel.app/api/leads", {
+                     fetch("https://smunai-lead-service.vercel.app/api/v1/leads", {
                        method: "POST",
                        headers: { "Content-Type": "application/json" },
                        body: JSON.stringify(parsedLead),
