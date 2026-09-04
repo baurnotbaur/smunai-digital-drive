@@ -4,7 +4,7 @@ import { X, MessageCircle, ArrowUp } from "lucide-react";
 // Пока сделаем язык русским по умолчанию.
 
 // ВНИМАНИЕ: СЮДА НУЖНО ВСТАВИТЬ ВАШУ ССЫЛКУ ИЗ CLOUDFLARE (которую выдал npx wrangler deploy)
-const WORKER_URL = "https://smunai-chat-worker.ВАШ_ЛОГИН.workers.dev"; 
+const WORKER_URL = "https://smunai-chat-worker.smunay-chat.workers.dev"; 
 
 interface Msg {
   role: "user" | "model";
