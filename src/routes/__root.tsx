@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { LanguageProvider } from "@/lib/i18n";
 import { CookieConsent } from "@/components/site/CookieConsent";
+import { SupportChat } from "@/components/site/SupportChat";
 
 function NotFoundComponent() {
   return (
@@ -149,6 +150,7 @@ function RootComponent() {
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <CookieConsent />
+          <SupportChat />
       </LanguageProvider>
     </QueryClientProvider>
   );
