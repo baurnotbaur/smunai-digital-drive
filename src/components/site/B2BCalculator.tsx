@@ -5,12 +5,9 @@ import {
   TrendingUp, 
   ShieldCheck, 
   BadgePercent, 
-  Truck, 
-  Car, 
-  Bus, 
   ChevronRight,
   Sparkles,
-  Sliders
+  Fuel
 } from "lucide-react";
 
 // Реальные цены сети С-Мунай на осень 2026 года (KZT / литр)
@@ -21,49 +18,26 @@ const FUEL_PRICES: Record<string, { name: string; price: number; badge?: string 
   ai92ht: { name: "АИ-92HT NanoTech", price: 253.4, badge: "Premium" },
 };
 
-type VehiclePreset = {
-  id: "cars" | "vans" | "trucks" | "custom";
-  labelKz: string;
-  labelRu: string;
-  litresPerCar: number;
-  icon: typeof Car;
-};
-
-const VEHICLE_PRESETS: VehiclePreset[] = [
-  { id: "cars", labelKz: "Жеңіл көліктер", labelRu: "Легковые авто", litresPerCar: 250, icon: Car },
-  { id: "vans", labelKz: "Шағын жүк / Газель", labelRu: "Газели / Фургоны", litresPerCar: 600, icon: Bus },
-  { id: "trucks", labelKz: "Ауыр жүк / Фуралар", labelRu: "Грузовые / Фуры", litresPerCar: 2000, icon: Truck },
-  { id: "custom", labelKz: "Өз көлеміңіз", labelRu: "Свой объём", litresPerCar: 0, icon: Sliders },
-];
+const QUICK_VOLUMES = [1000, 3000, 5000, 10000, 20000, 50000];
 
 export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (summary: string) => void }) {
   const { lang } = useLanguage();
   const isKz = lang === "kz";
 
-  const [vehiclePreset, setVehiclePreset] = useState<VehiclePreset["id"]>("vans");
-  const [vehicleCount, setVehicleCount] = useState<number>(5);
-  const [customLitres, setCustomLitres] = useState<number>(3000);
+  const [litres, setLitres] = useState<number>(5000);
   const [selectedFuel, setSelectedFuel] = useState<string>("dt");
 
   // Расчет объемов и сумм
   const activeFuel = FUEL_PRICES[selectedFuel] || FUEL_PRICES.ai92;
 
-  const totalMonthlyLitres = useMemo(() => {
-    if (vehiclePreset === "custom") {
-      return customLitres;
-    }
-    const preset = VEHICLE_PRESETS.find((p) => p.id === vehiclePreset);
-    return (preset?.litresPerCar || 500) * vehicleCount;
-  }, [vehiclePreset, vehicleCount, customLitres]);
-
   const calculations = useMemo(() => {
-    const monthlySpend = totalMonthlyLitres * activeFuel.price;
+    const monthlySpend = litres * activeFuel.price;
     // 1. Возврат НДС (12% в зачет из суммы)
     const vatSavings = Math.round((monthlySpend * 12) / 112);
     // 2. Предотвращение сливов и левых чеков лимитами по картам (~7% экономии)
     const leakSavings = Math.round(monthlySpend * 0.07);
     // 3. Защита от инфляции цен (+24 ₸/л в год по статистике аналитики)
-    const inflationSavingsAnnual = Math.round(totalMonthlyLitres * 24);
+    const inflationSavingsAnnual = Math.round(litres * 24);
     const inflationSavingsMonthly = Math.round(inflationSavingsAnnual / 12);
 
     const totalMonthlySavings = vatSavings + leakSavings + inflationSavingsMonthly;
@@ -78,12 +52,12 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
       totalMonthlySavings,
       totalAnnualSavings,
     };
-  }, [totalMonthlyLitres, activeFuel]);
+  }, [litres, activeFuel]);
 
   const handleApply = () => {
     const summaryText = isKz
-      ? `B2B Калькулятор есебі: ${vehicleCount} көлік, ${totalMonthlyLitres.toLocaleString()} л/ай (${activeFuel.name}). Болжамды үнем: ${calculations.totalAnnualSavings.toLocaleString()} ₸/жыл.`
-      : `Расчёт B2B калькулятора: ${vehicleCount} авто, ${totalMonthlyLitres.toLocaleString()} л/мес (${activeFuel.name}). Расчётная экономия: ${calculations.totalAnnualSavings.toLocaleString()} ₸/год.`;
+      ? `B2B Калькулятор есебі: ${litres.toLocaleString()} л/ай (${activeFuel.name}). Болжамды үнем: ${calculations.totalAnnualSavings.toLocaleString()} ₸/жыл.`
+      : `Расчёт B2B калькулятора: ${litres.toLocaleString()} л/мес (${activeFuel.name}). Расчётная экономия: ${calculations.totalAnnualSavings.toLocaleString()} ₸/год.`;
 
     if (onApplyCalculation) {
       onApplyCalculation(summaryText);
@@ -96,7 +70,7 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
   };
 
   return (
-    <section id="calculator" className="mx-auto max-w-6xl scroll-mt-28 px-5 py-12">
+    <section id="calculator" className="mx-auto max-w-6xl scroll-mt-28 px-5 py-10">
       <div className="overflow-hidden rounded-3xl border border-primary/20 bg-linear-to-b from-primary/10 via-primary/5 to-transparent p-6 shadow-xl backdrop-blur-md sm:p-10">
         
         {/* Заголовок */}
@@ -107,113 +81,100 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
               {isKz ? "Бизнеске арналған тиімділік" : "Калькулятор корпоративной выгоды"}
             </div>
             <h2 className="mt-3 text-2xl font-bold tracking-tight text-foreground font-display sm:text-4xl">
-              {isKz ? "Жанармай шығындарын қанша үнемдейсіз?" : "Сколько сбережет ваш автопарк?"}
+              {isKz ? "Жанармай шығындарын қанша үнемдейсіз?" : "Сколько сбережет ваш бизнес?"}
             </h2>
             <p className="mt-2 max-w-2xl text-sm text-foreground/75 sm:text-base">
               {isKz 
-                ? "С-Мунай отын карталары мен талондары: ҚҚС қайтару, ұрлық пен артық шығынды тоқтату және инфляциядан бағаны бекіту."
-                : "Расчёт чистой экономии с топливными картами С-Мунай: зачёт НДС 12%, лимиты без сливов и фиксация цены от роста."}
+                ? "Айлық көлемді енгізіңіз: ҚҚС 12% қайтару, ұрлықты тоқтату және инфляциядан бағаны бекіту арқылы нақты үнемді көріңіз."
+                : "Укажите ежемесячный объём топлива: рассчитайте чистую экономию за счёт зачёта НДС 12%, лимитов без сливов и фиксации цены."}
             </p>
           </div>
           <div className="flex items-center gap-2 rounded-2xl border border-primary/15 bg-primary/5 px-4 py-2 text-xs font-semibold text-foreground/70">
             <Calculator className="size-4 text-primary" />
-            <span>{isKz ? "Нақты нарықтық деректер негізінде" : "На основе фактических данных сети"}</span>
+            <span>{isKz ? "Нақты нарықтық деректер негізінде" : "На основе фактических цен сети"}</span>
           </div>
         </div>
 
         {/* Сетка калькулятора */}
         <div className="mt-10 grid gap-8 lg:grid-cols-12 lg:items-start">
           
-          {/* Левая колонка: Интерактивные настройки (7 колонок) */}
+          {/* Левая колонка: Ввод объёма и выбор топлива (7 колонок) */}
           <div className="space-y-6 lg:col-span-7">
             
-            {/* 1. Пресет автопарка */}
-            <div>
-              <label className="text-xs font-bold text-foreground/70 uppercase tracking-wider">
-                {isKz ? "1. Көлік түрі" : "1. Тип автопарка"}
-              </label>
-              <div className="mt-2.5 grid grid-cols-2 gap-2 sm:grid-cols-4">
-                {VEHICLE_PRESETS.map((p) => {
-                  const Icon = p.icon;
-                  const isSelected = vehiclePreset === p.id;
-                  return (
+            {/* 1. Ввод литров в месяц */}
+            <div className="rounded-2xl border border-primary/15 bg-background/60 p-5 sm:p-6">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <label htmlFor="fuel-volume-input" className="text-xs font-bold text-foreground/70 uppercase tracking-wider">
+                  {isKz ? "Айына қанша литр жанармай тұтынасыз?" : "Сколько литров в месяц вы заправляете?"}
+                </label>
+                
+                {/* Числовое поле с возможностью прямого ввода */}
+                <div className="flex items-center gap-2 rounded-xl border border-primary/20 bg-background px-3 py-1.5 focus-within:border-primary">
+                  <Fuel className="size-4 text-primary" />
+                  <input
+                    id="fuel-volume-input"
+                    type="number"
+                    min={100}
+                    max={200000}
+                    step={100}
+                    value={litres || ""}
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      setLitres(val >= 0 ? val : 0);
+                    }}
+                    className="w-24 text-right font-display text-lg font-bold text-primary outline-none sm:w-28 sm:text-xl"
+                  />
+                  <span className="text-xs font-semibold text-foreground/60">
+                    {isKz ? "литр" : "литров"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Ползунок слайдера */}
+              <input
+                type="range"
+                min={500}
+                max={50000}
+                step={500}
+                value={Math.min(litres, 50000)}
+                onChange={(e) => setLitres(Number(e.target.value))}
+                className="mt-6 h-2.5 w-full cursor-pointer appearance-none rounded-lg bg-primary/20 accent-primary"
+              />
+              <div className="mt-2 flex justify-between text-[11px] text-foreground/50">
+                <span>500 л</span>
+                <span>15 000 л</span>
+                <span>30 000 л</span>
+                <span>50 000+ л</span>
+              </div>
+
+              {/* Быстрые кнопки-пресеты объёма */}
+              <div className="mt-5 border-t border-primary/10 pt-4">
+                <span className="text-[11px] font-semibold text-foreground/50">
+                  {isKz ? "Жылдам таңдау:" : "Быстрый выбор объёма:"}
+                </span>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {QUICK_VOLUMES.map((v) => (
                     <button
-                      key={p.id}
+                      key={v}
                       type="button"
-                      onClick={() => setVehiclePreset(p.id)}
-                      className={`flex flex-col items-center justify-center gap-2 rounded-2xl border p-3.5 text-center transition-all ${
-                        isSelected
-                          ? "border-primary bg-primary text-primary-foreground shadow-md shadow-primary/20 scale-[1.02]"
-                          : "border-primary/15 bg-background/60 text-foreground hover:border-primary/40 hover:bg-primary/5"
+                      onClick={() => setLitres(v)}
+                      className={`rounded-xl border px-3 py-1.5 text-xs font-semibold transition-all ${
+                        litres === v
+                          ? "border-primary bg-primary text-primary-foreground shadow-xs"
+                          : "border-primary/15 bg-background/80 text-foreground/80 hover:border-primary/40 hover:bg-primary/5"
                       }`}
                     >
-                      <Icon className={`size-5 ${isSelected ? "text-gold" : "text-primary"}`} />
-                      <span className="text-xs font-bold leading-tight">
-                        {isKz ? p.labelKz : p.labelRu}
-                      </span>
+                      {v >= 1000 ? `${(v / 1000).toLocaleString()} 000 л` : `${v} л`}
                     </button>
-                  );
-                })}
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* 2. Количество авто или объем */}
-            {vehiclePreset === "custom" ? (
-              <div className="rounded-2xl border border-primary/15 bg-background/50 p-5">
-                <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold text-foreground/70 uppercase tracking-wider">
-                    {isKz ? "Айлық көлем (литр):" : "Общий объём топлива в месяц:"}
-                  </label>
-                  <span className="font-display text-xl font-bold text-primary">
-                    {customLitres.toLocaleString()} л
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min={500}
-                  max={30000}
-                  step={500}
-                  value={customLitres}
-                  onChange={(e) => setCustomLitres(Number(e.target.value))}
-                  className="mt-4 h-2 w-full cursor-pointer appearance-none rounded-lg bg-primary/20 accent-primary"
-                />
-                <div className="mt-2 flex justify-between text-[11px] text-foreground/50">
-                  <span>500 л</span>
-                  <span>15 000 л</span>
-                  <span>30 000+ л</span>
-                </div>
-              </div>
-            ) : (
-              <div className="rounded-2xl border border-primary/15 bg-background/50 p-5">
-                <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold text-foreground/70 uppercase tracking-wider">
-                    {isKz ? "Көліктер саны:" : "Количество автомобилей:"}
-                  </label>
-                  <span className="font-display text-2xl font-bold text-primary">
-                    {vehicleCount} {isKz ? "көлік" : vehicleCount === 1 ? "авто" : "машин"}
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min={1}
-                  max={50}
-                  step={1}
-                  value={vehicleCount}
-                  onChange={(e) => setVehicleCount(Number(e.target.value))}
-                  className="mt-4 h-2 w-full cursor-pointer appearance-none rounded-lg bg-primary/20 accent-primary"
-                />
-                <div className="mt-2 flex justify-between text-[11px] text-foreground/50">
-                  <span>1 авто</span>
-                  <span>25 машин</span>
-                  <span>50+ машин</span>
-                </div>
-              </div>
-            )}
-
-            {/* 3. Выбор вида топлива */}
+            {/* 2. Выбор вида топлива */}
             <div>
               <label className="text-xs font-bold text-foreground/70 uppercase tracking-wider">
-                {isKz ? "2. Негізгі жанармай түрі" : "2. Основной вид топлива"}
+                {isKz ? "Негізгі жанармай түрі" : "Вид топлива"}
               </label>
               <div className="mt-2.5 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
                 {Object.entries(FUEL_PRICES).map(([key, item]) => {
@@ -223,9 +184,9 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
                       key={key}
                       type="button"
                       onClick={() => setSelectedFuel(key)}
-                      className={`relative flex flex-col rounded-2xl border p-3.5 text-left transition-all ${
+                      className={`relative flex flex-col rounded-2xl border p-3.5 text-left transition-all cursor-pointer ${
                         isSelected
-                          ? "border-gold bg-primary text-primary-foreground shadow-md shadow-primary/20"
+                          ? "border-gold bg-primary text-primary-foreground shadow-md shadow-primary/20 scale-[1.02]"
                           : "border-primary/15 bg-background/60 text-foreground hover:border-primary/40 hover:bg-primary/5"
                       }`}
                     >
@@ -249,7 +210,7 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
               <TrendingUp className="size-4.5 shrink-0 text-gold mt-0.5" />
               <p>
                 {isKz
-                  ? "С-Мунай желісінің 2 жылдық талдауы: отын бағасы орташа есеппен жылына 24 ₸/л өседі (+10% / жыл). Келісімшартпен бекітілген баға бюджетіңізді қорғайды."
+                  ? "С-Мунай желісінің аналитикасы: отын бағасы орташа есеппен жылына 24 ₸/л өседі (+10% / жыл). Келісімшартпен бекітілген баға бюджетіңізді қорғайды."
                   : "Аналитика сети С-Мунай: цена топлива за последние 2 года растет в среднем на +2,0 ₸/л в месяц (+24 ₸/л в год). Безналичный договор защищает вас от скачков цен."}
               </p>
             </div>
@@ -259,14 +220,14 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
           <div className="flex flex-col justify-between rounded-3xl border border-primary/20 bg-primary-deeper text-white p-6 shadow-2xl lg:col-span-5 sm:p-8">
             <div>
               <span className="text-xs font-semibold text-white/60 uppercase tracking-wider">
-                {isKz ? "Жалпы есептік көлем" : "Расчётный объём потребления"}
+                {isKz ? "Айлық шығын (базалық бағамен)" : "Затраты по базовой цене"}
               </span>
               <div className="mt-1 flex items-baseline gap-2">
-                <span className="font-display text-3xl font-extrabold text-white sm:text-4xl">
-                  {totalMonthlyLitres.toLocaleString()}
+                <span className="font-display text-2xl font-bold text-white/90 sm:text-3xl">
+                  {calculations.monthlySpend.toLocaleString()} ₸
                 </span>
-                <span className="text-sm font-medium text-white/70">
-                  {isKz ? "литр / айына" : "литров в месяц"}
+                <span className="text-xs text-white/60">
+                  {isKz ? "/ айына" : "/ месяц"}
                 </span>
               </div>
 
