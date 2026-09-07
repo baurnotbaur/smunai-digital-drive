@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { submitLead } from "@/lib/leads";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,6 +13,7 @@ type B2BLeadFormProps = {
   className?: string;
   darkTheme?: boolean;
   defaultProduct?: "cards" | "vouchers" | "both";
+  initialComment?: string;
 };
 
 export function B2BLeadForm({
@@ -20,13 +21,22 @@ export function B2BLeadForm({
   className = "",
   darkTheme = false,
   defaultProduct = "both",
+  initialComment = "",
 }: B2BLeadFormProps) {
   const [selectedProduct, setSelectedProduct] = useState<"cards" | "vouchers" | "both">(defaultProduct);
+  const [commentValue, setCommentValue] = useState<string>(initialComment);
   const [isBusy, setIsBusy] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { t } = useLanguage();
   const f = t.form;
+
+  // Обновляем коммент, если передан новый расчет из калькулятора
+  useEffect(() => {
+    if (initialComment) {
+      setCommentValue(initialComment);
+    }
+  }, [initialComment]);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -280,6 +290,8 @@ export function B2BLeadForm({
           <Input
             id={`${formId}-comment`}
             name="comment"
+            value={commentValue}
+            onChange={(e) => setCommentValue(e.target.value)}
             disabled={isBusy}
             placeholder={f.commentPlaceholder}
             className={

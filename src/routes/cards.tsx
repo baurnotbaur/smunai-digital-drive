@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Gauge, Wallet, FileCheck2, Ticket, Droplets, Zap, ShieldCheck, CreditCard, Sparkles } from "lucide-react";
 import { B2BLeadForm } from "@/components/site/B2BLeadForm";
+import { B2BCalculator } from "@/components/site/B2BCalculator";
 import { useLanguage, LanguageSwitcher } from "@/lib/i18n";
 
 export const Route = createFileRoute("/cards")({
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/cards")({
 
 function CardsPage() {
   const [activeTab, setActiveTab] = useState<"cards" | "vouchers">("cards");
+  const [calculatorComment, setCalculatorComment] = useState<string>("");
   const { t } = useLanguage();
   const cp = t.cardsPage;
   const v = t.vouchersSection;
@@ -79,6 +81,11 @@ function CardsPage() {
                 </a>
               </li>
               <li>
+                <a className="transition-colors hover:text-primary font-semibold text-primary" href="#calculator">
+                  Калькулятор
+                </a>
+              </li>
+              <li>
                 <a className="transition-colors hover:text-primary" href="#cards">
                   {t.nav.b2b}
                 </a>
@@ -98,6 +105,9 @@ function CardsPage() {
           <ul className="flex gap-5 overflow-x-auto px-5 py-2.5 text-xs font-medium">
             <li className="whitespace-nowrap">
               <a href="#station">3D</a>
+            </li>
+            <li className="whitespace-nowrap">
+              <a href="#calculator" className="font-semibold text-primary">Калькулятор</a>
             </li>
             <li className="whitespace-nowrap">
               <a href="#cards">{t.nav.b2b}</a>
@@ -146,7 +156,14 @@ function CardsPage() {
           </section>
 
         <div className="mx-auto max-w-6xl px-5">
-          <div className="road-stripe my-20 sm:my-28" />
+          <div className="road-stripe my-14 sm:my-20" />
+        </div>
+
+        {/* B2B Калькулятор корпоративной выгоды */}
+        <B2BCalculator onApplyCalculation={(summary) => setCalculatorComment(summary)} />
+
+        <div className="mx-auto max-w-6xl px-5">
+          <div className="road-stripe my-14 sm:my-20" />
         </div>
 
         {/* Client fuel cards & vouchers */}
@@ -251,6 +268,7 @@ function CardsPage() {
                 formId="cards-b2b"
                 darkTheme
                 defaultProduct={activeTab === "cards" ? "cards" : "vouchers"}
+                initialComment={calculatorComment}
               />
             </div>
           </div>
