@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Oswald:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Oswald:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,500;1,400;1,500&display=swap");
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
@@ -62,9 +62,14 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --color-gold: var(--gold);
   --color-gold-foreground: var(--gold-foreground);
+  --color-gold-bright: var(--gold-bright);
+  --color-primary-deep: var(--primary-deep);
+  --color-primary-deeper: var(--primary-deeper);
   --color-terracotta: var(--terracotta);
   --font-display: "Oswald", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-sans: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* Editorial-акцент (подписи, курсивные подзаголовки) — heritage-нота в духе люкс-домов. */
+  --font-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --font-mono: "Montserrat", ui-monospace, monospace;
 }
 
@@ -78,8 +83,13 @@
   --popover-foreground: oklch(0.129 0.042 264.695);
   --primary: oklch(0.464 0.079 219.5);
   --primary-foreground: oklch(0.99 0.005 90);
+  /* Глубокие оттенки teal для кинематичных тёмных секций (hero, талоны, футер). */
+  --primary-deep: oklch(0.315 0.062 220);
+  --primary-deeper: oklch(0.215 0.05 221);
   --gold: oklch(0.749 0.113 76.6);
   --gold-foreground: oklch(0.28 0.03 220);
+  /* Более яркое золото для свечения и акцентов на тёмном фоне. */
+  --gold-bright: oklch(0.82 0.135 82);
   --terracotta: oklch(0.474 0.117 40.5);
   --secondary: oklch(0.968 0.007 247.896);
   --secondary-foreground: oklch(0.208 0.042 265.755);
@@ -216,8 +226,13 @@
 
 @utility reveal {
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform: translateY(22px) scale(0.98);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  /* Задержка задаётся через inline-переменную --reveal-delay для stagger-эффекта. */
+  transition-delay: var(--reveal-delay, 0s);
+  will-change: opacity, transform;
 }
 
 @utility reveal-in {
@@ -225,11 +240,77 @@
   transform: none;
 }
 
+/* --- Кинематичная тёмная поверхность (hero и тёмные секции) ------------------ */
+/* Глубокий teal-градиент с золотым и бирюзовым световыми пятнами. */
+@utility hero-surface {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--primary-deeper);
+  background-image:
+    radial-gradient(90% 70% at 78% 8%, color-mix(in oklab, var(--gold) 26%, transparent), transparent 60%),
+    radial-gradient(80% 80% at 8% 100%, color-mix(in oklab, var(--primary) 60%, transparent), transparent 62%),
+    linear-gradient(160deg, var(--primary-deep) 0%, var(--primary-deeper) 100%);
+  color: var(--primary-foreground);
+}
+
+/* Тонкая «инженерная» сетка поверх тёмного фона — намёк на технологичность топлива. */
+@utility grid-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(color-mix(in oklab, white 5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, white 5%, transparent) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: radial-gradient(120% 90% at 50% 0%, black 40%, transparent 78%);
+}
+
+/* Стеклянная плашка на тёмном фоне (метрики, чипы в hero). */
+@utility glass-dark {
+  background-color: color-mix(in oklab, white 8%, transparent);
+  border: 1px solid color-mix(in oklab, white 16%, transparent);
+  backdrop-filter: blur(10px);
+  border-radius: 1rem;
+}
+
+/* Золотое свечение под ключевыми элементами. */
+@utility glow-gold {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--gold) 30%, transparent),
+    0 18px 50px -18px color-mix(in oklab, var(--gold-bright) 60%, transparent);
+}
+
+/* Крупный кинематичный заголовок: плотный Oswald, антисиротство строк. */
+@utility display-hero {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+/* Края ролика растворяются в фоне: подложка видео чуть отличается по цвету
+   от CSS-фона в разных браузерах, маска прячет эту границу. */
+@utility video-fade {
+  mask-image: radial-gradient(ellipse 62% 70% at 50% 52%, black 45%, transparent 82%);
+}
+
+/* Мягкое всплытие карточки при наведении — единый жест на весь сайт. */
+@utility lift {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+  &:hover {
+    transform: translateY(-4px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+  .lift:hover {
+    transform: none;
   }
   * {
     scroll-behavior: auto !important;

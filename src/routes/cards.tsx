@@ -110,31 +110,43 @@ function CardsPage() {
       </header>
 
         <main>
-          <section id="station" className="bg-primary px-5 py-20 sm:py-32 relative overflow-hidden">
-            {/* Optional background decoration */}
-            <div className="absolute inset-0 bg-primary opacity-90"></div>
-            <div className="mx-auto max-w-6xl relative z-10">
-              <div className="max-w-xl text-primary-foreground">
-                <span className="inline-flex items-center rounded-full bg-gold/20 px-3.5 py-1 text-xs font-semibold text-gold">
-                  {cp.heroBadge}
-                </span>
-                <h1 className="mt-5 text-3xl leading-tight font-bold sm:text-4xl md:text-5xl font-display">
-                  {cp.heroTitle}
-                </h1>
-                <p className="mt-5 max-w-xl text-base text-primary-foreground/80 sm:text-lg">
-                  {cp.heroDesc}
-                </p>
-                <div className="mt-8 flex flex-wrap gap-3">
-                  <a href="#cards" className="btn-base btn-gold font-bold">
-                    {cp.heroOrderBtn}
-                  </a>
-                </div>
+          {/* Hero: колонки под навесом — реалистичный рендер станции */}
+          <section id="station" className="relative isolate overflow-hidden bg-primary-deeper text-white">
+            <picture>
+              <source srcSet="/images/station-pumps.webp" type="image/webp" />
+              <img
+                src="/images/station-pumps.jpg"
+                alt="Топливные колонки под навесом АЗС С-Мунай"
+                className="absolute inset-0 size-full object-cover object-[70%_center]"
+                fetchPriority="high"
+              />
+            </picture>
+            <div
+              className="absolute inset-0 bg-linear-to-t from-primary-deeper/95 via-primary-deeper/35 to-primary-deeper/5"
+              aria-hidden="true"
+            />
+            <div
+              className="absolute inset-0 bg-linear-to-r from-primary-deeper/75 via-primary-deeper/15 to-transparent"
+              aria-hidden="true"
+            />
+            <div className="relative mx-auto flex min-h-[72dvh] max-w-6xl flex-col justify-end px-5 pt-24 pb-14 sm:pb-20">
+              <p className="font-serif text-xl italic text-gold-bright sm:text-2xl">{cp.heroBadge}</p>
+              <h1 className="display-hero mt-4 max-w-3xl text-4xl text-white sm:text-6xl md:text-7xl">
+                {cp.heroTitle}
+              </h1>
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
+                {cp.heroDesc}
+              </p>
+              <div className="mt-8">
+                <a href="#cards" className="btn-base btn-gold glow-gold font-bold">
+                  {cp.heroOrderBtn}
+                </a>
               </div>
             </div>
           </section>
 
         <div className="mx-auto max-w-6xl px-5">
-          <div className="road-stripe my-14 sm:my-20" />
+          <div className="road-stripe my-20 sm:my-28" />
         </div>
 
         {/* Client fuel cards & vouchers */}

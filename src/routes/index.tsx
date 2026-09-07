@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import {
   Fuel,
   ShoppingBag,
@@ -219,7 +219,16 @@ const CITY_STATIONS: CityGroup[] = [
   },
 ];
 
-function Reveal({ children, className = "" }: { children: ReactNode; className?: string }) {
+function Reveal({
+  children,
+  className = "",
+  delay = 0,
+}: {
+  children: ReactNode;
+  className?: string;
+  /** Задержка появления в секундах — для stagger-эффекта соседних блоков. */
+  delay?: number;
+}) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -241,7 +250,11 @@ function Reveal({ children, className = "" }: { children: ReactNode; className?:
   }, []);
 
   return (
-    <div ref={ref} className={`reveal ${className}`}>
+    <div
+      ref={ref}
+      className={`reveal ${className}`}
+      style={delay ? ({ "--reveal-delay": `${delay}s` } as CSSProperties) : undefined}
+    >
       {children}
     </div>
   );
@@ -250,62 +263,96 @@ function Reveal({ children, className = "" }: { children: ReactNode; className?:
 function Stripe() {
   return (
     <div className="mx-auto max-w-6xl px-5">
-      <div className="road-stripe my-14 sm:my-20" />
+      <div className="road-stripe my-20 sm:my-28" />
     </div>
   );
 }
 
 function SectionTitle({ children }: { children: ReactNode }) {
-  return <h2 className="text-2xl font-bold text-primary sm:text-3xl font-display">{children}</h2>;
-}
-
-function HeroFeatureCard() {
-  const { t } = useLanguage();
-  const h = t.hero;
-
   return (
-    <div className="mx-auto w-full max-w-sm rounded-2xl bg-primary p-7 text-primary-foreground shadow-[0_28px_50px_-30px_rgba(13,108,137,0.8)] lg:mx-0">
-      <div className="flex items-center border-b border-primary-foreground/15 pb-4">
-        <img
-          src="/images/logo-white.svg"
-          alt="С-МУНАЙ"
-          className="h-7 w-auto object-contain"
-        />
-      </div>
-      <div className="mt-5 space-y-4">
-        <div className="flex items-center gap-3">
-          <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-gold/20 text-gold">
-            <Fuel className="size-4" aria-hidden="true" />
-          </span>
-          <div>
-            <p className="text-sm font-bold">{h.feature1}</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-3">
-          <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-gold/20 text-gold">
-            <Coffee className="size-4" aria-hidden="true" />
-          </span>
-          <div>
-            <p className="text-sm font-bold">{h.feature2}</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-3">
-          <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-gold/20 text-gold">
-            <MapPin className="size-4" aria-hidden="true" />
-          </span>
-          <div>
-            <p className="text-sm font-bold">{h.feature3}</p>
-          </div>
-        </div>
-      </div>
-      <div className="mt-6 border-t border-primary-foreground/15 pt-4">
-        <p className="text-center font-display text-xs font-semibold tracking-wide text-gold">
-          {h.slogan}
-        </p>
-      </div>
-    </div>
+    <h2 className="display-hero text-3xl text-primary sm:text-4xl md:text-5xl">{children}</h2>
   );
 }
+
+/* ---------- Hero: реалистичный рендер станции, editorial-подача ---------- */
+// Фото — Cycles-рендер station.glb на закате; текст ложится в тёмный низ кадра,
+// как у люкс-домов: минимум интерфейса, крупная типографика, serif-акцент.
+
+function HeroPhoto() {
+  const { t } = useLanguage();
+
+  const metrics = [
+    [t.hero.yearsMetric, t.hero.yearsLabel],
+    [t.hero.stationsMetric, t.hero.stationsLabel],
+    [t.hero.citiesMetric, t.hero.citiesLabel],
+  ];
+
+  return (
+    <section className="relative isolate overflow-hidden bg-primary-deeper text-white">
+      <picture>
+        <source srcSet="/images/station-hero.webp" type="image/webp" />
+        <img
+          src="/images/station-hero.jpg"
+          alt="АЗС С-Мунай на закате — визуализация станции"
+          className="absolute inset-0 size-full object-cover object-[30%_center] lg:object-[22%_center]"
+          fetchPriority="high"
+        />
+      </picture>
+      {/* затемнение снизу и слева — под текст, не трогая небо и навес */}
+      <div
+        className="absolute inset-0 bg-linear-to-t from-primary-deeper/95 via-primary-deeper/30 to-transparent"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-0 bg-linear-to-r from-primary-deeper/70 via-primary-deeper/10 to-transparent"
+        aria-hidden="true"
+      />
+
+      <div className="relative mx-auto flex min-h-[86dvh] max-w-6xl flex-col justify-end px-5 pt-28 pb-14 sm:pb-20">
+        <Reveal>
+          <p className="font-serif text-xl italic text-gold-bright sm:text-2xl">{t.hero.badge}</p>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <h1 className="display-hero mt-4 max-w-3xl text-4xl text-white sm:text-6xl md:text-7xl">
+            {t.hero.title}
+          </h1>
+        </Reveal>
+        <Reveal delay={0.16}>
+          <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
+            {t.hero.subtitle}
+          </p>
+        </Reveal>
+        <Reveal delay={0.24}>
+          <div className="mt-8 flex flex-wrap items-center gap-6">
+            <a href="#azs" className="btn-base btn-gold glow-gold font-bold">
+              {t.hero.findStation}
+            </a>
+            <a
+              href="#vouchers"
+              className="text-xs font-semibold uppercase tracking-[0.22em] text-white underline decoration-white/50 underline-offset-8 transition-colors hover:decoration-gold-bright"
+            >
+              {t.nav.vouchers}
+            </a>
+          </div>
+        </Reveal>
+        <Reveal delay={0.32}>
+          <dl className="mt-12 flex flex-wrap gap-x-10 gap-y-4 border-t border-white/15 pt-6">
+            {metrics.map(([value, label]) => (
+              <div key={label}>
+                <dt className="sr-only">{label}</dt>
+                <dd>
+                  <span className="font-display text-3xl font-bold text-gold-bright">{value}</span>
+                  <span className="ml-2 text-xs uppercase tracking-[0.14em] text-white/60">{label}</span>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 
 type StationsMapSectionProps = {
   selectedCity: string;
@@ -590,52 +637,7 @@ function Index() {
       </header>
 
       <main id="top">
-        {/* Hero */}
-        <section className="mx-auto max-w-6xl px-5 pt-12 sm:pt-20">
-          <div className="grid items-center gap-10 lg:grid-cols-[1.2fr_0.8fr]">
-            <Reveal>
-              <span className="inline-flex items-center rounded-full bg-gold/20 px-3.5 py-1 text-xs font-semibold text-gold-foreground">
-                {t.hero.badge}
-              </span>
-              <h1 className="mt-5 text-3xl leading-tight font-bold text-primary font-display sm:text-4xl md:text-5xl">
-                {t.hero.title}
-              </h1>
-              <p className="mt-5 max-w-xl text-base text-foreground/75 sm:text-lg">
-                {t.hero.subtitle}
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <a href="#azs" className="btn-base btn-gold font-bold">
-                  {t.hero.findStation}
-                </a>
-                <a href="#vouchers" className="btn-base border border-primary/30 text-primary hover:bg-primary/10 font-semibold inline-flex items-center gap-1.5">
-                  <Ticket className="size-4" />
-                  {t.nav.vouchers}
-                </a>
-              </div>
-            </Reveal>
-            <Reveal>
-              <HeroFeatureCard />
-            </Reveal>
-          </div>
-
-          <Reveal className="mt-14">
-            <dl className="grid gap-4 sm:grid-cols-3">
-              {[
-                [t.hero.yearsMetric, t.hero.yearsLabel],
-                [t.hero.stationsMetric, t.hero.stationsLabel],
-                [t.hero.citiesMetric, t.hero.citiesLabel],
-              ].map(([value, label]) => (
-                <div key={label} className="soft-card px-6 py-5">
-                  <dt className="sr-only">{label}</dt>
-                  <dd>
-                    <span className="font-display text-2xl font-bold text-primary">{value}</span>
-                    <span className="ml-2 text-sm text-foreground/70">{label}</span>
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </Reveal>
-        </section>
+        <HeroPhoto />
 
         <Stripe />
 
@@ -658,7 +660,7 @@ function Index() {
                     <article
                       key={station.number}
                       onClick={() => handleStationCardClick(group.city, station.number)}
-                      className={`soft-card cursor-pointer p-5 transition-all hover:border-primary/40 hover:shadow-md ${
+                      className={`soft-card lift cursor-pointer p-5 hover:border-primary/40 hover:shadow-md ${
                         isSelected
                           ? "border-primary bg-primary/[0.04] ring-2 ring-gold"
                           : ""
@@ -725,18 +727,32 @@ function Index() {
 
         <Stripe />
 
-        {/* Топливо */}
-        <section id="fuel" className="mx-auto max-w-6xl scroll-mt-28 px-5">
+        {/* Топливо — на фоне станции под навесом */}
+        <section
+          id="fuel"
+          className="relative isolate scroll-mt-28 overflow-hidden bg-primary-deeper py-20 text-white sm:py-28"
+        >
+          <img
+            src="/images/station-pumps.jpg"
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 size-full object-cover object-center opacity-45"
+            loading="lazy"
+          />
+          <div
+            className="absolute inset-0 bg-linear-to-b from-primary-deeper/60 via-primary-deeper/85 to-primary-deeper"
+            aria-hidden="true"
+          />
+          <div className="relative mx-auto max-w-6xl px-5">
           <Reveal>
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
-                <SectionTitle>{t.fuelSection.title}</SectionTitle>
-                <p className="mt-2 text-foreground/70">{t.fuelSection.subtitle}</p>
+                <p className="font-serif text-lg italic text-gold-bright sm:text-xl">{t.fuelSection.hitechBadge}</p>
+                <h2 className="display-hero mt-2 text-3xl text-white sm:text-4xl md:text-5xl">
+                  {t.fuelSection.title}
+                </h2>
+                <p className="mt-3 max-w-xl text-white/70">{t.fuelSection.subtitle}</p>
               </div>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-gold/20 px-3.5 py-1 text-xs font-bold text-gold-foreground">
-                <Sparkles className="size-3.5 text-gold" />
-                {t.fuelSection.hitechBadge}
-              </span>
             </div>
           </Reveal>
 
@@ -744,7 +760,7 @@ function Index() {
           <Reveal className="mt-8">
             <div className="grid gap-5 md:grid-cols-2">
               {/* АИ-95 Hi-Tech */}
-              <article className="rounded-3xl border-2 border-gold/40 bg-linear-to-br from-primary via-primary to-primary/95 p-7 text-primary-foreground shadow-lg transition-all hover:border-gold hover:shadow-xl">
+              <article className="glass-dark glow-gold lift p-7 text-white">
                 <div className="flex items-center justify-between">
                   <span className="flex size-11 items-center justify-center rounded-2xl bg-gold/20 text-gold">
                     <Zap className="size-6 text-gold" />
@@ -771,7 +787,7 @@ function Index() {
               </article>
 
               {/* АИ-92 Hi-Tech */}
-              <article className="rounded-3xl border-2 border-gold/40 bg-linear-to-br from-primary via-primary to-primary/95 p-7 text-primary-foreground shadow-lg transition-all hover:border-gold hover:shadow-xl">
+              <article className="glass-dark glow-gold lift p-7 text-white">
                 <div className="flex items-center justify-between">
                   <span className="flex size-11 items-center justify-center rounded-2xl bg-gold/20 text-gold">
                     <Sparkles className="size-6 text-gold" />
@@ -819,37 +835,37 @@ function Index() {
                   badge: t.fuelSection.dtBadge,
                 },
               ].map((fuel) => (
-                <article key={fuel.title} className="soft-card p-6 flex flex-col justify-between">
+                <article key={fuel.title} className="glass-dark lift flex flex-col justify-between p-6">
                   <div>
                     <div className="flex items-center justify-between">
-                      <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                      <span className="flex size-10 items-center justify-center rounded-xl bg-white/10 text-gold-bright">
                         <Fuel className="size-5" aria-hidden="true" />
                       </span>
-                      <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-semibold text-primary">
+                      <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-[11px] font-semibold text-white/80">
                         {fuel.badge}
                       </span>
                     </div>
-                    <h3 className="mt-4 font-display text-2xl font-bold text-primary">{fuel.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-foreground/75">
+                    <h3 className="mt-4 font-display text-2xl font-bold text-white">{fuel.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-white/70">
                       {fuel.desc}
                     </p>
                   </div>
-                  <div className="mt-6 pt-4 border-t border-primary/5 flex items-center gap-2 text-xs text-foreground/60">
-                    <ShieldCheck className="size-4 text-gold" />
+                  <div className="mt-6 flex items-center gap-2 border-t border-white/10 pt-4 text-xs text-white/60">
+                    <ShieldCheck className="size-4 text-gold-bright" />
                     <span>Лабораторный контроль каждой партии</span>
                   </div>
                 </article>
               ))}
             </div>
           </Reveal>
+          </div>
         </section>
 
-        <Stripe />
-
         {/* Топливные талоны */}
-        <section id="vouchers" className="mx-auto max-w-6xl scroll-mt-28 px-5">
+        <section id="vouchers" className="mx-auto max-w-6xl scroll-mt-28 px-5 pt-20 sm:pt-28">
           <Reveal>
-            <div className="rounded-3xl bg-linear-to-br from-primary via-primary to-primary/95 p-7 text-primary-foreground sm:p-10 lg:p-12 shadow-xl">
+            <div className="hero-surface overflow-hidden rounded-3xl p-7 text-white shadow-xl sm:p-10 lg:p-12">
+              <div className="grid-overlay" aria-hidden="true" />
               <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
                 <div>
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-gold/20 px-3.5 py-1 text-xs font-semibold text-gold">
@@ -943,7 +959,7 @@ function Index() {
                 { title: t.servicesSection.s5Title, desc: t.servicesSection.s5Desc, icon: UserCheck },
                 { title: t.servicesSection.s6Title, desc: t.servicesSection.s6Desc, icon: QrCode },
               ].map((srv) => (
-                <article key={srv.title} className="soft-card p-6 transition-all hover:border-primary/30">
+                <article key={srv.title} className="soft-card lift p-6 hover:border-primary/30">
                   <span className="flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                     <srv.icon className="size-5.5 text-primary" aria-hidden="true" />
                   </span>
@@ -1008,17 +1024,27 @@ function Index() {
 
         <Stripe />
 
-        {/* О нас */}
+        {/* О нас — editorial: текст и кадр станции */}
         <section id="about" className="mx-auto max-w-6xl scroll-mt-28 px-5">
-          <Reveal>
-            <SectionTitle>{t.about.title}</SectionTitle>
-            <p className="mt-4 max-w-3xl text-foreground/80 leading-relaxed">
-              {t.about.text}
-            </p>
-            <span className="mt-6 inline-flex items-center rounded-full bg-gold px-4 py-1.5 text-sm font-semibold text-gold-foreground">
-              {t.about.badge}
-            </span>
-          </Reveal>
+          <div className="grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+            <Reveal>
+              <p className="font-serif text-lg italic text-terracotta sm:text-xl">{t.about.badge}</p>
+              <SectionTitle>{t.about.title}</SectionTitle>
+              <p className="mt-6 max-w-xl text-base leading-relaxed text-foreground/80 sm:text-lg">
+                {t.about.text}
+              </p>
+            </Reveal>
+            <Reveal delay={0.15}>
+              <figure className="lift overflow-hidden rounded-3xl shadow-[0_30px_60px_-30px_color-mix(in_oklab,var(--primary)_60%,transparent)]">
+                <img
+                  src="/images/station-hero.jpg"
+                  alt="АЗС С-Мунай на закате"
+                  className="aspect-[16/10] w-full object-cover"
+                  loading="lazy"
+                />
+              </figure>
+            </Reveal>
+          </div>
         </section>
 
         <Stripe />
@@ -1109,11 +1135,41 @@ function Index() {
         </section>
       </main>
 
-      <footer className="mt-16 border-t border-primary/10 py-8">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-4 px-5">
-          <p className="text-sm text-foreground/60">
-            {t.footer.rights}
+      {/* Футер: фирменный леттеринг на весь экран — финальный аккорд, как у люкс-домов */}
+      <footer className="hero-surface mt-24 overflow-hidden pt-16 pb-8 sm:mt-32">
+        <div className="grid-overlay" aria-hidden="true" />
+        <div className="mx-auto max-w-6xl px-5">
+          <div className="flex flex-wrap items-end justify-between gap-6 border-b border-white/10 pb-8">
+            <img src="/images/logo-white.svg" alt="С-МУНАЙ" className="h-9 w-auto object-contain" />
+            <nav aria-label="Футер" className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/70">
+              {navItems.map((item) => (
+                <a key={item.href} href={item.href} className="transition-colors hover:text-gold-bright">
+                  {item.label}
+                </a>
+              ))}
+              <Link to="/cards" className="transition-colors hover:text-gold-bright">{t.nav.cards3d}</Link>
+              <Link to="/career" className="transition-colors hover:text-gold-bright">Карьера</Link>
+            </nav>
+          </div>
+          <p
+            className="display-hero mt-10 select-none text-center uppercase leading-none tracking-[-0.02em] text-white/[0.07]"
+            style={{ fontSize: "clamp(4rem, 15vw, 14rem)" }}
+            aria-hidden="true"
+          >
+            С-Мұнай
           </p>
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 text-xs text-white/50">
+            <p>{t.footer.rights}</p>
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 transition-colors hover:text-gold-bright"
+            >
+              <Instagram className="size-4" aria-hidden="true" />
+              {t.contacts.instaHandle}
+            </a>
+          </div>
         </div>
       </footer>
     </div>

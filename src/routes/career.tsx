@@ -95,10 +95,6 @@ function CareerPage() {
 
   return (
     <div className="min-h-dvh bg-background text-foreground flex flex-col relative overflow-hidden">
-      {/* Abstract Background Design */}
-      <div className="absolute top-0 left-0 right-0 h-[50vh] bg-linear-to-b from-primary/10 to-transparent -z-10" />
-      <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-gold/5 blur-[120px] -z-10" />
-      <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/5 blur-[100px] -z-10" />
 
       <header className="sticky top-0 z-40 border-b border-primary/10 bg-background/90 backdrop-blur">
         <div className="mx-auto flex max-w-4xl items-center gap-4 px-5 py-3 sm:py-4">
@@ -113,22 +109,39 @@ function CareerPage() {
         </div>
       </header>
 
-      <main className="flex-1 flex items-center justify-center p-5 py-12">
-        <div className="w-full max-w-xl">
-          <div className="text-center mb-10">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-gold/20 px-3 py-1 text-xs font-bold text-gold-foreground mb-4">
-              <Briefcase className="size-3.5" />
-              Команда С-Мунай
-            </span>
-            <h1 className="text-3xl sm:text-4xl font-bold text-primary font-display mb-4">
-              Карьера в С-Мунай
-            </h1>
-            <p className="text-foreground/70 max-w-md mx-auto font-medium">
-              Присоединяйтесь к команде первой сети АЗС в регионе. Мы ценим ответственность, профессионализм и желание развиваться.
-            </p>
-          </div>
+      {/* Hero: станция на закате — команда, к которой приглашаем */}
+      <section className="relative isolate overflow-hidden bg-primary-deeper text-white">
+        <picture>
+          <source srcSet="/images/station-hero.webp" type="image/webp" />
+          <img
+            src="/images/station-hero.jpg"
+            alt="АЗС С-Мунай на закате"
+            className="absolute inset-0 size-full object-cover object-[35%_center]"
+            fetchPriority="high"
+          />
+        </picture>
+        <div
+          className="absolute inset-0 bg-linear-to-t from-primary-deeper/95 via-primary-deeper/35 to-primary-deeper/5"
+          aria-hidden="true"
+        />
+        <div className="relative mx-auto flex min-h-[58dvh] max-w-6xl flex-col justify-end px-5 pt-24 pb-12 sm:pb-16">
+          <p className="inline-flex items-center gap-2 font-serif text-xl italic text-gold-bright sm:text-2xl">
+            <Briefcase className="size-5" aria-hidden="true" />
+            Команда С-Мунай
+          </p>
+          <h1 className="display-hero mt-4 max-w-3xl text-4xl text-white sm:text-6xl md:text-7xl">
+            Карьера в С-Мунай
+          </h1>
+          <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
+            Присоединяйтесь к команде первой сети АЗС в регионе. Мы ценим ответственность,
+            профессионализм и желание развиваться.
+          </p>
+        </div>
+      </section>
 
-          <div className="soft-card p-6 sm:p-8 bg-background/80 backdrop-blur-md shadow-xl border-primary/10">
+      <main className="flex-1 flex items-center justify-center p-5 py-14 sm:py-20">
+        <div className="w-full max-w-xl">
+          <div className="soft-card p-6 sm:p-8 shadow-xl border-primary/10">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 

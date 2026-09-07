@@ -163,8 +163,9 @@ export function StationVideoScroll({ children }: { children?: ReactNode }) {
   }, []);
 
   return (
-    // фон подогнан под фактический цвет подложки в station.webm после цветокоррекции
-    <div ref={wrapperRef} className="relative h-[300vh] bg-[#27809b]">
+    // фон = цвет подложки station.webm так, как его отдаёт браузер (vp9 → sRGB даёт
+    // rgb(31,121,158), а не исходный #27809b), иначе на широких экранах видна рамка кадра
+    <div ref={wrapperRef} className="relative h-[300vh] bg-[#1f799e]">
       <div className="sticky top-0 h-dvh w-full overflow-hidden">
         {!isLoaded && !error && (
           <div className="absolute inset-0 flex items-center justify-center text-sm text-primary-foreground/60">

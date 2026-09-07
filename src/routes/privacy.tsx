@@ -34,7 +34,7 @@ function PrivacyPage() {
 
       <main className="flex-1 px-5 py-12 max-w-4xl mx-auto w-full">
         <div className="soft-card p-6 sm:p-10 bg-background/80 backdrop-blur-md shadow-xl border-primary/10 prose prose-teal max-w-none">
-          <h1 className="text-2xl sm:text-3xl font-bold text-primary font-display mb-6">
+          <h1 className="display-hero mb-8 text-3xl text-primary sm:text-4xl md:text-5xl">
             ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ И ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ
           </h1>
           
