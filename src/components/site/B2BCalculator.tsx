@@ -2,7 +2,6 @@ import { useState, useMemo } from "react";
 import { useLanguage } from "@/lib/i18n";
 import { 
   Calculator, 
-  TrendingUp, 
   ShieldCheck, 
   BadgePercent, 
   ChevronRight,
@@ -36,19 +35,14 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
     const vatSavings = Math.round((monthlySpend * 12) / 112);
     // 2. Предотвращение сливов и левых чеков лимитами по картам (~7% экономии)
     const leakSavings = Math.round(monthlySpend * 0.07);
-    // 3. Защита от инфляции цен (+24 ₸/л в год по статистике аналитики)
-    const inflationSavingsAnnual = Math.round(litres * 24);
-    const inflationSavingsMonthly = Math.round(inflationSavingsAnnual / 12);
 
-    const totalMonthlySavings = vatSavings + leakSavings + inflationSavingsMonthly;
+    const totalMonthlySavings = vatSavings + leakSavings;
     const totalAnnualSavings = totalMonthlySavings * 12;
 
     return {
       monthlySpend,
       vatSavings,
       leakSavings,
-      inflationSavingsMonthly,
-      inflationSavingsAnnual,
       totalMonthlySavings,
       totalAnnualSavings,
     };
@@ -205,13 +199,13 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
               </div>
             </div>
 
-            {/* Блок пояснения инфляции на основе статистики сети */}
-            <div className="flex items-start gap-3 rounded-2xl border border-gold/30 bg-gold/5 p-4 text-xs text-foreground/80">
-              <TrendingUp className="size-4.5 shrink-0 text-gold mt-0.5" />
+            {/* Блок преимуществ для бизнеса */}
+            <div className="flex items-start gap-3 rounded-2xl border border-primary/20 bg-primary/5 p-4 text-xs text-foreground/80">
+              <ShieldCheck className="size-4.5 shrink-0 text-primary mt-0.5" />
               <p>
                 {isKz
-                  ? "С-Мунай желісінің аналитикасы: отын бағасы орташа есеппен жылына 24 ₸/л өседі (+10% / жыл). Келісімшартпен бекітілген баға бюджетіңізді қорғайды."
-                  : "Аналитика сети С-Мунай: цена топлива за последние 2 года растет в среднем на +2,0 ₸/л в месяц (+24 ₸/л в год). Безналичный договор защищает вас от скачков цен."}
+                  ? "С-Мунай корпоративтік клиенттеріне: бірыңғай дербес шот, ЭСФ және барлық жабу құжаттары уақытында, әр картаға дербес тәуліктік лимиттер."
+                  : "Корпоративным клиентам С-Мунай: единый лицевой счёт, полный пакет ЭСФ и закрывающих документов день в день, суточные лимиты по картам."}
               </p>
             </div>
           </div>
@@ -253,17 +247,6 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
                   </span>
                   <span className="font-semibold text-white">
                     +{calculations.leakSavings.toLocaleString()} ₸
-                  </span>
-                </div>
-
-                {/* Защита от инфляции */}
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2 text-white/80 text-xs sm:text-sm">
-                    <TrendingUp className="size-4 text-gold" />
-                    {isKz ? "Инфляциядан қорғау (бағаны бекіту):" : "Экономия на фиксации цены:"}
-                  </span>
-                  <span className="font-semibold text-white">
-                    +{calculations.inflationSavingsMonthly.toLocaleString()} ₸
                   </span>
                 </div>
               </div>
