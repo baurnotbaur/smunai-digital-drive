@@ -31,8 +31,8 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
 
   const calculations = useMemo(() => {
     const monthlySpend = litres * activeFuel.price;
-    // 1. Возврат НДС (12% в зачет из суммы)
-    const vatSavings = Math.round((monthlySpend * 12) / 112);
+    // 1. Возврат НДС (16% в зачет из суммы по новому Налоговому кодексу РК)
+    const vatSavings = Math.round((monthlySpend * 16) / 116);
     // 2. Предотвращение сливов и левых чеков лимитами по картам (~7% экономии)
     const leakSavings = Math.round(monthlySpend * 0.07);
 
@@ -79,8 +79,8 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
             </h2>
             <p className="mt-2 max-w-2xl text-sm text-foreground/75 sm:text-base">
               {isKz 
-                ? "Айлық көлемді енгізіңіз: ҚҚС 12% қайтару, ұрлықты тоқтату және инфляциядан бағаны бекіту арқылы нақты үнемді көріңіз."
-                : "Укажите ежемесячный объём топлива: рассчитайте чистую экономию за счёт зачёта НДС 12%, лимитов без сливов и фиксации цены."}
+                ? "Айлық көлемді енгізіңіз: ҚҚС 16% қайтару және карталық лимиттер арқылы нақты үнемді көріңіз."
+                : "Укажите ежемесячный объём топлива: рассчитайте чистую экономию за счёт зачёта НДС 16% и суточных лимитов без сливов."}
             </p>
           </div>
           <div className="flex items-center gap-2 rounded-2xl border border-primary/15 bg-primary/5 px-4 py-2 text-xs font-semibold text-foreground/70">
@@ -232,7 +232,7 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-2 text-white/80 text-xs sm:text-sm">
                     <BadgePercent className="size-4 text-gold" />
-                    {isKz ? "ҚҚС 12% есепке алу (зачёт):" : "Зачёт НДС 12% (возврат):"}
+                    {isKz ? "ҚҚС 16% есепке алу (зачёт):" : "Зачёт НДС 16% (возврат):"}
                   </span>
                   <span className="font-semibold text-white">
                     +{calculations.vatSavings.toLocaleString()} ₸
