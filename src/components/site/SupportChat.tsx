@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { X, MessageCircle, ArrowUp } from "lucide-react";
+import { submitLead } from "@/lib/leads";
 
 const WORKER_URL = "https://smunai-chat-worker.smunay-chat.workers.dev"; 
 
@@ -91,23 +92,30 @@ export function SupportChat() {
             let visibleText = answer;
             if (visibleText.includes("[LEAD]")) {
                visibleText = visibleText.substring(0, visibleText.indexOf("[LEAD]")).trim();
-               
-               if (!leadSent && answer.includes("[/LEAD]")) {
-                 const leadMatch = answer.match(/\[LEAD\]([\s\S]*?)\[\/LEAD\]/);
-                 if (leadMatch && leadMatch[1]) {
-                   try {
-                     const parsedLead = JSON.parse(leadMatch[1]);
-                     fetch("https://smunai-lead-service.vercel.app/api/v1/leads", {
-                       method: "POST",
-                       headers: { "Content-Type": "application/json" },
-                       body: JSON.stringify(parsedLead),
-                     }).catch(console.error);
-                     leadSent = true;
-                   } catch (err) {
-                     console.error("Failed to parse lead JSON:", err);
+                              if (!leadSent && answer.includes("[/LEAD]")) {
+                   const leadMatch = answer.match(/\[LEAD\]([\s\S]*?)\[\/LEAD\]/);
+                   if (leadMatch && leadMatch[1]) {
+                     try {
+                       const parsedLead = JSON.parse(leadMatch[1]);
+                       leadSent = true;
+                       submitLead({
+                         name: parsedLead.name || "Кандидат из чата",
+                         phone: parsedLead.phone,
+                         comment: parsedLead.comment || "Заявка через чат-бот Мунай",
+                         type: parsedLead.type === "hr" ? "hr" : "sales",
+                         form_id: "chat_bot",
+                         consent: true,
+                         extra: {
+                           data_consent: true,
+                           source: "ai_chat",
+                           position: parsedLead.position || (parsedLead.type === "hr" ? "Кандидат из чата" : undefined),
+                         },
+                       }).catch((err) => console.error("[SupportChat] Ошибка отправки лида:", err));
+                     } catch (err) {
+                       console.error("Failed to parse lead JSON:", err);
+                     }
                    }
                  }
-               }
             }
             
             setMessages([...history, { role: "model", text: visibleText }]);
