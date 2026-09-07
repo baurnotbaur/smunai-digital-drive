@@ -79,13 +79,13 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
             </h2>
             <p className="mt-2 max-w-2xl text-sm text-foreground/75 sm:text-base">
               {isKz 
-                ? "Айлық көлемді енгізіңіз: ҚҚС 16% қайтару және карталық лимиттер арқылы нақты үнемді көріңіз."
-                : "Укажите ежемесячный объём топлива: рассчитайте чистую экономию за счёт зачёта НДС 16% и суточных лимитов без сливов."}
+                ? "Калькулятордағы бағалар нақты емес, шартты түрде қарапайым есептеу үшін көрсетілген. Нақты бағалар мен шарттарды менеджерден нақтылаңыз."
+                : "Цены на продукты в калькуляторе не являются публичной офертой и служат для простого подсчёта выгоды. Актуальные условия уточняйте у менеджеров."}
             </p>
           </div>
           <div className="flex items-center gap-2 rounded-2xl border border-primary/15 bg-primary/5 px-4 py-2 text-xs font-semibold text-foreground/70">
             <Calculator className="size-4 text-primary" />
-            <span>{isKz ? "Нақты нарықтық деректер негізінде" : "На основе фактических цен сети"}</span>
+            <span>{isKz ? "Үлгілік есептеу" : "Ориентировочный расчёт"}</span>
           </div>
         </div>
 
