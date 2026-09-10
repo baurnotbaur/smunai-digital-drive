@@ -14,7 +14,8 @@ import {
   PhoneCall, 
   ArrowLeft,
   Scale,
-  Sparkles
+  Sparkles,
+  Mail,
 } from "lucide-react";
 import { B2BLeadForm } from "@/components/site/B2BLeadForm";
 import { B2BCalculator } from "@/components/site/B2BCalculator";
@@ -47,28 +48,29 @@ function B2BPage() {
     <div className="min-h-dvh bg-slate-950 text-white selection:bg-gold selection:text-slate-950 flex flex-col">
       {/* Top Navigation Bar */}
       <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/80 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:py-3.5">
-          <div className="flex items-center gap-4">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-5 py-2.5 sm:py-3.5">
+          <div className="flex items-center gap-2.5 sm:gap-4">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 transition-colors hover:text-white sm:text-sm"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/5 p-2 text-xs font-semibold text-slate-300 transition-colors hover:bg-white/10 hover:text-white sm:border-0 sm:bg-transparent sm:p-0 sm:text-sm"
+              title={isKz ? "Басты бетке" : isEn ? "Back to Home" : "На главную"}
             >
               <ArrowLeft className="size-4" />
-              <span>{isKz ? "Басты бетке" : isEn ? "Back to Home" : "На главную"}</span>
+              <span className="hidden sm:inline">{isKz ? "Басты бетке" : isEn ? "Back to Home" : "На главную"}</span>
             </Link>
-            <div className="h-4 w-px bg-white/10" />
+            <div className="hidden sm:block h-4 w-px bg-white/10" />
             <Link to="/" className="flex items-center gap-2">
-              <img src="/images/logo-white.svg" alt="С-Мунай" className="h-8 w-auto object-contain sm:h-9" />
+              <img src="/images/logo-white.svg" alt="С-Мунай" className="h-7 w-auto object-contain sm:h-8 md:h-9" />
             </Link>
           </div>
 
-          <div className="flex items-center gap-3">
-            <LanguageSwitcher />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <LanguageSwitcher darkTheme={true} />
             <a
               href="#order-form"
-              className="btn-base btn-gold !py-2 !px-4 !text-xs font-bold text-slate-950"
+              className="btn-base btn-gold !py-1.5 sm:!py-2 !px-3 sm:!px-4 !text-xs font-bold text-slate-950 shadow-xs whitespace-nowrap"
             >
-              {b.orderBtn}
+              <span>{b.orderBtn}</span>
             </a>
           </div>
         </div>
@@ -112,7 +114,7 @@ function B2BPage() {
           {/* Quick Metrics Bar - 4 Richly Styled Blocks */}
           <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
             <div className="rounded-2xl border border-teal-500/25 bg-gradient-to-b from-teal-950/35 to-slate-900/60 p-4 sm:p-5 text-center backdrop-blur-md hover:border-teal-400/40 transition-colors">
-              <div className="font-display text-2xl sm:text-3xl font-bold text-teal-300">5 000+ л</div>
+              <div className="font-display text-2xl sm:text-3xl font-bold text-teal-300">5 000+ {isEn ? "L" : "л"}</div>
               <div className="mt-1 text-xs uppercase tracking-wider text-slate-400">
                 {isKz ? "Жеткізу партиясы" : isEn ? "Min. Tanker Load" : "Партия доставки"}
               </div>
@@ -126,14 +128,14 @@ function B2BPage() {
             </div>
 
             <div className="rounded-2xl border border-emerald-500/25 bg-gradient-to-b from-emerald-950/35 to-slate-900/60 p-4 sm:p-5 text-center backdrop-blur-md hover:border-emerald-400/40 transition-colors">
-              <div className="font-display text-2xl sm:text-3xl font-bold text-emerald-300">16% ҚҚС</div>
+              <div className="font-display text-2xl sm:text-3xl font-bold text-emerald-300">16% {isKz ? "ҚҚС" : isEn ? "VAT" : "НДС"}</div>
               <div className="mt-1 text-xs uppercase tracking-wider text-slate-400">
                 {isKz ? "Толық ресми ЭШФ есебі" : isEn ? "Full 16% VAT Offset" : "Зачёт НДС по ЭСФ"}
               </div>
             </div>
 
             <div className="rounded-2xl border border-gold/30 bg-gradient-to-b from-gold/15 to-slate-900/60 p-4 sm:p-5 text-center backdrop-blur-md hover:border-gold-bright transition-colors">
-              <div className="font-display text-2xl sm:text-3xl font-bold text-gold-bright">30 Жыл</div>
+              <div className="font-display text-2xl sm:text-3xl font-bold text-gold-bright">30 {isKz ? "Жыл" : isEn ? "Years" : "Лет"}</div>
               <div className="mt-1 text-xs uppercase tracking-wider text-slate-400">
                 {isKz ? "Үздіксіз тәжірибе (1996)" : isEn ? "Experience since 1996" : "Надёжность с 1996 г."}
               </div>
@@ -480,16 +482,16 @@ function B2BPage() {
                     </h2>
                     <p className="mt-4 text-base leading-relaxed text-slate-300">
                       {isKz
-                        ? "Бағаны бүгінгі күнмен бекітіп, инфляция мен маусымдық баға өсімінен толық қорғаныңыз. Номиналдары 10, 20 және 50 литр, барлық 8 станцияда жарамды."
+                        ? "Бағаны бүгінгі күнмен бекітіп, инфляция мен маусымдық баға өсімінен толық қорғаныңыз. Номиналдары 10, 20 және 50 литр, барлық 9 станцияда жарамды."
                         : isEn
-                        ? "Lock in fuel prices today to protect against inflation and seasonal price spikes. Available in 10, 20, and 50 liter denominations across all 8 stations."
-                        : "Зафиксируйте цену на топливо в день покупки. Защита от колебаний тарифов, удобная выдача командировочным сотрудникам и субподрядчикам. Номиналы: 10 л, 20 л и 50 л."}
+                        ? "Lock in fuel prices today to protect against inflation and seasonal market spikes. Available in 10, 20, and 50 liter denominations across all 9 network stations."
+                        : "Зафиксируйте цену на топливо в день покупки. Защита от колебаний тарифов, удобная выдача командировочным сотрудникам и субподрядчикам. Номиналы: 10 л, 20 л и 50 л, приём на всех 9 АЗС."}
                     </p>
 
                     <div className="mt-6 flex flex-wrap items-center gap-3">
-                      <span className="rounded-xl border border-amber-400/40 bg-amber-400/15 px-4 py-2 font-display text-lg font-bold text-amber-300">10 Л</span>
-                      <span className="rounded-xl border border-amber-400/40 bg-amber-400/15 px-4 py-2 font-display text-lg font-bold text-amber-300">20 Л</span>
-                      <span className="rounded-xl border border-amber-400/40 bg-amber-400/15 px-4 py-2 font-display text-lg font-bold text-amber-300">50 Л</span>
+                      <span className="rounded-xl border border-amber-400/40 bg-amber-400/15 px-4 py-2 font-display text-lg font-bold text-amber-300">10 {isEn ? "L" : "Л"}</span>
+                      <span className="rounded-xl border border-amber-400/40 bg-amber-400/15 px-4 py-2 font-display text-lg font-bold text-amber-300">20 {isEn ? "L" : "Л"}</span>
+                      <span className="rounded-xl border border-amber-400/40 bg-amber-400/15 px-4 py-2 font-display text-lg font-bold text-amber-300">50 {isEn ? "L" : "Л"}</span>
                     </div>
 
                     <div className="mt-8">
@@ -529,9 +531,9 @@ function B2BPage() {
                         <CheckCircle2 className="size-4 text-amber-400 mt-0.5 shrink-0" />
                         <span>
                           <strong className="text-white">
-                            {isKz ? "8 станцияда қабылданады:" : isEn ? "8 Network Stations:" : "Приём на 8 АЗС:"}
+                            {isKz ? "9 станцияда қабылданады:" : isEn ? "9 Network Stations:" : "Приём на 9 АЗС:"}
                           </strong>{" "}
-                          {isKz ? "3 Жезқазғанда, 3 Сәтбаевта, 2 Астанада" : isEn ? "3 in Zhezkazgan, 3 in Satpayev, 2 in Astana" : "3 в Жезказгане, 3 в Сатпаеве, 2 в Астане"}
+                          {isKz ? "Жезқазған, Сәтбаев, Ұлытау және Астана бойынша" : isEn ? "across Zhezkazgan, Satpayev, Ulytau, and Astana" : "в Жезказгане, Сатпаеве, Ұлытау и Астане"}
                         </span>
                       </li>
                     </ul>
@@ -589,7 +591,11 @@ function B2BPage() {
                       {isKz ? "1 жұмыс күні" : isEn ? "1 Business Day" : "1 рабочий день"}
                     </div>
                     <div className="text-xs text-slate-400">
-                      {isKz ? "Карталарды ресімдеу немесе жеткізу шартын бекіту мерзімі" : "Срок оформления и выдачи карт или заключения договора поставки"}
+                      {isKz
+                        ? "Карталарды ресімдеу немесе жеткізу шартын бекіту мерзімі"
+                        : isEn
+                        ? "Turnaround time for card issuance or supply contracts"
+                        : "Срок оформления и выдачи карт или заключения договора поставки"}
                     </div>
                   </div>
                 </div>
@@ -603,7 +609,11 @@ function B2BPage() {
                       {isKz ? "ЭШФ және жабу құжаттары" : isEn ? "Official Electronic Invoices (ESF)" : "ЭСФ и закрывающие документы"}
                     </div>
                     <div className="text-xs text-slate-400">
-                      {isKz ? "Әр айдың басында ИС ЭШФ арқылы қатаң кесте бойынша" : "Строго по графику через ИС ЭСФ в начале каждого месяца"}
+                      {isKz
+                        ? "Әр айдың басында ИС ЭШФ арқылы қатаң кесте бойынша"
+                        : isEn
+                        ? "Issued strictly on schedule via national ESF system each month"
+                        : "Строго по графику через ИС ЭСФ в начале каждого месяца"}
                     </div>
                   </div>
                 </div>
@@ -617,7 +627,11 @@ function B2BPage() {
                       {isKz ? "Жеке менеджер" : isEn ? "Dedicated Account Manager" : "Персональный менеджер"}
                     </div>
                     <div className="text-xs text-slate-400">
-                      {isKz ? "Кезексіз және автожауап берушісіз тікелей байланыс" : "Прямая связь без очередей и автоответчиков"}
+                      {isKz
+                        ? "Кезексіз және автожауап берушісіз тікелей байланыс"
+                        : isEn
+                        ? "Direct communication without waiting or answering machines"
+                        : "Прямая связь без очередей и автоответчиков"}
                     </div>
                   </div>
                 </div>
@@ -668,7 +682,16 @@ function B2BPage() {
           </p>
 
           <div className="mt-6 flex flex-wrap items-center justify-between gap-4 text-xs text-white/50">
-            <p>© 1996–2026 ТОО «С-Мунай». Жезқазған, Сәтбаев, Астана. Барлық құқықтар қорғалған.</p>
+            <div className="flex flex-wrap items-center gap-4">
+              <p>© 1996–2026 {isKz ? "«С-Мұнай» ЖШС. Жезқазған, Сәтбаев, Ұлытау, Астана. Барлық құқықтар қорғалған." : isEn ? "S-Munai LLP. Zhezkazgan, Satpayev, Ulytau, Astana. All rights reserved." : "ТОО «С-Мунай». Жезказган, Сатпаев, Ұлытау, Астана. Все права защищены."}</p>
+              <a
+                href="mailto:service@s-munai.kz"
+                className="inline-flex items-center gap-1.5 text-white/80 hover:text-gold-bright transition-colors font-medium lowercase tracking-normal"
+              >
+                <Mail className="size-3.5 text-gold-bright" />
+                <span>service@s-munai.kz</span>
+              </a>
+            </div>
             <p className="font-serif italic text-gold-bright/80">
               Жанармай — көлікке, Ұлытау — жүректе
             </p>

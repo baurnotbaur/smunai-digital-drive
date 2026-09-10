@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { Cookie } from "lucide-react";
+import { useLanguage } from "@/lib/i18n";
 
 export function CookieConsent() {
+  const { lang } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -57,22 +59,37 @@ export function CookieConsent() {
           </div>
           <div className="space-y-1">
             <p className="text-xs sm:text-sm leading-relaxed">
-              Біз сайттың жұмысын жақсарту және ыңғайлылықты арттыру үшін cookie файлдарын пайдаланамыз.{" "}
-              <Link
-                to="/privacy"
-                className="font-semibold text-primary underline underline-offset-2 transition-colors hover:text-gold"
-              >
-                Құпиялылық саясаты
-              </Link>
-            </p>
-            <p className="text-[11px] sm:text-xs text-muted-foreground leading-relaxed">
-              Мы используем файлы cookie для улучшения работы сайта и повышения удобства.{" "}
-              <Link
-                to="/privacy"
-                className="font-semibold text-primary underline underline-offset-2 transition-colors hover:text-gold"
-              >
-                Политика конфиденциальности
-              </Link>
+              {lang === "kz" ? (
+                <>
+                  Біз сайттың жұмысын жақсарту және ыңғайлылықты арттыру үшін cookie файлдарын пайдаланамыз.{" "}
+                  <Link
+                    to="/privacy"
+                    className="font-semibold text-primary underline underline-offset-2 transition-colors hover:text-gold"
+                  >
+                    Құпиялылық саясаты
+                  </Link>
+                </>
+              ) : lang === "en" ? (
+                <>
+                  We use cookies to improve your browsing experience and website performance.{" "}
+                  <Link
+                    to="/privacy"
+                    className="font-semibold text-primary underline underline-offset-2 transition-colors hover:text-gold"
+                  >
+                    Privacy Policy
+                  </Link>
+                </>
+              ) : (
+                <>
+                  Мы используем файлы cookie для улучшения работы сайта и повышения удобства.{" "}
+                  <Link
+                    to="/privacy"
+                    className="font-semibold text-primary underline underline-offset-2 transition-colors hover:text-gold"
+                  >
+                    Политика конфиденциальности
+                  </Link>
+                </>
+              )}
             </p>
           </div>
         </div>
@@ -83,14 +100,14 @@ export function CookieConsent() {
             onClick={() => applyConsent(false)}
             className="btn-base w-full md:w-auto !py-2.5 !px-6 !text-xs sm:!text-sm font-semibold border border-primary/20 text-foreground/80 transition-colors hover:bg-primary/5 cursor-pointer"
           >
-            Decline / Бас тарту
+            {lang === "kz" ? "Бас тарту" : lang === "en" ? "Decline" : "Отклонить"}
           </button>
           <button
             type="button"
             onClick={() => applyConsent(true)}
             className="btn-base btn-gold w-full md:w-auto !py-2.5 !px-6 !text-xs sm:!text-sm font-semibold shadow-md transition-transform cursor-pointer"
           >
-            Accept / Қабылдау
+            {lang === "kz" ? "Қабылдау" : lang === "en" ? "Accept" : "Принять"}
           </button>
         </div>
       </div>

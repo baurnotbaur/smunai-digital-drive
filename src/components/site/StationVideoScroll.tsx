@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
-
 import { BASE_TIER, pickTier } from "@/lib/videoQuality";
+import { useLanguage } from "@/lib/i18n";
 
 // Доля прокрутки сцены, на которой начинает и заканчивает проявляться текст
 const TEXT_REVEAL_START = 0.55;
@@ -13,6 +13,7 @@ const MOBILE_SCALE = 1.45;
 const DESKTOP_MQ = "(min-width: 768px)";
 
 export function StationVideoScroll({ children }: { children?: ReactNode }) {
+  const { lang } = useLanguage();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -169,12 +170,16 @@ export function StationVideoScroll({ children }: { children?: ReactNode }) {
       <div className="sticky top-0 h-dvh w-full overflow-hidden">
         {!isLoaded && !error && (
           <div className="absolute inset-0 flex items-center justify-center text-sm text-primary-foreground/60">
-            Загрузка видео...
+            {lang === "kz" ? "Бейне жүктелуде..." : lang === "en" ? "Loading video..." : "Загрузка видео..."}
           </div>
         )}
         {error && (
           <div className="absolute inset-0 flex items-center justify-center px-4 text-center text-sm text-primary-foreground/60">
-            Видео не найдено. Добавьте station.webm в public/videos
+            {lang === "kz"
+              ? "Бейне табылмады. station.webm файлын public/videos ішіне қосыңыз"
+              : lang === "en"
+              ? "Video not found. Please add station.webm to public/videos"
+              : "Видео не найдено. Добавьте station.webm в public/videos"}
           </div>
         )}
         <video
@@ -201,15 +206,19 @@ export function StationVideoScroll({ children }: { children?: ReactNode }) {
           ref={hintRef}
           className="absolute inset-x-0 bottom-16 flex flex-col items-center gap-1 text-primary-foreground/80"
         >
-          <span className="text-xs font-medium tracking-[0.2em] uppercase">Листайте вниз</span>
+          <span className="text-xs font-medium tracking-[0.2em] uppercase">
+            {lang === "kz" ? "Төмен қарай жылжытыңыз" : lang === "en" ? "Scroll down" : "Листайте вниз"}
+          </span>
           <span aria-hidden="true" className="text-lg leading-none transition-transform duration-700 group-hover:translate-y-1">↓</span>
         </div>
 
         <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-baseline justify-between gap-3 px-5 pb-4 sm:px-8">
           <span className="font-display text-sm tracking-[0.12em] text-primary-foreground uppercase">
-            Станция в Жезказгане · 3D
+            {lang === "kz" ? "Жезқазғандағы станция · 3D" : lang === "en" ? "Zhezkazgan Station · 3D" : "Станция в Жезказгане · 3D"}
           </span>
-          <span className="text-xs text-primary-foreground/70">Вращается при скролле</span>
+          <span className="text-xs text-primary-foreground/70">
+            {lang === "kz" ? "Айналдыру арқылы бұрылады" : lang === "en" ? "Rotates on scroll" : "Вращается при скролле"}
+          </span>
         </div>
       </div>
     </div>

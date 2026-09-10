@@ -6,7 +6,8 @@ import * as z from "zod";
 import { toast } from "sonner";
 import { submitLead } from "@/lib/leads";
 import { formatKzPhone } from "@/lib/utils";
-import { ChevronLeft, Briefcase, Send } from "lucide-react";
+import { ChevronLeft, Briefcase, Send, ArrowLeft, Mail } from "lucide-react";
+import { useLanguage, LanguageSwitcher } from "@/lib/i18n";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,14 +39,18 @@ export const Route = createFileRoute("/career")({
 });
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: "Имя должно содержать минимум 2 символа." }),
+  name: z.string().min(2, { message: "Минимум 2 символа." }),
   phone: z.string().min(10, { message: "Введите корректный номер телефона." }),
-  position: z.string({ required_error: "Пожалуйста, выберите желаемую должность." }).min(1, { message: "Пожалуйста, выберите желаемую должность." }),
+  position: z.string().min(1, { message: "Пожалуйста, выберите должность." }),
   experience: z.string().optional(),
   consent: z.boolean().refine(val => val === true, "Необходимо согласие на обработку данных"),
 });
 
 function CareerPage() {
+  const { lang } = useLanguage();
+  const isKz = lang === "kz";
+  const isEn = lang === "en";
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -68,7 +73,7 @@ function CareerPage() {
       await submitLead({
         name: values.name,
         phone: values.phone,
-        comment: values.experience ? `Опыт работы: ${values.experience}` : "Опыт работы: не указан",
+        comment: values.experience ? `Опыт: ${values.experience}` : "Опыт не указан",
         extra: {
           position: values.position,
           data_consent: values.consent,
@@ -78,16 +83,22 @@ function CareerPage() {
         _hp: hp
       });
 
-      toast.success("Ваша заявка успешно отправлена!", {
-        description: "Наш HR-менеджер свяжется с вами в ближайшее время.",
-      });
+      toast.success(
+        isKz ? "Өтінішіңіз сәтті жіберілді!" : isEn ? "Application submitted successfully!" : "Ваша заявка успешно отправлена!",
+        {
+          description: isKz ? "Біздің HR-менеджер жақын арада сізбен байланысады." : isEn ? "Our HR manager will get in touch with you shortly." : "Наш HR-менеджер свяжется с вами в ближайшее время.",
+        }
+      );
       
       form.reset();
     } catch (error) {
       console.error(error);
-      toast.error("Произошла ошибка", {
-        description: "Не удалось отправить заявку. Попробуйте еще раз позже.",
-      });
+      toast.error(
+        isKz ? "Қате орын алды" : isEn ? "An error occurred" : "Произошла ошибка",
+        {
+          description: isKz ? "Өтінім жіберілмеді. Кейінірек қайталап көріңіз." : isEn ? "Failed to send application. Please try again later." : "Не удалось отправить заявку. Попробуйте еще раз позже.",
+        }
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -97,25 +108,34 @@ function CareerPage() {
     <div className="min-h-dvh bg-background text-foreground flex flex-col relative overflow-hidden">
 
       <header className="sticky top-0 z-40 border-b border-primary/10 bg-background/90 backdrop-blur">
-        <div className="mx-auto flex max-w-4xl items-center gap-4 px-5 py-3 sm:py-4">
-          <Link to="/" className="inline-flex items-center justify-center rounded-full bg-primary/5 p-2 text-primary transition-colors hover:bg-primary/10">
-            <ChevronLeft className="size-5" />
-          </Link>
-          <img
-            src="/images/logo-navbar.svg"
-            alt="С-МУНАЙ"
-            className="h-7 w-auto object-contain sm:h-8"
-          />
+        <div className="mx-auto flex max-w-4xl items-center justify-between px-4 sm:px-5 py-2.5 sm:py-3.5">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <Link
+              to="/"
+              className="inline-flex items-center justify-center rounded-xl bg-primary/5 p-2 text-primary transition-colors hover:bg-primary/10"
+              title={isKz ? "Басты бетке" : isEn ? "Back to Home" : "На главную"}
+            >
+              <ArrowLeft className="size-4 sm:size-5" />
+            </Link>
+            <Link to="/" className="flex items-center">
+              <img
+                src="/images/logo-navbar.svg"
+                alt="С-МУНАЙ"
+                className="h-7 w-auto object-contain sm:h-8"
+              />
+            </Link>
+          </div>
+          <LanguageSwitcher />
         </div>
       </header>
 
-      {/* Hero: станция на закате — команда, к которой приглашаем */}
+      {/* Hero */}
       <section className="relative isolate overflow-hidden bg-primary-deeper text-white">
         <picture>
           <source srcSet="/images/station-hero.webp" type="image/webp" />
           <img
             src="/images/station-hero.jpg"
-            alt="АЗС С-Мунай на закате"
+            alt="АЗС С-Мунай"
             className="absolute inset-0 size-full object-cover object-[35%_center]"
             fetchPriority="high"
           />
@@ -124,17 +144,20 @@ function CareerPage() {
           className="absolute inset-0 bg-linear-to-t from-primary-deeper/95 via-primary-deeper/35 to-primary-deeper/5"
           aria-hidden="true"
         />
-        <div className="relative mx-auto flex min-h-[58dvh] max-w-6xl flex-col justify-end px-5 pt-24 pb-12 sm:pb-16">
+        <div className="relative mx-auto flex min-h-[50dvh] max-w-4xl flex-col justify-end px-5 pt-20 pb-12 sm:pb-16">
           <p className="inline-flex items-center gap-2 font-serif text-xl italic text-gold-bright sm:text-2xl">
             <Briefcase className="size-5" aria-hidden="true" />
-            Команда С-Мунай
+            {isKz ? "С-Мұнай командасы" : isEn ? "S-Munai Team" : "Команда С-Мунай"}
           </p>
-          <h1 className="display-hero mt-4 max-w-3xl text-4xl text-white sm:text-6xl md:text-7xl">
-            Карьера в С-Мунай
+          <h1 className="display-hero mt-3 max-w-3xl text-3xl text-white sm:text-5xl md:text-6xl">
+            {isKz ? "С-Мұнайдағы мансап" : isEn ? "Careers at S-Munai" : "Карьера в С-Мунай"}
           </h1>
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
-            Присоединяйтесь к команде первой сети АЗС в регионе. Мы ценим ответственность,
-            профессионализм и желание развиваться.
+          <p className="mt-4 max-w-xl text-sm sm:text-base leading-relaxed text-white/80">
+            {isKz
+              ? "Өңірдегі алғашқы АЗС желісінің командасына қосылыңыз. Біз жауапкершілікті, кәсібилікті және бірге дамуды бағалаймыз."
+              : isEn
+              ? "Join the team of the region's pioneering gas station network. We value responsibility, professionalism, and team growth."
+              : "Присоединяйтесь к команде первой сети АЗС в регионе. Мы ценим ответственность, профессионализм и желание развиваться."}
           </p>
         </div>
       </section>
@@ -153,9 +176,11 @@ function CareerPage() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-foreground/90 font-medium">Ваше имя</FormLabel>
+                      <FormLabel className="text-foreground/90 font-medium">
+                        {isKz ? "Сіздің аты-жөніңіз" : isEn ? "Full Name" : "Ваше имя"}
+                      </FormLabel>
                       <FormControl>
-                        <Input placeholder="Азамат Сериков" className="bg-background/50 focus-visible:ring-primary/30" {...field} />
+                        <Input placeholder={isKz ? "Азамат Серіков" : isEn ? "John Doe" : "Азамат Сериков"} className="bg-background/50 focus-visible:ring-primary/30" {...field} />
                       </FormControl>
                       <FormMessage className="text-red-500/90 text-xs" />
                     </FormItem>
@@ -167,7 +192,9 @@ function CareerPage() {
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-foreground/90 font-medium">Телефон</FormLabel>
+                      <FormLabel className="text-foreground/90 font-medium">
+                        {isKz ? "Телефон нөмірі" : isEn ? "Phone Number" : "Телефон"}
+                      </FormLabel>
                       <FormControl>
                         <Input 
                           placeholder="+7 (707) 000-00-00" 
@@ -191,17 +218,20 @@ function CareerPage() {
                   name="position"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-foreground/90 font-medium">Желаемая должность</FormLabel>
+                      <FormLabel className="text-foreground/90 font-medium">
+                        {isKz ? "Қажетті лауазым" : isEn ? "Desired Position" : "Желаемая должность"}
+                      </FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger className="bg-background/50 focus-visible:ring-primary/30">
-                            <SelectValue placeholder="Выберите должность" />
+                            <SelectValue placeholder={isKz ? "Лауазымды таңдаңыз" : isEn ? "Select a position" : "Выберите должность"} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="Кассир">Кассир</SelectItem>
-                          <SelectItem value="Водитель бензовоза">Водитель бензовоза</SelectItem>
-                          <SelectItem value="Менеджер">Менеджер</SelectItem>
+                          <SelectItem value="Кассир">{isKz ? "АЗС кассирі" : isEn ? "Station Cashier" : "Кассир АЗС"}</SelectItem>
+                          <SelectItem value="Оператор АЗС">{isKz ? "ЖҚС / АЗС операторы" : isEn ? "Fuel Station Operator" : "Оператор АЗС"}</SelectItem>
+                          <SelectItem value="Водитель бензовоза">{isKz ? "Бензовоз жүргізушісі" : isEn ? "Fuel Tanker Driver" : "Водитель бензовоза"}</SelectItem>
+                          <SelectItem value="Менеджер">{isKz ? "Менеджер / Әкімші" : isEn ? "Office / Station Manager" : "Менеджер / Администратор"}</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage className="text-red-500/90 text-xs" />
@@ -214,10 +244,12 @@ function CareerPage() {
                   name="experience"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-foreground/90 font-medium">Опыт работы</FormLabel>
+                      <FormLabel className="text-foreground/90 font-medium">
+                        {isKz ? "Жұмыс тәжірибесі" : isEn ? "Work Experience" : "Опыт работы"}
+                      </FormLabel>
                       <FormControl>
                         <Textarea 
-                          placeholder="Расскажите кратко о вашем опыте работы..." 
+                          placeholder={isKz ? "Жұмыс тәжірибеңіз бен дағдыларыңыз туралы қысқаша жазыңыз..." : isEn ? "Tell us briefly about your experience and skills..." : "Расскажите кратко о вашем опыте работы..."}
                           className="min-h-[100px] resize-none bg-background/50 focus-visible:ring-primary/30" 
                           {...field} 
                         />
@@ -242,7 +274,31 @@ function CareerPage() {
                       </FormControl>
                       <div className="space-y-1 leading-tight">
                         <FormLabel className="text-xs font-normal text-foreground/80 cursor-pointer">
-                          Я даю согласие ТОО «С-Мунай» на сбор и обработку моих персональных данных в соответствии с <Link to="/privacy" className="text-primary font-medium underline hover:text-primary/80">Политикой конфиденциальности</Link>. <span className="text-red-500">*</span>
+                          {isKz ? (
+                            <>
+                              Мен «С-Мұнай» ЖШС-не дербес деректерімді жинауға және өңдеуге келісім беремін{" "}
+                              <Link to="/privacy" className="text-primary font-medium underline hover:text-primary/80">
+                                Құпиялылық саясатына
+                              </Link>{" "}
+                              сәйкес. <span className="text-red-500">*</span>
+                            </>
+                          ) : isEn ? (
+                            <>
+                              I consent to the collection and processing of my personal data by S-Munai LLP under the{" "}
+                              <Link to="/privacy" className="text-primary font-medium underline hover:text-primary/80">
+                                Privacy Policy
+                              </Link>
+                              . <span className="text-red-500">*</span>
+                            </>
+                          ) : (
+                            <>
+                              Я даю согласие ТОО «С-Мунай» на сбор и обработку моих персональных данных в соответствии с{" "}
+                              <Link to="/privacy" className="text-primary font-medium underline hover:text-primary/80">
+                                Политикой конфиденциальности
+                              </Link>
+                              . <span className="text-red-500">*</span>
+                            </>
+                          )}
                         </FormLabel>
                         <FormMessage className="text-red-500/90 text-xs" />
                       </div>
@@ -258,12 +314,12 @@ function CareerPage() {
                   {isSubmitting ? (
                     <div className="flex items-center gap-2">
                       <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                      <span>Отправка...</span>
+                      <span>{isKz ? "Жіберілуде..." : isEn ? "Submitting..." : "Отправка..."}</span>
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
                       <Send className="size-4" />
-                      <span>Отправить заявку</span>
+                      <span>{isKz ? "Өтінімді жіберу" : isEn ? "Submit Application" : "Отправить заявку"}</span>
                     </div>
                   )}
                 </Button>
@@ -272,6 +328,28 @@ function CareerPage() {
           </div>
         </div>
       </main>
+
+      {/* Clean Footer */}
+      <footer className="hero-surface border-t border-white/10 py-8 text-white/70 text-xs">
+        <div className="mx-auto max-w-6xl px-5 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-4">
+            <p>© 1996–2026 {isKz ? "«С-Мұнай» ЖШС. Барлық құқықтар қорғалған." : isEn ? "S-Munai LLP. All rights reserved." : "ТОО «С-Мунай». Все права защищены."}</p>
+            <a
+              href="mailto:service@s-munai.kz"
+              className="inline-flex items-center gap-1.5 text-white/85 hover:text-gold transition-colors font-medium lowercase tracking-normal"
+            >
+              <Mail className="size-3.5 text-gold" />
+              <span>service@s-munai.kz</span>
+            </a>
+          </div>
+          <div className="flex flex-wrap gap-4 font-medium">
+            <Link to="/" className="hover:text-gold transition-colors">{isKz ? "Басты бет" : isEn ? "Home" : "Главная"}</Link>
+            <Link to="/stations" className="hover:text-gold transition-colors">{isKz ? "АЗС" : isEn ? "Stations" : "АЗС"}</Link>
+            <Link to="/b2b" className="hover:text-gold transition-colors">{isKz ? "Бизнеске" : isEn ? "Business" : "Бизнес"}</Link>
+            <Link to="/privacy" className="hover:text-gold transition-colors">{isKz ? "Құпиялылық" : isEn ? "Privacy" : "Конфиденциальность"}</Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

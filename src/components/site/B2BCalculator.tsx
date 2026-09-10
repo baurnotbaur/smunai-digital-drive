@@ -28,6 +28,7 @@ export function B2BCalculator({
 }) {
   const { lang } = useLanguage();
   const isKz = lang === "kz";
+  const isEn = lang === "en";
 
   const [litres, setLitres] = useState<number>(5000);
   const [selectedFuel, setSelectedFuel] = useState<string>("dt");
@@ -57,6 +58,8 @@ export function B2BCalculator({
   const handleApply = () => {
     const summaryText = isKz
       ? `B2B Калькулятор есебі: ${litres.toLocaleString()} л/ай (${activeFuel.name}). Болжамды үнем: ${calculations.totalAnnualSavings.toLocaleString()} ₸/жыл.`
+      : isEn
+      ? `B2B Calculator Estimate: ${litres.toLocaleString()} L/mo (${activeFuel.name}). Projected Savings: ${calculations.totalAnnualSavings.toLocaleString()} ₸/year.`
       : `Расчёт B2B калькулятора: ${litres.toLocaleString()} л/мес (${activeFuel.name}). Расчётная экономия: ${calculations.totalAnnualSavings.toLocaleString()} ₸/год.`;
 
     if (onApplyCalculation) {
@@ -70,8 +73,8 @@ export function B2BCalculator({
   };
 
   return (
-    <section id="calculator" className="mx-auto max-w-6xl scroll-mt-28 px-5 py-6">
-      <div className={`overflow-hidden rounded-3xl border p-6 shadow-2xl backdrop-blur-md sm:p-10 ${
+    <div className="w-full">
+      <div className={`rounded-3xl border p-6 sm:p-10 transition-all ${
         darkTheme 
           ? "border-teal-500/25 bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-950 text-white" 
           : "border-primary/20 bg-linear-to-b from-primary/10 via-primary/5 to-transparent text-foreground shadow-xl"
@@ -84,18 +87,20 @@ export function B2BCalculator({
               darkTheme ? "text-gold-bright" : "text-gold-foreground"
             }`}>
               <Sparkles className="size-3.5 text-gold" />
-              {isKz ? "Бизнеске арналған тиімділік" : "Калькулятор корпоративной выгоды"}
+              {isKz ? "Бизнеске арналған тиімділік" : isEn ? "Corporate Savings Calculator" : "Калькулятор корпоративной выгоды"}
             </div>
             <h2 className={`mt-3 text-2xl font-bold tracking-tight font-display sm:text-4xl ${
               darkTheme ? "text-white" : "text-foreground"
             }`}>
-              {isKz ? "Жанармай шығындарын қанша үнемдейсіз?" : "Сколько сбережет ваш бизнес?"}
+              {isKz ? "Жанармай шығындарын қанша үнемдейсіз?" : isEn ? "How Much Can Your Fleet Save?" : "Сколько сбережет ваш бизнес?"}
             </h2>
             <p className={`mt-2 max-w-2xl text-sm sm:text-base ${
               darkTheme ? "text-slate-300" : "text-foreground/75"
             }`}>
               {isKz 
                 ? "Калькулятордағы бағалар нақты емес, шартты түрде қарапайым есептеу үшін көрсетілген. Нақты бағалар мен шарттарды менеджерден нақтылаңыз."
+                : isEn
+                ? "Prices in the calculator are indicative for estimation purposes. Exact terms and tariffs will be provided in your commercial proposal."
                 : "Цены на продукты в калькуляторе не являются публичной офертой и служат для простого подсчёта выгоды. Актуальные условия уточняйте у менеджеров."}
             </p>
           </div>
@@ -103,7 +108,7 @@ export function B2BCalculator({
             darkTheme ? "border-white/15 bg-white/5 text-slate-300" : "border-primary/15 bg-primary/5 text-foreground/70"
           }`}>
             <Calculator className={`size-4 ${darkTheme ? "text-teal-400" : "text-primary"}`} />
-            <span>{isKz ? "Үлгілік есептеу" : "Ориентировочный расчёт"}</span>
+            <span>{isKz ? "Үлгілік есептеу" : isEn ? "Estimated calculation" : "Ориентировочный расчёт"}</span>
           </div>
         </div>
 
@@ -123,7 +128,7 @@ export function B2BCalculator({
                 <label htmlFor="fuel-volume-input" className={`text-xs font-bold uppercase tracking-wider ${
                   darkTheme ? "text-slate-300" : "text-foreground/70"
                 }`}>
-                  {isKz ? "Айына қанша литр жанармай тұтынасыз?" : "Сколько литров в месяц вы заправляете?"}
+                  {isKz ? "Айына қанша литр жанармай тұтынасыз?" : isEn ? "Monthly fuel volume in litres:" : "Сколько литров в месяц вы заправляете?"}
                 </label>
                 
                 {/* Числовое поле с возможностью прямого ввода */}
@@ -149,7 +154,7 @@ export function B2BCalculator({
                     }`}
                   />
                   <span className={`text-xs font-semibold ${darkTheme ? "text-slate-400" : "text-foreground/60"}`}>
-                    {isKz ? "литр" : "литров"}
+                    {isKz ? "литр" : isEn ? "litres" : "литров"}
                   </span>
                 </div>
               </div>
@@ -171,16 +176,16 @@ export function B2BCalculator({
               <div className={`mt-2 flex justify-between text-[11px] ${
                 darkTheme ? "text-slate-400" : "text-foreground/50"
               }`}>
-                <span>500 л</span>
-                <span>15 000 л</span>
-                <span>30 000 л</span>
-                <span>50 000+ л</span>
+                <span>{isEn ? "500 L" : "500 л"}</span>
+                <span>{isEn ? "15,000 L" : "15 000 л"}</span>
+                <span>{isEn ? "30,000 L" : "30 000 л"}</span>
+                <span>{isEn ? "50,000+ L" : "50 000+ л"}</span>
               </div>
 
               {/* Быстрые кнопки-пресеты объёма */}
               <div className={`mt-5 border-t pt-4 ${darkTheme ? "border-white/10" : "border-primary/10"}`}>
                 <span className={`text-[11px] font-semibold ${darkTheme ? "text-slate-400" : "text-foreground/50"}`}>
-                  {isKz ? "Жылдам таңдау:" : "Быстрый выбор объёма:"}
+                  {isKz ? "Жылдам таңдау:" : isEn ? "Quick presets:" : "Быстрый выбор объёма:"}
                 </span>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {QUICK_VOLUMES.map((v) => (
@@ -198,7 +203,7 @@ export function B2BCalculator({
                           : "border-primary/15 bg-background/80 text-foreground/80 hover:border-primary/40 hover:bg-primary/5"
                       }`}
                     >
-                      {v >= 1000 ? `${(v / 1000).toLocaleString()} 000 л` : `${v} л`}
+                      {v >= 1000 ? `${(v / 1000).toLocaleString()} 000 ${isEn ? "L" : "л"}` : `${v} ${isEn ? "L" : "л"}`}
                     </button>
                   ))}
                 </div>
@@ -210,7 +215,7 @@ export function B2BCalculator({
               <label className={`text-xs font-bold uppercase tracking-wider ${
                 darkTheme ? "text-slate-300" : "text-foreground/70"
               }`}>
-                {isKz ? "Негізгі жанармай түрі" : "Вид топлива"}
+                {isKz ? "Негізгі жанармай түрі" : isEn ? "Primary Fuel Grade" : "Вид топлива"}
               </label>
               <div className="mt-2.5 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
                 {Object.entries(FUEL_PRICES).map(([key, item]) => {
@@ -241,7 +246,7 @@ export function B2BCalculator({
                           ? darkTheme ? "text-amber-300" : "text-gold"
                           : darkTheme ? "text-teal-300" : "text-primary"
                       }`}>
-                        {item.price} ₸/л
+                        {item.price} ₸/{isEn ? "L" : "л"}
                       </span>
                     </button>
                   );
@@ -259,6 +264,8 @@ export function B2BCalculator({
               <p>
                 {isKz
                   ? "С-Мунай корпоративтік клиенттеріне: бірыңғай дербес шот, ЭСФ және барлық жабу құжаттары уақытында, әр картаға дербес тәуліктік лимиттер."
+                  : isEn
+                  ? "For S-Munai B2B partners: single corporate account, full electronic VAT invoices (ESF), same-day accounting reconciliation, and custom per-card daily limits."
                   : "Корпоративным клиентам С-Мунай: единый лицевой счёт, полный пакет ЭСФ и закрывающих документов день в день, суточные лимиты по картам."}
               </p>
             </div>
@@ -272,14 +279,14 @@ export function B2BCalculator({
           }`}>
             <div>
               <span className="text-xs font-semibold text-white/60 uppercase tracking-wider">
-                {isKz ? "Айлық шығын (базалық бағамен)" : "Затраты по базовой цене"}
+                {isKz ? "Айлық шығын (базалық бағамен)" : isEn ? "Monthly fuel budget (base rates)" : "Затраты по базовой цене"}
               </span>
               <div className="mt-1 flex items-baseline gap-2">
                 <span className="font-display text-2xl font-bold text-white/90 sm:text-3xl">
                   {calculations.monthlySpend.toLocaleString()} ₸
                 </span>
                 <span className="text-xs text-white/60">
-                  {isKz ? "/ айына" : "/ месяц"}
+                  {isKz ? "/ айына" : isEn ? "/ month" : "/ месяц"}
                 </span>
               </div>
 
@@ -290,7 +297,7 @@ export function B2BCalculator({
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-2 text-white/80 text-xs sm:text-sm">
                     <BadgePercent className="size-4 text-gold" />
-                    {isKz ? "ҚҚС 16% есепке алу (зачёт):" : "Зачёт НДС 16% (возврат):"}
+                    {isKz ? "ҚҚС 16% есепке алу (зачёт):" : isEn ? "16% VAT refund deduction:" : "Зачёт НДС 16% (возврат):"}
                   </span>
                   <span className="font-semibold text-white">
                     +{calculations.vatSavings.toLocaleString()} ₸
@@ -301,7 +308,7 @@ export function B2BCalculator({
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-2 text-white/80 text-xs sm:text-sm">
                     <ShieldCheck className="size-4 text-gold" />
-                    {isKz ? "Ұрлық пен лимит бақылауы (~7%):" : "Исключение сливов/чеков (7%):"}
+                    {isKz ? "Ұрлық пен лимит бақылауы (~7%):" : isEn ? "Anti-leakage & limits control (7%):" : "Исключение сливов/чеков (7%):"}
                   </span>
                   <span className="font-semibold text-white">
                     +{calculations.leakSavings.toLocaleString()} ₸
@@ -316,7 +323,7 @@ export function B2BCalculator({
                   : "border-gold/30 bg-white/5"
               }`}>
                 <p className="text-xs font-bold text-gold uppercase tracking-wider">
-                  {isKz ? "ЖЫЛДЫҚ ЖАЛПЫ ҮНЕМІҢІЗ:" : "ВАША ВЫГОДА В ГОД:"}
+                  {isKz ? "ЖЫЛДЫҚ ЖАЛПЫ ҮНЕМІҢІЗ:" : isEn ? "TOTAL ANNUAL CORPORATE SAVINGS:" : "ВАША ВЫГОДА В ГОД:"}
                 </p>
                 <div className="mt-1.5 font-display text-3xl font-extrabold text-gold-bright sm:text-4xl">
                   {calculations.totalAnnualSavings.toLocaleString()} ₸
@@ -324,6 +331,8 @@ export function B2BCalculator({
                 <p className="mt-1 text-[11px] text-white/60">
                   {isKz 
                     ? `(ай сайын ~${calculations.totalMonthlySavings.toLocaleString()} ₸ үнемдеу)` 
+                    : isEn
+                    ? `(approx. ~${calculations.totalMonthlySavings.toLocaleString()} ₸ net monthly savings)`
                     : `(около ~${calculations.totalMonthlySavings.toLocaleString()} ₸ чистой экономии в месяц)`}
                 </p>
               </div>
@@ -335,7 +344,7 @@ export function B2BCalculator({
               onClick={handleApply}
               className="btn-base btn-gold glow-gold mt-8 w-full flex items-center justify-center gap-2 font-bold py-3.5 text-sm sm:text-base cursor-pointer text-slate-950 transition-transform hover:scale-[1.02] active:scale-[0.98]"
             >
-              <span>{isKz ? "Коммерциялық ұсыныс алу" : "Получить коммерческое предложение"}</span>
+              <span>{isKz ? "Коммерциялық ұсыныс алу" : isEn ? "Request Commercial Proposal" : "Получить коммерческое предложение"}</span>
               <ChevronRight className="size-4" />
             </button>
           </div>

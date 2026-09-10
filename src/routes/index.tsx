@@ -26,6 +26,7 @@ import {
   Store,
   Briefcase,
   Building2,
+  Mail,
 } from "lucide-react";
 import { HiTechVideoBanner } from "@/components/site/HiTechVideoBanner";
 import { SDukenSection } from "@/components/site/SDukenSection";
@@ -52,6 +53,8 @@ export const Route = createFileRoute("/")({
 
 const INSTAGRAM_URL = "https://www.instagram.com/azs_smunai?igsh=MWRnOHhrcGM1MHk4dg==";
 
+export type FuelType = "hitech95" | "hitech92" | "ai95" | "ai92" | "dt" | "gas";
+
 export type Station = {
   number: number;
   city: string;
@@ -63,7 +66,8 @@ export type Station = {
   hours: string;
   hoursKz: string;
   hoursEn: string;
-  services: ("fuel" | "shop" | "coffee")[];
+  services: ("fuel" | "shop" | "coffee" | "gas")[];
+  fuels: FuelType[];
   coords: { lat: number; lng: number };
   gisUrl: string;
 };
@@ -218,13 +222,13 @@ function Index() {
     <div className="min-h-dvh bg-background text-foreground">
       {/* Clean Apple-style Header */}
       <header className="sticky top-0 z-40 border-b border-primary/10 bg-background/90 backdrop-blur-md transition-all">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:py-3.5">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-5 py-2.5 sm:py-3.5">
           {/* Logo */}
           <Link to="/" className="flex items-center transition-opacity hover:opacity-90">
             <img
               src="/images/logo-navbar.svg"
               alt="С-МУНАЙ"
-              className="h-8 w-auto object-contain sm:h-9 md:h-10"
+              className="h-7 w-auto object-contain sm:h-8 md:h-9"
             />
           </Link>
 
@@ -238,7 +242,7 @@ function Index() {
             </a>
             <Link to="/stations" className="transition-colors hover:text-primary inline-flex items-center gap-1.5 text-primary">
               <MapPin className="size-3.5 text-terracotta" />
-              <span>{isKz ? "Карта АЗС" : isEn ? "Stations Map" : "Карта АЗС"}</span>
+              <span>{isKz ? "АЗС картасы" : isEn ? "Stations Map" : "Карта АЗС"}</span>
             </Link>
             <Link to="/b2b" className="transition-colors hover:text-primary">
               {isKz ? "Бизнеске" : isEn ? "For Business" : "Бизнес клиентам"}
@@ -246,7 +250,7 @@ function Index() {
           </nav>
 
           {/* Right Action Controls */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <LanguageSwitcher />
 
             <Link
@@ -254,14 +258,14 @@ function Index() {
               className="hidden sm:inline-flex items-center gap-1.5 rounded-xl bg-gold px-4 py-2 text-xs font-bold text-gold-foreground shadow-sm transition-all hover:bg-gold-bright hover:shadow"
             >
               <Navigation className="size-3.5" />
-              <span>{isKz ? "Найти АЗС" : isEn ? "Find Station" : "Найти АЗС"}</span>
+              <span>{isKz ? "ЖҚС табу" : isEn ? "Find Station" : "Найти АЗС"}</span>
             </Link>
 
             {/* Mobile Hamburger Toggle */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden rounded-xl border border-primary/20 p-2 text-primary transition-colors hover:bg-primary/5"
+              className="md:hidden flex size-9 items-center justify-center rounded-xl border border-primary/20 text-primary transition-colors hover:bg-primary/5 active:scale-95"
               aria-label="Меню"
             >
               {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -286,7 +290,7 @@ function Index() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex items-center justify-between py-2 text-foreground/85 hover:text-primary"
               >
-                <span>{isKz ? "«С-Дүкен» маркеттері (24/7)" : isEn ? "S-Duken Stores" : "Маркеты «С-Дүкен» (24/7)"}</span>
+                <span>{isKz ? "«С-Дүкен» маркеттері (24/7)" : isEn ? "S-Duken Stores (24/7)" : "Маркеты «С-Дүкен» (24/7)"}</span>
                 <ChevronRight className="size-4 text-foreground/40" />
               </a>
               <Link
@@ -296,7 +300,7 @@ function Index() {
               >
                 <span className="flex items-center gap-2">
                   <MapPin className="size-4 text-terracotta" />
-                  {isKz ? "Карта және 8 АЗС мекенжайлары" : "Карта и адреса 8 АЗС"}
+                  {isKz ? "9 АЗС картасы және мекенжайлары" : isEn ? "Interactive Map of 9 Stations" : "Карта и адреса 9 АЗС"}
                 </span>
                 <ChevronRight className="size-4 text-primary" />
               </Link>
@@ -305,7 +309,7 @@ function Index() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex items-center justify-between py-2 text-foreground/85 hover:text-primary"
               >
-                <span>{isKz ? "Бизнес клиенттерге (Опт, карталар)" : "Бизнес клиентам (Опт, талоны)"}</span>
+                <span>{isKz ? "Бизнес клиенттерге (Опт, карталар)" : isEn ? "For Business (Bulk & Cards)" : "Бизнес клиентам (Опт, талоны)"}</span>
                 <ChevronRight className="size-4 text-foreground/40" />
               </Link>
               <Link
@@ -313,9 +317,17 @@ function Index() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex items-center justify-between py-2 text-foreground/85 hover:text-primary"
               >
-                <span>{isKz ? "С-Мұнайдағы мансап (Вакансии)" : "Карьера и вакансии"}</span>
+                <span>{isKz ? "«С-Мұнайдағы» мансап және бос орындар" : isEn ? "Careers & Vacancies" : "Карьера и вакансии"}</span>
                 <ChevronRight className="size-4 text-foreground/40" />
               </Link>
+
+              {/* Language Selector inside Drawer */}
+              <div className="pt-3 border-t border-primary/10">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/70 mb-2">
+                  {isKz ? "Тілді таңдау" : isEn ? "Interface Language" : "Язык интерфейса"}
+                </div>
+                <LanguageSwitcher variant="pills" />
+              </div>
 
               <div className="pt-3 border-t border-primary/10 flex items-center justify-between text-xs">
                 <a
@@ -328,7 +340,7 @@ function Index() {
                   <span>@azs_smunai</span>
                 </a>
                 <Link to="/privacy" className="text-foreground/50 hover:underline">
-                  {isKz ? "Құпиялылық" : "Конфиденциальность"}
+                  {isKz ? "Құпиялылық" : isEn ? "Privacy Policy" : "Конфиденциальность"}
                 </Link>
               </div>
             </nav>
@@ -394,7 +406,7 @@ function Index() {
                   <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs text-gold">
                     <span className="inline-flex items-center gap-1.5 font-semibold">
                       <ShieldCheck className="size-4" />
-                      Модификатор трения и защита цилиндров
+                      {isKz ? "Үйкеліс модификаторы және цилиндрді қорғау" : isEn ? "Friction modifier & cylinder protection" : "Модификатор трения и защита цилиндров"}
                     </span>
                     <span className="rounded bg-white/10 px-2 py-0.5 text-white/80 font-mono">
                       RON 95+
@@ -421,7 +433,7 @@ function Index() {
                   <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs text-gold">
                     <span className="inline-flex items-center gap-1.5 font-semibold">
                       <ShieldCheck className="size-4" />
-                      Моющий комплекс и очистка форсунок
+                      {isKz ? "Жуғыш кешен және форсункаларды тазалау" : isEn ? "Active detergent & injector cleansing" : "Моющий комплекс и очистка форсунок"}
                     </span>
                     <span className="rounded bg-white/10 px-2 py-0.5 text-white/80 font-mono">
                       RON 92+
@@ -456,7 +468,7 @@ function Index() {
                     </div>
                     <div className="mt-6 flex items-center gap-2 border-t border-white/10 pt-4 text-xs text-white/60">
                       <ShieldCheck className="size-4 text-gold-bright" />
-                      <span>Лабораторный контроль каждой партии</span>
+                      <span>{isKz ? "Әр партияны зертханалық бақылау" : isEn ? "Rigorous batch laboratory control" : "Лабораторный контроль каждой партии"}</span>
                     </div>
                   </article>
                 ))}
@@ -475,14 +487,16 @@ function Index() {
           <Reveal>
             <div className="text-center max-w-2xl mx-auto mb-10">
               <span className="inline-flex items-center rounded-full bg-gold/20 px-3.5 py-1 text-xs font-semibold text-gold-foreground">
-                {isKz ? "Қызметтер мен бағыттар" : "Сервисы и инфраструктура сети"}
+                {isKz ? "Қызметтер мен бағыттар" : isEn ? "Services & Infrastructure" : "Сервисы и инфраструктура сети"}
               </span>
               <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-primary font-display">
-                {isKz ? "С-Мұнай әлеміне қош келдіңіз" : "Всё, что нужно в дороге и бизнесе"}
+                {isKz ? "С-Мұнай әлеміне қош келдіңіз" : isEn ? "Everything You Need on the Road & in Business" : "Всё, что нужно в дороге и бизнесе"}
               </h2>
               <p className="mt-2.5 text-sm sm:text-base text-foreground/75">
                 {isKz
-                  ? "Жезқазған, Сәтбаев және Астана қалаларындағы автокөлік жүргізушілері мен корпоративтік клиенттерге арналған толық экожүйе."
+                  ? "Жезқазған, Сәтбаев, Ұлытау және Астана қалаларындағы автокөлік жүргізушілері мен корпоративтік клиенттерге арналған толық экожүйе."
+                  : isEn
+                  ? "A unified ecosystem for private motorists, corporate transport fleets, and job seekers."
                   : "Единая экосистема для частных автомобилистов, логистических компаний и соискателей."}
               </p>
             </div>
@@ -498,16 +512,18 @@ function Index() {
                       <MapPin className="size-6" />
                     </span>
                     <span className="rounded-full bg-terracotta/15 px-3 py-1 text-[11px] font-bold text-terracotta">
-                      8 АЗС
+                      {isKz ? "9 АЗС" : isEn ? "9 Stations" : "9 АЗС"}
                     </span>
                   </div>
                   <h3 className="mt-5 font-display text-xl sm:text-2xl font-bold text-primary">
-                    {isKz ? "Интерактивті карта" : "Сеть станций и карта"}
+                    {isKz ? "Интерактивті карта" : isEn ? "Stations Network & Map" : "Сеть станций и карта"}
                   </h3>
                   <p className="mt-2.5 text-xs sm:text-sm text-foreground/75 leading-relaxed">
                     {isKz
-                      ? "Жезқазған, Сәтбаев және Астанадағы барлық 8 АЗС нақты мекенжайлары, қызметтері және 2ГИС бағыты."
-                      : "Интерактивная карта 8 АЗС: Жезказган, Сатпаев, Астана. Точные адреса, режим 24/7 и прямой маршрут в 2ГИС."}
+                      ? "Жезқазған, Сәтбаев, Ұлытау және Астанадағы барлық 9 АЗС нақты мекенжайлары, қызметтері және 2ГИС бағыты."
+                      : isEn
+                      ? "Interactive map of 9 stations across Zhezkazgan, Satpayev, Ulytau, and Astana with 24/7 hours and 2GIS navigation."
+                      : "Интерактивная карта 9 АЗС: Жезказган, Сатпаев, Ұлытау, Астана. Точные адреса, режим 24/7 и прямой маршрут в 2ГИС."}
                   </p>
                 </div>
 
@@ -516,7 +532,7 @@ function Index() {
                     to="/stations"
                     className="inline-flex items-center gap-2 text-xs font-bold text-primary hover:text-gold transition-colors"
                   >
-                    <span>{isKz ? "Картаны ашу" : "Открыть карту АЗС"}</span>
+                    <span>{isKz ? "Картаны ашу" : isEn ? "Open Station Map" : "Открыть карту АЗС"}</span>
                     <ArrowRight className="size-3.5" />
                   </Link>
                 </div>
@@ -532,15 +548,17 @@ function Index() {
                       <Building2 className="size-6" />
                     </span>
                     <span className="rounded-full bg-gold px-3 py-1 text-[11px] font-bold text-slate-950">
-                      B2B ПОРТАЛ
+                      {isKz ? "B2B ПОРТАЛЫ" : isEn ? "B2B HUB" : "B2B ПОРТАЛ"}
                     </span>
                   </div>
                   <h3 className="mt-5 font-display text-xl sm:text-2xl font-bold text-white">
-                    {isKz ? "Бизнес клиенттерге" : "Бизнес клиентам"}
+                    {isKz ? "Бизнес клиенттерге" : isEn ? "Corporate B2B Services" : "Бизнес клиентам"}
                   </h3>
                   <p className="mt-2.5 text-xs sm:text-sm text-white/80 leading-relaxed">
                     {isKz
                       ? "Бензовоздармен жеткізу, мұнай базасы, талондар, жанармай карталары, 16% ҚҚС және үнемдеу калькуляторы."
+                      : isEn
+                      ? "Wholesale fuel deliveries by tankers, oil storage depot, corporate fuel cards, 16% VAT refund, and ROI calculator."
                       : "Оптовая доставка бензовозами, нефтебаза, талоны и карты для юрлиц, зачёт 16% НДС и калькулятор выгоды."}
                   </p>
                 </div>
@@ -550,7 +568,7 @@ function Index() {
                     to="/b2b"
                     className="inline-flex items-center gap-2 text-xs font-bold text-gold-bright hover:underline"
                   >
-                    <span>{isKz ? "Бизнес-порталға өту" : "Перейти в Бизнес-раздел"}</span>
+                    <span>{isKz ? "Бизнес-порталға өту" : isEn ? "Visit B2B Portal" : "Перейти в Бизнес-раздел"}</span>
                     <ArrowRight className="size-3.5" />
                   </Link>
                 </div>
@@ -570,11 +588,13 @@ function Index() {
                     </span>
                   </div>
                   <h3 className="mt-5 font-display text-xl sm:text-2xl font-bold text-primary">
-                    {isKz ? "С-Мұнайдағы мансап" : "Карьера и вакансии"}
+                    {isKz ? "С-Мұнайдағы мансап" : isEn ? "Careers at S-Munai" : "Карьера и вакансии"}
                   </h3>
                   <p className="mt-2.5 text-xs sm:text-sm text-foreground/75 leading-relaxed">
                     {isKz
                       ? "30 жылдық тарихы бар тұрақты ұжымға қосылыңыз: кассирлер, операторлар, жүргізушілер. Онлайн сауалнама."
+                      : isEn
+                      ? "Join our trusted family network with 30 years of stability. Vacancies for cashiers, station operators, drivers."
                       : "Присоединяйтесь к надежной семейной сети с 30-летней историей. Вакансии кассиров, операторов АЗС, водителей."}
                   </p>
                 </div>
@@ -584,7 +604,7 @@ function Index() {
                     to="/career"
                     className="inline-flex items-center gap-2 text-xs font-bold text-primary hover:text-gold transition-colors"
                   >
-                    <span>{isKz ? "Бос орындарды қарау" : "Посмотреть вакансии"}</span>
+                    <span>{isKz ? "Бос орындарды қарау" : isEn ? "Explore Job Openings" : "Посмотреть вакансии"}</span>
                     <ArrowRight className="size-3.5" />
                   </Link>
                 </div>
@@ -666,8 +686,10 @@ function Index() {
                   </div>
                   <p className="mt-4 text-sm leading-relaxed text-foreground/80">
                     {isKz
-                      ? "Барлық 8 АЗС бойынша нақты ақпарат, байланыс нөмірлері және 2ГИС арқылы навигация бөлек интерактивті бетте қолжетімді."
-                      : "Вся информация по станциям сети, точные адреса, режим работы 24/7 и прямая навигация доступны на выделенной странице карты."}
+                      ? "Барлық 9 АЗС бойынша нақты ақпарат, байланыс нөмірлері және 2ГИС арқылы навигация бөлек интерактивті бетте қолжетімді."
+                      : isEn
+                      ? "Complete information on all 9 stations, phone contacts, 24/7 hours, and 2GIS navigation are available on the interactive map page."
+                      : "Вся информация по 9 станциям сети, точные адреса, режим работы 24/7 и прямая навигация доступны на выделенной странице карты."}
                   </p>
                 </div>
                 <div className="mt-6">
@@ -676,7 +698,7 @@ function Index() {
                     className="btn-base btn-primary inline-flex items-center gap-2 font-semibold"
                   >
                     <Navigation className="size-4" />
-                    <span>{isKz ? "Барлық 8 АЗС-ті картадан көру →" : "Все 8 АЗС на карте →"}</span>
+                    <span>{isKz ? "Барлық 9 АЗС-ті картадан көру →" : isEn ? "View all 9 stations on map →" : "Все 9 АЗС на карте →"}</span>
                   </Link>
                 </div>
               </div>
@@ -692,12 +714,12 @@ function Index() {
           <div className="flex flex-wrap items-end justify-between gap-6 border-b border-white/10 pb-8">
             <img src="/images/logo-white.svg" alt="С-МУНАЙ" className="h-9 w-auto object-contain" />
             <nav aria-label="Футер" className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/70">
-              <a href="#fuel" className="transition-colors hover:text-gold-bright">{isKz ? "Hi-Tech Отын" : "Топливо Hi-Tech"}</a>
-              <a href="#sduken" className="transition-colors hover:text-gold-bright">С-Дүкен</a>
-              <Link to="/stations" className="transition-colors hover:text-gold-bright">{isKz ? "Карта АЗС" : "Карта АЗС"}</Link>
+              <a href="#fuel" className="transition-colors hover:text-gold-bright">{isKz ? "Hi-Tech Отын" : isEn ? "Hi-Tech Fuel" : "Топливо Hi-Tech"}</a>
+              <a href="#sduken" className="transition-colors hover:text-gold-bright">{isKz ? "С-Дүкен" : isEn ? "S-Duken" : "С-Дүкен"}</a>
+              <Link to="/stations" className="transition-colors hover:text-gold-bright">{isKz ? "АЗС картасы" : isEn ? "Stations Map" : "Карта АЗС"}</Link>
               <Link to="/b2b" className="transition-colors hover:text-gold-bright">{t.nav.b2b}</Link>
-              <Link to="/career" className="transition-colors hover:text-gold-bright">{isKz ? "Мансап" : "Вакансии"}</Link>
-              <Link to="/privacy" className="transition-colors hover:text-gold-bright">{isKz ? "Құпиялылық" : "Конфиденциальность"}</Link>
+              <Link to="/career" className="transition-colors hover:text-gold-bright">{isKz ? "Мансап" : isEn ? "Careers" : "Вакансии"}</Link>
+              <Link to="/privacy" className="transition-colors hover:text-gold-bright">{isKz ? "Құпиялылық" : isEn ? "Privacy Policy" : "Конфиденциальность"}</Link>
             </nav>
           </div>
           <p
@@ -708,16 +730,25 @@ function Index() {
             С-Мұнай
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-between gap-4 text-xs text-white/50">
-            <p>© 1996–2026 ТОО «С-Мунай». Барлық құқықтар қорғалған.</p>
-            <a
-              href={INSTAGRAM_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 transition-colors hover:text-gold-bright"
-            >
-              <Instagram className="size-4" aria-hidden="true" />
-              {t.contacts.instaHandle}
-            </a>
+            <p>© 1996–2026 {isKz ? "«С-Мұнай» ЖШС. Барлық құқықтар қорғалған." : isEn ? "S-Munai LLP. All rights reserved." : "ТОО «С-Мунай». Все права защищены."}</p>
+            <div className="flex flex-wrap items-center gap-5 sm:gap-6 font-medium">
+              <a
+                href="mailto:service@s-munai.kz"
+                className="inline-flex items-center gap-2 transition-colors hover:text-gold-bright text-white/80"
+              >
+                <Mail className="size-4 text-gold" aria-hidden="true" />
+                <span>service@s-munai.kz</span>
+              </a>
+              <a
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 transition-colors hover:text-gold-bright text-white/80"
+              >
+                <Instagram className="size-4 text-gold" aria-hidden="true" />
+                <span>{t.contacts.instaHandle}</span>
+              </a>
+            </div>
           </div>
         </div>
       </footer>

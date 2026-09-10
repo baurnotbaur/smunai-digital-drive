@@ -319,7 +319,11 @@ export function B2BLeadForm({
             <span
               className={darkTheme ? "text-slate-300" : "text-foreground/80"}
             >
-              Я даю согласие ТОО «С-Мунай» на сбор и обработку моих персональных данных в соответствии с <Link to="/privacy" className={darkTheme ? "text-gold-bright font-medium underline" : "text-primary font-medium underline"}>Политикой конфиденциальности</Link>. <span className="text-terracotta">*</span>
+              {f.dataConsentText}{" "}
+              <Link to="/privacy" className={darkTheme ? "text-gold-bright font-medium underline" : "text-primary font-medium underline"}>
+                {f.privacyLink}
+              </Link>
+              . <span className="text-terracotta">*</span>
             </span>
           </label>
 

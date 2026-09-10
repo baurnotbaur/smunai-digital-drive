@@ -2,7 +2,9 @@ import { useLanguage } from "@/lib/i18n";
 import { ShieldCheck, Award, MapPin, Sparkles, Clock, History } from "lucide-react";
 
 export function AnniversaryTimeline() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const isKz = lang === "kz";
+  const isEn = lang === "en";
   const a = t.anniversary;
 
   const milestones = [
@@ -11,28 +13,28 @@ export function AnniversaryTimeline() {
       title: a.milestone1Title,
       desc: a.milestone1Desc,
       icon: History,
-      city: "Жезқазған",
+      city: isKz ? "Жезқазған" : isEn ? "Zhezkazgan" : "Жезказган",
     },
     {
       year: a.milestone2Year,
       title: a.milestone2Title,
       desc: a.milestone2Desc,
       icon: MapPin,
-      city: "Сәтбаев",
+      city: isKz ? "Сәтбаев" : isEn ? "Satpayev" : "Сатпаев",
     },
     {
       year: a.milestone3Year,
       title: a.milestone3Title,
       desc: a.milestone3Desc,
       icon: Award,
-      city: "Астана",
+      city: isKz ? "Астана" : isEn ? "Astana" : "Астана",
     },
     {
       year: a.milestone4Year,
       title: a.milestone4Title,
       desc: a.milestone4Desc,
       icon: Sparkles,
-      city: "30 жылдық экожүйе",
+      city: isKz ? "30 жылдық экожүйе" : isEn ? "30-Year Ecosystem" : "30-летняя экосистема",
     },
   ];
 
@@ -103,7 +105,7 @@ export function AnniversaryTimeline() {
 
                 <div className="mt-6 pt-4 border-t border-primary/10 flex items-center gap-1.5 text-[11px] font-medium text-primary/70">
                   <ShieldCheck className="size-3.5 text-gold" />
-                  <span>С-Мұнай стандарты</span>
+                  <span>{isKz ? "С-Мұнай стандарты" : isEn ? "S-Munai Standard" : "Стандарт С-Мунай"}</span>
                 </div>
               </div>
             );
@@ -131,7 +133,13 @@ export function AnniversaryTimeline() {
             </p>
             <div className="flex items-center gap-2 text-muted-foreground">
               <Clock className="size-4 text-gold" />
-              <span>Басты бекет: Жезқазған, Ұлытау к-сі, 4/2 (дүкен мен кофе 24/7)</span>
+              <span>
+                {isKz
+                  ? "Басты бекет: Жезқазған, Ұлытау к-сі, 4/2 (дүкен мен кофе 24/7)"
+                  : isEn
+                  ? "Flagship Station: 4/2 Ulytau st., Zhezkazgan (store & coffee 24/7)"
+                  : "Главная станция: Жезказган, ул. Ұлытау, 4/2 (маркет и кофе 24/7)"}
+              </span>
             </div>
           </div>
         </div>

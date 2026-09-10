@@ -26,7 +26,7 @@ export function HiTechVideoBanner() {
       ron: "RON 95+",
       octaneDesc: lang === "kz" ? "Фактикалық октандық сан 95.6+" : lang === "en" ? "Actual octane rating 95.6+" : "Фактическое октановое число 95.6+",
       feature: lang === "kz" ? "Жоғары сығымдалу дәрежесі бар турбо қозғалтқыштарға арналған" : lang === "en" ? "Engineered for high-compression turbo engines" : "Оптимально для турбированных и форсированных двигателей",
-      economy: "До 5.2%",
+      economy: lang === "kz" ? "5.2%-ға дейін" : lang === "en" ? "Up to 5.2%" : "До 5.2%",
       protection: "100%",
     },
     "92": {
@@ -35,7 +35,7 @@ export function HiTechVideoBanner() {
       ron: "RON 92+",
       octaneDesc: lang === "kz" ? "Фактикалық октандық сан 92.8+" : lang === "en" ? "Actual octane rating 92.8+" : "Фактическое октановое число 92.8+",
       feature: lang === "kz" ? "Қалалық режимде қозғалтқышты қорғау және тазалау" : lang === "en" ? "City-driving wear protection and active injector cleaning" : "Защита цилиндров в городском цикле «старт-стоп» и удаление нагара",
-      economy: "До 4.5%",
+      economy: lang === "kz" ? "4.5%-ға дейін" : lang === "en" ? "Up to 4.5%" : "До 4.5%",
       protection: "98%",
     },
   };
@@ -222,7 +222,7 @@ export function HiTechVideoBanner() {
                 onClick={togglePlay}
                 aria-label={isPlaying ? "Pause video" : "Play video"}
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition-colors hover:bg-white/20"
-                title={isPlaying ? "Пауза" : "Воспроизведение"}
+                title={isPlaying ? (lang === "kz" ? "Кідірту" : lang === "en" ? "Pause" : "Пауза") : (lang === "kz" ? "Ойнату" : lang === "en" ? "Play" : "Воспроизведение")}
               >
                 {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ml-0.5" />}
               </button>

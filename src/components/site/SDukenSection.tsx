@@ -137,7 +137,7 @@ export function SDukenSection() {
                   <div>
                     <div className="flex items-center justify-between">
                       <span className="font-heading text-lg font-bold text-white">
-                        АЗС №{st.number}
+                        {lang === "kz" ? `№${st.number} ЖҚС` : lang === "en" ? `Station #${st.number}` : `АЗС №${st.number}`}
                       </span>
                       <span
                         className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${

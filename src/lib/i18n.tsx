@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import { Globe, Check, ChevronDown } from "lucide-react";
 
 export type Lang = "kz" | "ru" | "en";
 
@@ -1253,38 +1254,155 @@ export function useLanguage() {
   return ctx;
 }
 
-export function LanguageSwitcher({ className = "" }: { className?: string }) {
+export function LanguageSwitcher({
+  className = "",
+  darkTheme = false,
+  variant = "dropdown",
+}: {
+  className?: string;
+  darkTheme?: boolean;
+  variant?: "dropdown" | "pills";
+}) {
   const { lang, setLang } = useLanguage();
+  const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  const options: { id: Lang; label: string }[] = [
-    { id: "kz", label: "ҚАЗ" },
-    { id: "ru", label: "РУС" },
-    { id: "en", label: "ENG" },
+  // Close on outside click or ESC key
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+      }
+    }
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen]);
+
+  const languages: { id: Lang; code: string; label: string; full: string }[] = [
+    { id: "kz", code: "KZ", label: "ҚАЗ", full: "Қазақша" },
+    { id: "ru", code: "RU", label: "РУС", full: "Русский" },
+    { id: "en", code: "EN", label: "ENG", full: "English" },
   ];
 
+  const currentLang = languages.find((l) => l.id === lang) || languages[0];
+
+  if (variant === "pills") {
+    return (
+      <div
+        role="group"
+        aria-label="Тілді таңдау / Выбор языка"
+        className={`inline-flex items-center rounded-xl p-1 gap-1 w-full ${
+          darkTheme
+            ? "border border-white/15 bg-white/5"
+            : "border border-primary/20 bg-primary/5"
+        } ${className}`}
+      >
+        {languages.map((item) => {
+          const isActive = lang === item.id;
+          return (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => setLang(item.id)}
+              className={`flex-1 rounded-lg py-2 text-xs font-bold transition-all ${
+                isActive
+                  ? darkTheme
+                    ? "bg-gold text-slate-950 shadow-sm"
+                    : "bg-primary text-primary-foreground shadow-xs"
+                  : darkTheme
+                  ? "text-slate-300 hover:text-white hover:bg-white/10"
+                  : "text-foreground/70 hover:text-primary hover:bg-primary/10"
+              }`}
+            >
+              {item.full}
+            </button>
+          );
+        })}
+      </div>
+    );
+  }
+
   return (
-    <div
-      role="group"
-      aria-label="Тілді таңдау / Выбор языка"
-      className={`inline-flex items-center rounded-full border border-primary/20 bg-background/80 p-0.5 shadow-sm backdrop-blur ${className}`}
-    >
-      {options.map((opt) => {
-        const isActive = lang === opt.id;
-        return (
-          <button
-            key={opt.id}
-            type="button"
-            onClick={() => setLang(opt.id)}
-            className={`rounded-full px-2.5 py-1 text-[11px] font-bold tracking-wider transition-all ${
-              isActive
-                ? "bg-primary text-primary-foreground shadow-xs"
-                : "text-foreground/70 hover:bg-primary/10 hover:text-primary"
-            }`}
-          >
-            {opt.label}
-          </button>
-        );
-      })}
+    <div ref={menuRef} className={`relative inline-block text-left ${className}`}>
+      <button
+        type="button"
+        onClick={() => setIsOpen((prev) => !prev)}
+        aria-expanded={isOpen}
+        aria-haspopup="true"
+        aria-label={`Выбрать язык. Текущий: ${currentLang.full}`}
+        className={`inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-bold transition-all shadow-xs select-none ${
+          darkTheme
+            ? "border border-white/15 bg-white/10 text-white hover:bg-white/15 hover:border-white/30"
+            : "border border-primary/20 bg-background/95 text-foreground hover:bg-primary/5 hover:border-primary/40"
+        } ${isOpen ? "ring-2 ring-gold/50" : ""}`}
+      >
+        <Globe className={`size-3.5 ${darkTheme ? "text-gold" : "text-primary"}`} />
+        <span className="tracking-wide uppercase font-extrabold text-[11px] sm:text-xs">
+          {currentLang.code}
+        </span>
+        <ChevronDown
+          className={`size-3 transition-transform duration-200 opacity-60 ${
+            isOpen ? "rotate-180 opacity-100" : ""
+          }`}
+        />
+      </button>
+
+      {isOpen && (
+        <div
+          role="menu"
+          className={`absolute right-0 top-full mt-2 w-44 origin-top-right rounded-2xl p-1.5 shadow-2xl backdrop-blur-xl z-50 border transition-all animate-in fade-in slide-in-from-top-1.5 duration-150 ${
+            darkTheme
+              ? "border-white/15 bg-slate-900/98 text-white shadow-black/60"
+              : "border-primary/15 bg-background/98 text-foreground shadow-primary/10"
+          }`}
+        >
+          <div className="px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70 border-b border-primary/10 mb-1">
+            {lang === "kz" ? "Тілді таңдаңыз" : lang === "en" ? "Select Language" : "Выберите язык"}
+          </div>
+          {languages.map((item) => {
+            const isActive = lang === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                role="menuitem"
+                onClick={() => {
+                  setLang(item.id);
+                  setIsOpen(false);
+                }}
+                className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-all ${
+                  isActive
+                    ? darkTheme
+                      ? "bg-gold text-slate-950 font-bold shadow-xs"
+                      : "bg-primary text-primary-foreground font-bold shadow-xs"
+                    : darkTheme
+                    ? "text-slate-200 hover:bg-white/10"
+                    : "text-foreground/80 hover:bg-primary/10 hover:text-primary"
+                }`}
+              >
+                <span>{item.full}</span>
+                <div className="flex items-center gap-1.5">
+                  <span className={`text-[10px] tracking-wider uppercase font-bold opacity-60`}>
+                    {item.code}
+                  </span>
+                  {isActive && <Check className="size-3.5 shrink-0 stroke-[3]" />}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { X, MessageCircle, ArrowUp } from "lucide-react";
 import { submitLead } from "@/lib/leads";
+import { useLanguage } from "@/lib/i18n";
 
 const WORKER_URL = "https://smunai-chat-worker.smunay-chat.workers.dev"; 
 
@@ -46,13 +47,13 @@ function parseLead(raw: string): PendingLead | null {
 }
 
 const GREETING: Record<string, string> = {
-  kz: "Сәлеметсіз бе! Мен Мұнай — С-Мунай виртуалды көмекшісімін. Қалай көмектесе аламын?",
+  kz: "Сәлеметсіз бе! Мен Мұнай — С-Мұнай виртуалды көмекшісімін. Сізге қалай көмектесе аламын?",
   ru: "Здравствуйте! Я Мунай — виртуальный ассистент С-Мунай. Чем могу помочь?",
-  en: "Hello! I'm Munai, the S-Munai virtual assistant. How can I help?",
+  en: "Hello! I'm Munai, the S-Munai virtual assistant. How can I help you?",
 };
 
 export function SupportChat() {
-  const lang = "ru"; 
+  const { lang } = useLanguage();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
@@ -202,12 +203,17 @@ export function SupportChat() {
             М
           </div>
           <div className="flex-1">
-            <p className="text-[15px] font-semibold tracking-tight text-foreground">Мунай</p>
-            <p className="text-xs text-muted-foreground">Ассистент С-Мунай</p>
+            <p className="text-[15px] font-semibold tracking-tight text-foreground">
+              {lang === "kz" ? "Мұнай" : lang === "en" ? "Munai" : "Мунай"}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {lang === "kz" ? "С-Мұнай виртуалды ассистенті" : lang === "en" ? "S-Munai Virtual Assistant" : "Ассистент С-Мунай"}
+            </p>
           </div>
           <button 
             onClick={() => {
-              if (messages.length > 0 && confirm("Очистить историю чата?")) {
+              const confirmText = lang === "kz" ? "Чат тарихын тазалау керек пе?" : lang === "en" ? "Clear chat history?" : "Очистить историю чата?";
+              if (messages.length > 0 && confirm(confirmText)) {
                 localStorage.removeItem("smunai_chat_history");
                 setMessages([]);
               } else {
@@ -215,8 +221,8 @@ export function SupportChat() {
               }
             }} 
             className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-foreground transition-colors hover:bg-primary/20" 
-            aria-label="Очистить или закрыть"
-            title="Очистить историю"
+            aria-label={lang === "kz" ? "Жабу" : lang === "en" ? "Close" : "Закрыть"}
+            title={lang === "kz" ? "Тарихты тазалау" : lang === "en" ? "Clear history" : "Очистить историю"}
           >
             <X className="h-4 w-4" />
           </button>
@@ -231,23 +237,29 @@ export function SupportChat() {
             <div className="rounded-3xl border border-primary/15 bg-primary/5 px-5 py-4 text-[13px]">
               {leadState === "sent" ? (
                 <p className="font-medium text-foreground">
-                  Заявка отправлена — менеджер свяжется с вами по номеру {pendingLead.phone}.
+                  {lang === "kz"
+                    ? `Өтінім жіберілді — менеджер ${pendingLead.phone} нөміріне хабарласады.`
+                    : lang === "en"
+                    ? `Request sent — our manager will contact you at ${pendingLead.phone}.`
+                    : `Заявка отправлена — менеджер свяжется с вами по номеру ${pendingLead.phone}.`}
                 </p>
               ) : (
                 <>
-                  <p className="font-semibold text-foreground">Оформить заявку?</p>
+                  <p className="font-semibold text-foreground">
+                    {lang === "kz" ? "Өтінім қалдыру керек пе?" : lang === "en" ? "Submit inquiry?" : "Оформить заявку?"}
+                  </p>
                   <dl className="mt-2 space-y-0.5 text-muted-foreground">
                     <div className="flex gap-2">
-                      <dt className="shrink-0">Имя:</dt>
+                      <dt className="shrink-0">{lang === "kz" ? "Аты-жөні:" : lang === "en" ? "Name:" : "Имя:"}</dt>
                       <dd className="text-foreground">{pendingLead.name}</dd>
                     </div>
                     <div className="flex gap-2">
-                      <dt className="shrink-0">Телефон:</dt>
+                      <dt className="shrink-0">{lang === "kz" ? "Телефон:" : lang === "en" ? "Phone:" : "Телефон:"}</dt>
                       <dd className="text-foreground">{pendingLead.phone}</dd>
                     </div>
                     {pendingLead.position && (
                       <div className="flex gap-2">
-                        <dt className="shrink-0">Должность:</dt>
+                        <dt className="shrink-0">{lang === "kz" ? "Лауазымы:" : lang === "en" ? "Position:" : "Должность:"}</dt>
                         <dd className="text-foreground">{pendingLead.position}</dd>
                       </div>
                     )}
@@ -261,16 +273,40 @@ export function SupportChat() {
                       className="mt-0.5 size-4 shrink-0 rounded accent-primary"
                     />
                     <span>
-                      Я даю согласие ТОО «С-Мунай» на обработку моих персональных данных согласно{" "}
-                      <Link to="/privacy" className="font-medium text-primary underline">
-                        Политике конфиденциальности
-                      </Link>
-                      .
+                      {lang === "kz" ? (
+                        <>
+                          Мен «С-Мұнай» ЖШС-не дербес деректерімді өңдеуге келісім беремін{" "}
+                          <Link to="/privacy" className="font-medium text-primary underline">
+                            Құпиялылық саясатына
+                          </Link>{" "}
+                          сәйкес.
+                        </>
+                      ) : lang === "en" ? (
+                        <>
+                          I consent to S-Munai LLP processing my personal data according to the{" "}
+                          <Link to="/privacy" className="font-medium text-primary underline">
+                            Privacy Policy
+                          </Link>
+                          .
+                        </>
+                      ) : (
+                        <>
+                          Я даю согласие ТОО «С-Мунай» на обработку моих персональных данных согласно{" "}
+                          <Link to="/privacy" className="font-medium text-primary underline">
+                            Политике конфиденциальности
+                          </Link>
+                          .
+                        </>
+                      )}
                     </span>
                   </label>
                   {leadState === "error" && (
                     <p className="mt-2 text-[12px] text-destructive">
-                      Не удалось отправить заявку. Попробуйте ещё раз.
+                      {lang === "kz"
+                        ? "Өтінім жіберілмеді. Қайталап көріңіз."
+                        : lang === "en"
+                        ? "Failed to submit request. Please try again."
+                        : "Не удалось отправить заявку. Попробуйте ещё раз."}
                     </p>
                   )}
                   <div className="mt-3 flex items-center gap-2">
@@ -280,7 +316,9 @@ export function SupportChat() {
                       disabled={!leadConsent || leadState === "sending"}
                       className="rounded-full bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground transition-opacity disabled:opacity-40"
                     >
-                      {leadState === "sending" ? "Отправляем…" : "Отправить заявку"}
+                      {leadState === "sending"
+                        ? lang === "kz" ? "Жіберілуде…" : lang === "en" ? "Sending…" : "Отправляем…"
+                        : lang === "kz" ? "Өтінім жіберу" : lang === "en" ? "Submit Request" : "Отправить заявку"}
                     </button>
                     <button
                       type="button"
@@ -288,7 +326,7 @@ export function SupportChat() {
                       disabled={leadState === "sending"}
                       className="rounded-full px-3 py-2 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground"
                     >
-                      Не сейчас
+                      {lang === "kz" ? "Қазір емес" : lang === "en" ? "Not now" : "Не сейчас"}
                     </button>
                   </div>
                 </>
@@ -303,14 +341,20 @@ export function SupportChat() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && send()}
-              placeholder="Спросите что-нибудь..."
+              placeholder={
+                lang === "kz"
+                  ? "Сұрағыңызды жазыңыз..."
+                  : lang === "en"
+                  ? "Ask anything..."
+                  : "Спросите что-нибудь..."
+              }
               className="flex-1 bg-transparent py-2.5 text-[15px] text-foreground outline-none placeholder:text-muted-foreground"
             />
             <button
               onClick={send}
               disabled={!input.trim() || busy}
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm transition-transform enabled:hover:scale-105 disabled:opacity-40"
-              aria-label="Отправить"
+              aria-label={lang === "kz" ? "Жіберу" : lang === "en" ? "Send" : "Отправить"}
             >
               <ArrowUp className="h-5 w-5" strokeWidth={2.5} />
             </button>
@@ -321,7 +365,7 @@ export function SupportChat() {
       <button
         onClick={() => setOpen((v) => !v)}
         className="fixed bottom-6 right-6 z-50 flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/25 transition-transform duration-300 ease-out hover:scale-110 active:scale-95"
-        aria-label="Чат поддержки"
+        aria-label={lang === "kz" ? "Қолдау чаты" : lang === "en" ? "Support Chat" : "Чат поддержки"}
       >
         {open ? <X className="h-7 w-7" /> : <MessageCircle className="h-7 w-7" />}
       </button>

@@ -64,8 +64,9 @@ export function LeafletMap({ stations, activeStationNum, onStationSelect, lang =
         const hasStore = [1, 3, 4, 6].includes(st.number);
         const isFlagship = st.number === 4;
 
+        const pinTitle = isKz ? `№${st.number} ЖҚС` : isEn ? `Station #${st.number}` : `АЗС №${st.number}`;
         const iconHtml = `
-          <div class="custom-leaflet-pin ${isActive ? "active-pin" : ""} ${hasStore ? "has-store" : ""}" title="АЗС №${st.number}">
+          <div class="custom-leaflet-pin ${isActive ? "active-pin" : ""} ${hasStore ? "has-store" : ""}" title="${pinTitle}">
             <span>${st.number}</span>
           </div>
         `;
@@ -80,20 +81,35 @@ export function LeafletMap({ stations, activeStationNum, onStationSelect, lang =
 
         const addressText = isKz ? st.addressKz : isEn ? st.addressEn : st.address;
         const hoursText = isKz ? st.hoursKz : isEn ? st.hoursEn : st.hours;
-        const brandTitle = isKz ? `АЗС №${st.number} · С-Мұнай` : `АЗС №${st.number} · С-Мунай`;
+        const brandTitle = isKz ? `№${st.number} ЖҚС · С-Мұнай` : isEn ? `Station #${st.number} · S-Munai` : `АЗС №${st.number} · С-Мунай`;
+        const cityName = isKz ? st.cityKz : isEn ? st.cityEn : st.city;
         const gisBtnText = isKz ? "2ГИС Бағыты →" : isEn ? "2GIS Route →" : "Маршрут в 2ГИС →";
 
         const storeBadgeHtml = isFlagship
-          ? `<span style="display: inline-block; background: #f59e0b; color: #451a03; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 9999px; margin-bottom: 4px;">⭐ ${isKz ? "Флагмандық С-Дүкен" : "Флагманский С-Дүкен"}</span>`
+          ? `<span style="display: inline-block; background: #f59e0b; color: #451a03; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 9999px; margin-bottom: 4px;">⭐ ${isKz ? "Флагмандық С-Дүкен" : isEn ? "Flagship S-Duken" : "Флагманский С-Дүкен"}</span>`
           : hasStore
           ? `<span style="display: inline-block; background: rgba(13,108,137,0.12); color: #0D6C89; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 9999px; margin-bottom: 4px;">🏪 С-Дүкен 24/7</span>`
           : "";
 
+        const fuelsHtml = st.fuels && st.fuels.length > 0
+          ? `<div style="margin-top: 8px; padding-top: 6px; border-top: 1px dashed #e2e8f0; display: flex; flex-wrap: wrap; gap: 4px;">
+              ${st.fuels.map(f => {
+                if (f === 'hitech95') return '<span style="background: rgba(212,175,55,0.18); border: 1px solid rgba(212,175,55,0.45); color: #854d0e; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 6px;">95 Hi-Tech</span>';
+                if (f === 'hitech92') return '<span style="background: rgba(212,175,55,0.18); border: 1px solid rgba(212,175,55,0.45); color: #854d0e; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 6px;">92 Hi-Tech</span>';
+                if (f === 'ai95') return '<span style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 6px;">АИ-95</span>';
+                if (f === 'ai92') return '<span style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 6px;">АИ-92</span>';
+                if (f === 'dt') return `<span style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 6px;">${isKz ? "ДТ Еуро" : isEn ? "Diesel" : "ДТ Евро"}</span>`;
+                if (f === 'gas') return `<span style="background: rgba(13,108,137,0.15); border: 1px solid rgba(13,108,137,0.35); color: #0D6C89; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 6px;">${isKz ? "СҰГ Газ" : isEn ? "LPG" : "Автогаз (СУГ)"}</span>`;
+                return '';
+              }).join('')}
+            </div>`
+          : "";
+
         const popupContent = `
-          <div style="font-family: system-ui, -apple-system, sans-serif; width: 240px; overflow: hidden; border-radius: 16px;">
+          <div style="font-family: system-ui, -apple-system, sans-serif; width: 255px; overflow: hidden; border-radius: 16px;">
             <div style="background: linear-gradient(135deg, #0D6C89, #094a5e); color: #ffffff; padding: 12px 14px;">
               <div style="font-weight: 800; font-size: 14px; letter-spacing: -0.01em;">${brandTitle}</div>
-              <div style="font-size: 11px; opacity: 0.85; margin-top: 2px;">${st.city}</div>
+              <div style="font-size: 11px; opacity: 0.85; margin-top: 2px;">${cityName}</div>
             </div>
             <div style="padding: 12px 14px; background: #ffffff;">
               ${storeBadgeHtml}
@@ -102,6 +118,7 @@ export function LeafletMap({ stations, activeStationNum, onStationSelect, lang =
                 <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #10b981;"></span>
                 <span>${hoursText}</span>
               </div>
+              ${fuelsHtml}
               <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #f1f5f9;">
                 <a href="${st.gisUrl}" target="_blank" rel="noreferrer" style="display: block; text-align: center; background: #D4AF37; color: #1e293b; text-decoration: none; font-size: 11px; font-weight: 700; padding: 8px 12px; border-radius: 8px; box-shadow: 0 2px 6px rgba(212,175,55,0.35);">
                   ${gisBtnText}

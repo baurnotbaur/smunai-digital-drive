@@ -17,10 +17,11 @@ import {
   Compass,
   ListFilter,
   Flame,
+  Mail,
 } from "lucide-react";
 import { LeafletMap } from "@/components/site/LeafletMap";
 import { useLanguage, LanguageSwitcher } from "@/lib/i18n";
-import type { Station } from "./index";
+import type { Station, FuelType } from "./index";
 
 export const Route = createFileRoute("/stations")({
   head: () => ({
@@ -35,6 +36,65 @@ export const Route = createFileRoute("/stations")({
   }),
   component: StationsPage,
 });
+
+export const FUEL_CONFIG: Record<
+  FuelType,
+  {
+    code: FuelType;
+    labelKz: string;
+    labelRu: string;
+    labelEn: string;
+    isPremium?: boolean;
+    isGas?: boolean;
+    badgeClass: string;
+  }
+> = {
+  hitech95: {
+    code: "hitech95",
+    labelKz: "95 Hi-Tech",
+    labelRu: "95 Hi-Tech",
+    labelEn: "95 Hi-Tech",
+    isPremium: true,
+    badgeClass: "border-gold/50 bg-gold/15 text-gold-foreground font-bold shadow-xs",
+  },
+  hitech92: {
+    code: "hitech92",
+    labelKz: "92 Hi-Tech",
+    labelRu: "92 Hi-Tech",
+    labelEn: "92 Hi-Tech",
+    isPremium: true,
+    badgeClass: "border-gold/50 bg-gold/15 text-gold-foreground font-bold shadow-xs",
+  },
+  ai95: {
+    code: "ai95",
+    labelKz: "АИ-95",
+    labelRu: "АИ-95",
+    labelEn: "AI-95",
+    badgeClass: "border-primary/20 bg-primary/5 text-foreground/85 font-medium",
+  },
+  ai92: {
+    code: "ai92",
+    labelKz: "АИ-92",
+    labelRu: "АИ-92",
+    labelEn: "AI-92",
+    badgeClass: "border-primary/20 bg-primary/5 text-foreground/85 font-medium",
+  },
+  dt: {
+    code: "dt",
+    labelKz: "ДТ Еуро",
+    labelRu: "ДТ Евро",
+    labelEn: "Diesel Euro",
+    badgeClass: "border-primary/20 bg-primary/5 text-foreground/85 font-medium",
+  },
+  gas: {
+    code: "gas",
+    labelKz: "Автогаз (СҰГ)",
+    labelRu: "Автогаз (СУГ)",
+    labelEn: "Autogas (LPG)",
+    isGas: true,
+    badgeClass: "border-teal-500/40 bg-teal-500/15 text-teal-700 dark:text-teal-300 font-bold",
+  },
+};
 
 type CityGroup = {
   city: string;
@@ -67,6 +127,7 @@ const STATIONS_DATA: CityGroup[] = [
         hoursKz: "Тәулік бойы",
         hoursEn: "24/7 (All Day)",
         services: GAS_AND_SHOP,
+        fuels: ["hitech95", "hitech92", "ai95", "ai92", "dt", "gas"],
         coords: { lat: 47.783971, lng: 67.696561 },
         gisUrl: "https://2gis.kz/zhezkazgan/firm/70000001068949327",
       },
@@ -82,6 +143,7 @@ const STATIONS_DATA: CityGroup[] = [
         hoursKz: "Тәулік бойы",
         hoursEn: "24/7 (All Day)",
         services: FUEL_ONLY,
+        fuels: ["ai95", "ai92", "dt"],
         coords: { lat: 47.784135, lng: 67.694417 },
         gisUrl: "https://2gis.kz/zhezkazgan/firm/70000001070980296",
       },
@@ -97,6 +159,7 @@ const STATIONS_DATA: CityGroup[] = [
         hoursKz: "Тәулік бойы",
         hoursEn: "24/7 (All Day)",
         services: FUEL_ONLY,
+        fuels: ["hitech95", "hitech92", "ai95", "ai92"],
         coords: { lat: 47.802055, lng: 67.714752 },
         gisUrl: "https://2gis.kz/zhezkazgan/firm/70000001068498088",
       },
@@ -120,6 +183,7 @@ const STATIONS_DATA: CityGroup[] = [
         hoursKz: "Тәулік бойы",
         hoursEn: "24/7 (All Day)",
         services: GAS_AND_SHOP,
+        fuels: ["hitech95", "hitech92", "ai95", "ai92", "dt", "gas"],
         coords: { lat: 47.901277, lng: 67.517376 },
         gisUrl: "https://2gis.kz/zhezkazgan/firm/70000001070540201",
       },
@@ -135,6 +199,7 @@ const STATIONS_DATA: CityGroup[] = [
         hoursKz: "Тәулік бойы",
         hoursEn: "24/7 (All Day)",
         services: ALL_SERVICES,
+        fuels: ["hitech95", "hitech92", "ai95", "ai92", "dt"],
         coords: { lat: 47.914004, lng: 67.531064 },
         gisUrl: "https://2gis.kz/zhezkazgan/firm/70000001070530403",
       },
@@ -150,6 +215,7 @@ const STATIONS_DATA: CityGroup[] = [
         hoursKz: "Тәулік бойы",
         hoursEn: "24/7 (All Day)",
         services: GAS_AND_SHOP,
+        fuels: ["hitech95", "hitech92", "ai95", "ai92", "dt", "gas"],
         coords: { lat: 47.898436, lng: 67.528117 },
         gisUrl: "https://2gis.kz/zhezkazgan/firm/70000001069917278",
       },
@@ -173,6 +239,7 @@ const STATIONS_DATA: CityGroup[] = [
         hoursKz: "Тәулік бойы",
         hoursEn: "24/7 (All Day)",
         services: FUEL_ONLY,
+        fuels: ["ai92", "dt"],
         coords: { lat: 48.6536, lng: 66.9934 },
         gisUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
       },
@@ -196,6 +263,7 @@ const STATIONS_DATA: CityGroup[] = [
         hoursKz: "Тәулік бойы",
         hoursEn: "24/7 (All Day)",
         services: FUEL_ONLY,
+        fuels: ["hitech92", "ai95", "ai92", "dt"],
         coords: { lat: 51.232479, lng: 71.384983 },
         gisUrl: "https://2gis.kz/astana/firm/70000001023880627",
       },
@@ -211,6 +279,7 @@ const STATIONS_DATA: CityGroup[] = [
         hoursKz: "Тәулік бойы",
         hoursEn: "24/7 (All Day)",
         services: FUEL_ONLY,
+        fuels: ["hitech92", "ai95", "ai92", "dt"],
         coords: { lat: 51.065141, lng: 71.392492 },
         gisUrl: "https://2gis.kz/astana/firm/70000001023880615",
       },
@@ -224,7 +293,7 @@ export function StationsPage() {
   const { lang } = useLanguage();
   const [selectedCity, setSelectedCity] = useState<string>("all");
   const [selectedStationNum, setSelectedStationNum] = useState<number>(4);
-  const [serviceFilter, setServiceFilter] = useState<"all" | "store" | "flagship">("all");
+  const [serviceFilter, setServiceFilter] = useState<"all" | "store" | "gas" | "hitech95" | "dt">("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [mobileView, setMobileView] = useState<"list" | "map">("list");
 
@@ -249,18 +318,24 @@ export function StationsPage() {
     return st.hours;
   }
 
-  // Filter stations based on city, services, and query
+  // Filter stations based on city, services, fuels, and search query
   const filteredStations = useMemo(() => {
     return ALL_STATIONS.filter((st) => {
       // City filter
       if (selectedCity !== "all" && st.city !== selectedCity) {
         return false;
       }
-      // Service filter
+      // Service & Fuel filter
       if (serviceFilter === "store" && ![1, 3, 4, 6].includes(st.number)) {
         return false;
       }
-      if (serviceFilter === "flagship" && st.number !== 4) {
+      if (serviceFilter === "gas" && !st.fuels.includes("gas")) {
+        return false;
+      }
+      if (serviceFilter === "hitech95" && !st.fuels.includes("hitech95")) {
+        return false;
+      }
+      if (serviceFilter === "dt" && !st.fuels.includes("dt")) {
         return false;
       }
       // Search query filter
@@ -269,7 +344,23 @@ export function StationsPage() {
         const numMatch = st.number.toString().includes(q);
         const cityMatch = (st.city + " " + st.cityKz + " " + st.cityEn).toLowerCase().includes(q);
         const addressMatch = (st.address + " " + st.addressKz + " " + st.addressEn).toLowerCase().includes(q);
-        if (!numMatch && !cityMatch && !addressMatch) {
+        const fuelsMatch = st.fuels.some((f) => {
+          const cfg = FUEL_CONFIG[f];
+          if (!cfg) return false;
+          return (
+            cfg.labelRu.toLowerCase().includes(q) ||
+            cfg.labelKz.toLowerCase().includes(q) ||
+            cfg.labelEn.toLowerCase().includes(q) ||
+            (q === "газ" && f === "gas") ||
+            (q === "суг" && f === "gas") ||
+            (q === "дт" && f === "dt") ||
+            (q === "дизель" && f === "dt") ||
+            (q.includes("95") && (f === "hitech95" || f === "ai95")) ||
+            (q.includes("92") && (f === "hitech92" || f === "ai92")) ||
+            (q.includes("hitech") && (f === "hitech95" || f === "hitech92"))
+          );
+        });
+        if (!numMatch && !cityMatch && !addressMatch && !fuelsMatch) {
           return false;
         }
       }
@@ -290,21 +381,22 @@ export function StationsPage() {
     <div className="min-h-dvh bg-background text-foreground flex flex-col">
       {/* Clean Minimalist Header */}
       <header className="sticky top-0 z-40 border-b border-primary/10 bg-background/90 backdrop-blur-md transition-all">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:py-3.5">
-          <div className="flex items-center gap-4">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-5 py-2.5 sm:py-3.5">
+          <div className="flex items-center gap-2.5 sm:gap-4">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-foreground/70 transition-colors hover:text-primary sm:text-sm"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-primary/15 bg-background/80 p-2 text-xs font-bold uppercase tracking-wider text-foreground/70 transition-colors hover:bg-primary/5 hover:text-primary sm:border-0 sm:bg-transparent sm:p-0 sm:text-sm"
+              title={isKz ? "Басты бет" : isEn ? "Home" : "Главная"}
             >
               <ArrowLeft className="size-4" />
-              <span>{isKz ? "Басты бет" : isEn ? "Home" : "Главная"}</span>
+              <span className="hidden sm:inline">{isKz ? "Басты бет" : isEn ? "Home" : "Главная"}</span>
             </Link>
-            <div className="h-4 w-px bg-primary/20" />
+            <div className="hidden sm:block h-4 w-px bg-primary/20" />
             <Link to="/" className="flex items-center transition-opacity hover:opacity-90">
               <img
                 src="/images/logo-navbar.svg"
                 alt="С-МУНАЙ"
-                className="h-8 w-auto object-contain sm:h-9"
+                className="h-7 w-auto object-contain sm:h-8 md:h-9"
               />
             </Link>
           </div>
@@ -324,7 +416,7 @@ export function StationsPage() {
             </Link>
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <LanguageSwitcher />
             <Link
               to="/b2b"
@@ -392,8 +484,8 @@ export function StationsPage() {
                   9
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-primary">{isKz ? "АЗС Желісі" : "Сеть АЗС"}</div>
-                  <div className="text-[11px] text-foreground/60">{isKz ? "4 өңірде" : "в 4 локациях"}</div>
+                  <div className="text-xs font-bold text-primary">{isKz ? "АЗС Желісі" : isEn ? "Stations Network" : "Сеть АЗС"}</div>
+                  <div className="text-[11px] text-foreground/60">{isKz ? "4 өңірде" : isEn ? "in 4 regions" : "в 4 локациях"}</div>
                 </div>
               </div>
 
@@ -402,8 +494,8 @@ export function StationsPage() {
                   24/7
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-primary">{isKz ? "Тәулік бойы" : "Круглосуточно"}</div>
-                  <div className="text-[11px] text-foreground/60">{isKz ? "Үзіліссіз қызмет" : "Без перерывов"}</div>
+                  <div className="text-xs font-bold text-primary">{isKz ? "Тәулік бойы" : isEn ? "Open 24/7" : "Круглосуточно"}</div>
+                  <div className="text-[11px] text-foreground/60">{isKz ? "Үзіліссіз қызмет" : isEn ? "Non-stop service" : "Без перерывов"}</div>
                 </div>
               </div>
 
@@ -412,8 +504,8 @@ export function StationsPage() {
                   <Store className="size-5" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-primary">{isKz ? "4 С-Дүкен" : "4 С-Дүкен"}</div>
-                  <div className="text-[11px] text-foreground/60">{isKz ? "Маркет & Кофе" : "Маркет и кофе"}</div>
+                  <div className="text-xs font-bold text-primary">{isKz ? "4 С-Дүкен" : isEn ? "4 S-Duken Stores" : "4 С-Дүкен"}</div>
+                  <div className="text-[11px] text-foreground/60">{isKz ? "Маркет & Кофе" : isEn ? "Market & Coffee" : "Маркет и кофе"}</div>
                 </div>
               </div>
 
@@ -422,8 +514,8 @@ export function StationsPage() {
                   <Flame className="size-5 text-gold" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-primary">{isKz ? "Hi-Tech Отын" : "Топливо Hi-Tech"}</div>
-                  <div className="text-[11px] text-foreground/60">{isKz ? "Евро-5 формуласы" : "Формула Евро-5"}</div>
+                  <div className="text-xs font-bold text-primary">{isKz ? "Hi-Tech Отын" : isEn ? "Hi-Tech Fuel" : "Топливо Hi-Tech"}</div>
+                  <div className="text-[11px] text-foreground/60">{isKz ? "Евро-5 формуласы" : isEn ? "Euro-5 formula" : "Формула Евро-5"}</div>
                 </div>
               </div>
             </div>
@@ -469,10 +561,10 @@ export function StationsPage() {
               })}
             </div>
 
-            {/* Service Filter Chips & Search Box */}
+            {/* Filter Chips & Search Box */}
             <div className="flex flex-wrap items-center gap-2.5">
-              {/* Service filter */}
-              <div className="inline-flex rounded-xl border border-primary/15 bg-primary/5 p-0.5 text-xs font-semibold">
+              {/* Filter pills */}
+              <div className="flex flex-wrap items-center rounded-xl border border-primary/15 bg-primary/5 p-0.5 text-xs font-semibold gap-0.5">
                 <button
                   type="button"
                   onClick={() => setServiceFilter("all")}
@@ -480,7 +572,34 @@ export function StationsPage() {
                     serviceFilter === "all" ? "bg-primary text-primary-foreground font-bold shadow-xs" : "text-foreground/70 hover:text-primary"
                   }`}
                 >
-                  {isKz ? "Барлығы" : "Все"}
+                  {isKz ? "Барлығы" : isEn ? "All" : "Все"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setServiceFilter("hitech95")}
+                  className={`rounded-lg px-2.5 py-1 transition-colors ${
+                    serviceFilter === "hitech95" ? "bg-gold text-slate-950 font-bold shadow-xs" : "text-foreground/70 hover:text-primary"
+                  }`}
+                >
+                  ⚡ 95 Hi-Tech
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setServiceFilter("gas")}
+                  className={`rounded-lg px-2.5 py-1 transition-colors ${
+                    serviceFilter === "gas" ? "bg-teal-600 text-white font-bold shadow-xs" : "text-foreground/70 hover:text-primary"
+                  }`}
+                >
+                  🔥 {isKz ? "СҰГ Газ (3)" : isEn ? "LPG Gas (3)" : "Автогаз (3)"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setServiceFilter("dt")}
+                  className={`rounded-lg px-2.5 py-1 transition-colors ${
+                    serviceFilter === "dt" ? "bg-primary text-primary-foreground font-bold shadow-xs" : "text-foreground/70 hover:text-primary"
+                  }`}
+                >
+                  🚛 {isKz ? "ДТ Еуро" : isEn ? "Diesel" : "ДТ Евро"}
                 </button>
                 <button
                   type="button"
@@ -489,16 +608,7 @@ export function StationsPage() {
                     serviceFilter === "store" ? "bg-primary text-primary-foreground font-bold shadow-xs" : "text-foreground/70 hover:text-primary"
                   }`}
                 >
-                  🏪 {isKz ? "С-Дүкен (4)" : "С-Дүкен (4)"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setServiceFilter("flagship")}
-                  className={`rounded-lg px-2.5 py-1 transition-colors ${
-                    serviceFilter === "flagship" ? "bg-amber-400 text-amber-950 font-bold shadow-xs" : "text-foreground/70 hover:text-primary"
-                  }`}
-                >
-                  ⭐ {isKz ? "Флагман (№4)" : "Флагман (№4)"}
+                  🏪 {isKz ? "С-Дүкен (4)" : isEn ? "S-Duken (4)" : "С-Дүкен (4)"}
                 </button>
               </div>
 
@@ -509,7 +619,7 @@ export function StationsPage() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={isKz ? "Көше немесе АЗС № іздеу..." : "Поиск по адресу или №..."}
+                  placeholder={isKz ? "Көше, АЗС № немесе отын іздеу..." : isEn ? "Search street, station # or fuel..." : "Поиск по адресу, № или топливу..."}
                   className="w-full rounded-xl border border-primary/20 bg-background py-1.5 pl-9 pr-8 text-xs placeholder:text-foreground/40 focus:border-primary focus:outline-hidden focus:ring-1 focus:ring-primary"
                 />
                 {searchQuery && (
@@ -536,7 +646,7 @@ export function StationsPage() {
                 }`}
               >
                 <ListFilter className="size-3.5" />
-                <span>{isKz ? `Тізім (${filteredStations.length})` : `Список (${filteredStations.length})`}</span>
+                <span>{isKz ? `Тізім (${filteredStations.length})` : isEn ? `List (${filteredStations.length})` : `Список (${filteredStations.length})`}</span>
               </button>
               <button
                 type="button"
@@ -546,7 +656,7 @@ export function StationsPage() {
                 }`}
               >
                 <Compass className="size-3.5" />
-                <span>{isKz ? "Интерактивті карта" : "Карта станций"}</span>
+                <span>{isKz ? "Интерактивті карта" : isEn ? "Station Map" : "Карта станций"}</span>
               </button>
             </div>
           </div>
@@ -558,11 +668,13 @@ export function StationsPage() {
             <div className="soft-card p-12 text-center my-8">
               <MapPin className="size-10 text-primary/30 mx-auto mb-3" />
               <h3 className="font-bold text-primary font-display text-lg">
-                {isKz ? "Ешбір АЗС табылмады" : "Станции не найдены"}
+                {isKz ? "Ешбір АЗС табылмады" : isEn ? "No stations found" : "Станции не найдены"}
               </h3>
               <p className="text-xs text-foreground/60 mt-1 max-w-md mx-auto">
                 {isKz
                   ? "Іздеу сұранысын өзгертіп көріңіз немесе барлық қалалар сүзгісін таңдаңыз."
+                  : isEn
+                  ? "Try changing your search query or reset city filters."
                   : "Попробуйте изменить поисковый запрос или сбросить фильтры по городу."}
               </p>
               <button
@@ -574,7 +686,7 @@ export function StationsPage() {
                 }}
                 className="mt-4 rounded-xl bg-primary px-4 py-2 text-xs font-bold text-primary-foreground"
               >
-                {isKz ? "Сүзгілерді тазарту" : "Сбросить фильтры"}
+                {isKz ? "Сүзгілерді тазарту" : isEn ? "Reset filters" : "Сбросить фильтры"}
               </button>
             </div>
           ) : (
@@ -583,10 +695,10 @@ export function StationsPage() {
               <div className={`space-y-4 ${mobileView === "map" ? "hidden lg:block" : "block"}`}>
                 <div className="flex items-center justify-between text-xs text-foreground/60 px-1">
                   <span>
-                    {isKz ? "Таңдалған станциялар:" : "Показано станций:"} {filteredStations.length}
+                    {isKz ? "Таңдалған станциялар:" : isEn ? "Stations shown:" : "Показано станций:"} {filteredStations.length}
                   </span>
                   <span className="text-primary font-medium">
-                    {isKz ? "Картадан көру үшін басыңыз" : "Нажмите для фокуса на карте"}
+                    {isKz ? "Картадан көру үшін басыңыз" : isEn ? "Click to view on map" : "Нажмите для фокуса на карте"}
                   </span>
                 </div>
 
@@ -627,10 +739,10 @@ export function StationsPage() {
                           </span>
                           <div>
                             <h3 className="font-bold text-primary font-display text-lg leading-tight">
-                              АЗС №{st.number} · {isKz ? "С-Мұнай" : "С-Мунай"}
+                              {isKz ? `№${st.number} ЖҚС · С-Мұнай` : isEn ? `Station #${st.number} · S-Munai` : `АЗС №${st.number} · С-Мунай`}
                             </h3>
                             <p className="text-xs font-semibold text-foreground/60">
-                              {st.city}
+                              {isKz ? st.cityKz : isEn ? st.cityEn : st.city}
                             </p>
                           </div>
                         </div>
@@ -640,7 +752,7 @@ export function StationsPage() {
                           {isFlagship && (
                             <span className="inline-flex items-center gap-1 rounded-full bg-amber-400 px-2.5 py-0.5 text-[10px] font-bold text-amber-950 shadow-xs">
                               <Sparkles className="size-3" />
-                              <span>{isKz ? "Флагман С-Дүкен" : "Флагман С-Дүкен"}</span>
+                              <span>{isKz ? "Флагман С-Дүкен" : isEn ? "Flagship S-Duken" : "Флагман С-Дүкен"}</span>
                             </span>
                           )}
                           {hasStore && !isFlagship && (
@@ -668,33 +780,30 @@ export function StationsPage() {
 
                         <div className="flex items-center gap-2 text-foreground/65 pl-6">
                           <Clock className="size-3.5 shrink-0 text-foreground/40" />
-                          <span>{getHours(st)} · {isKz ? "Үзіліссіз" : "Без перерывов"}</span>
+                          <span>{getHours(st)} · {isKz ? "Үзіліссіз" : isEn ? "Non-stop" : "Без перерывов"}</span>
                         </div>
                       </div>
 
                       {/* Fuel Available Tags */}
                       <div className="mt-3.5 pt-3 border-t border-primary/10">
-                        <div className="text-[10px] font-bold uppercase tracking-wider text-foreground/50 mb-1.5">
-                          {isKz ? "Жанармай түрлері:" : "Виды топлива на АЗС:"}
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-foreground/50 mb-1.5 flex items-center justify-between">
+                          <span>{isKz ? "Жанармай түрлері:" : isEn ? "Fuel types available:" : "Виды топлива на АЗС:"}</span>
+                          <span className="font-normal text-[10px] text-foreground/40">{st.fuels.length} {isKz ? "түрі" : isEn ? "grades" : "вид(ов)"}</span>
                         </div>
                         <div className="flex flex-wrap gap-1.5">
-                          <span className="rounded-lg border border-gold/40 bg-gold/10 px-2 py-0.5 text-[11px] font-bold text-gold-foreground">
-                            95 Hi-Tech
-                          </span>
-                          <span className="rounded-lg border border-gold/40 bg-gold/10 px-2 py-0.5 text-[11px] font-bold text-gold-foreground">
-                            92 Hi-Tech
-                          </span>
-                          <span className="rounded-lg border border-primary/15 bg-primary/5 px-2 py-0.5 text-[11px] font-medium text-foreground/80">
-                            АИ-92
-                          </span>
-                          <span className="rounded-lg border border-primary/15 bg-primary/5 px-2 py-0.5 text-[11px] font-medium text-foreground/80">
-                            ДТ Евро
-                          </span>
-                          {st.services.includes("gas") && (
-                            <span className="rounded-lg border border-teal-500/40 bg-teal-500/15 px-2 py-0.5 text-[11px] font-bold text-teal-700 dark:text-teal-300">
-                              Автогаз (СУГ)
-                            </span>
-                          )}
+                          {st.fuels.map((fuelCode) => {
+                            const cfg = FUEL_CONFIG[fuelCode];
+                            if (!cfg) return null;
+                            const label = isKz ? cfg.labelKz : isEn ? cfg.labelEn : cfg.labelRu;
+                            return (
+                              <span
+                                key={fuelCode}
+                                className={`rounded-lg border px-2 py-0.5 text-[11px] transition-all ${cfg.badgeClass}`}
+                              >
+                                {label}
+                              </span>
+                            );
+                          })}
                         </div>
                       </div>
 
@@ -702,24 +811,24 @@ export function StationsPage() {
                       <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] text-foreground/75">
                         <span className="inline-flex items-center gap-1 rounded-md bg-foreground/5 px-2 py-0.5">
                           <Fuel className="size-3 text-primary" />
-                          <span>{isKz ? "Дәл құю" : "Точный налив"}</span>
+                          <span>{isKz ? "Дәл құю" : isEn ? "Accurate delivery" : "Точный налив"}</span>
                         </span>
                         {st.services.includes("gas") && (
                           <span className="inline-flex items-center gap-1 rounded-md bg-foreground/5 px-2 py-0.5">
                             <Flame className="size-3 text-teal-600" />
-                            <span>{isKz ? "СУГ Газ" : "Автогаз (LPG)"}</span>
+                            <span>{isKz ? "СҰГ Газ" : isEn ? "Autogas (LPG)" : "Автогаз (LPG)"}</span>
                           </span>
                         )}
                         {hasStore && (
                           <span className="inline-flex items-center gap-1 rounded-md bg-foreground/5 px-2 py-0.5">
                             <Store className="size-3 text-amber-500" />
-                            <span>{isKz ? "С-Дүкен" : "Маркет"}</span>
+                            <span>{isKz ? "С-Дүкен" : isEn ? "Store" : "Маркет"}</span>
                           </span>
                         )}
                         {hasCoffee && (
                           <span className="inline-flex items-center gap-1 rounded-md bg-foreground/5 px-2 py-0.5">
                             <Coffee className="size-3 text-amber-600" />
-                            <span>{isKz ? "Арабика кофе" : "Кофе с собой"}</span>
+                            <span>{isKz ? "Арабика кофе" : isEn ? "Coffee to-go" : "Кофе с собой"}</span>
                           </span>
                         )}
                         <span className="inline-flex items-center gap-1 rounded-md bg-foreground/5 px-2 py-0.5">
@@ -773,12 +882,16 @@ export function StationsPage() {
                     </span>
                     <div className="min-w-0 truncate">
                       <div className="text-xs font-bold text-primary truncate">
-                        АЗС №{activeStation.number} · {getAddress(activeStation)}
+                        {isKz ? `№${activeStation.number} ЖҚС` : isEn ? `Station #${activeStation.number}` : `АЗС №${activeStation.number}`} · {getAddress(activeStation)}
                       </div>
-                      <div className="text-[11px] text-foreground/60 flex items-center gap-1.5">
-                        <span>{activeStation.city}</span>
+                      <div className="text-[11px] text-foreground/60 flex items-center gap-1.5 flex-wrap">
+                        <span>{isKz ? activeStation.cityKz : isEn ? activeStation.cityEn : activeStation.city}</span>
                         <span>·</span>
                         <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{getHours(activeStation)}</span>
+                        <span>·</span>
+                        <span className="font-medium text-foreground/80">
+                          {activeStation.fuels?.map((f) => FUEL_CONFIG[f]?.[isKz ? "labelKz" : isEn ? "labelEn" : "labelRu"] || f).join(" · ")}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -791,7 +904,7 @@ export function StationsPage() {
                       className="btn-base btn-gold inline-flex items-center gap-1.5 !px-4 !py-2 !text-xs font-bold shadow-md"
                     >
                       <Navigation className="size-3.5" />
-                      <span>{isKz ? "2ГИС Бағыты" : "Поехать в 2ГИС →"}</span>
+                      <span>{isKz ? "2ГИС Бағыты →" : isEn ? "Drive with 2GIS →" : "Поехать в 2ГИС →"}</span>
                     </a>
                   </div>
                 </div>
@@ -805,14 +918,16 @@ export function StationsPage() {
           <div className="hero-surface rounded-3xl p-8 sm:p-10 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="max-w-xl">
               <span className="inline-flex items-center rounded-full bg-gold/20 px-3.5 py-1 text-xs font-bold text-gold">
-                {isKz ? "Корпоративтік автопарктерге" : "Корпоративным клиентам и автопаркам"}
+                {isKz ? "Корпоративтік автопарктерге" : isEn ? "For Corporate Fleets" : "Корпоративным клиентам и автопаркам"}
               </span>
               <h2 className="mt-3 font-display text-2xl font-bold sm:text-3xl">
-                {isKz ? "Жанармай карталары, талондар және лимиттер" : "Топливные карты, талоны и оптовые поставки"}
+                {isKz ? "Жанармай карталары, талондар және лимиттер" : isEn ? "Fuel cards, vouchers, and wholesale supply" : "Топливные карты, талоны и оптовые поставки"}
               </h2>
               <p className="mt-2 text-sm text-white/85 leading-relaxed">
                 {isKz
                   ? "Жезқазған, Сәтбаев және Астана қалаларындағы көліктерге жеке лимиттер, бірыңғай шот және 16% ҚҚС есебі (ЭСФ)."
+                  : isEn
+                  ? "Custom vehicle limits across Zhezkazgan, Satpayev, and Astana, single corporate account, and 16% VAT offset via ESF."
                   : "Индивидуальные лимиты по машинам в Жезказгане, Сатпаеве и Астане, единый счёт компании и зачёт 16% НДС по ЭСФ."}
               </p>
             </div>
@@ -820,7 +935,7 @@ export function StationsPage() {
               to="/b2b"
               className="btn-base btn-gold shrink-0 font-bold text-slate-950 shadow-md"
             >
-              {isKz ? "Бизнес бөліміне өту →" : "Перейти в Бизнес-портал →"}
+              {isKz ? "Бизнес бөліміне өту →" : isEn ? "Visit Business Hub →" : "Перейти в Бизнес-портал →"}
             </Link>
           </div>
         </section>
@@ -829,12 +944,21 @@ export function StationsPage() {
       {/* Clean Footer */}
       <footer className="hero-surface border-t border-white/10 py-10 text-white/70 text-xs">
         <div className="mx-auto max-w-6xl px-5 flex flex-wrap items-center justify-between gap-4">
-          <p>© 1996–2026 ТОО «С-Мунай». Барлық құқықтар қорғалған.</p>
+          <div className="flex flex-wrap items-center gap-4">
+            <p>© 1996–2026 {isKz ? "«С-Мұнай» ЖШС. Барлық құқықтар қорғалған." : isEn ? "S-Munai LLP. All rights reserved." : "ТОО «С-Мунай». Все права защищены."}</p>
+            <a
+              href="mailto:service@s-munai.kz"
+              className="inline-flex items-center gap-1.5 text-white/85 hover:text-gold transition-colors font-medium"
+            >
+              <Mail className="size-3.5 text-gold" />
+              <span>service@s-munai.kz</span>
+            </a>
+          </div>
           <div className="flex flex-wrap gap-4 font-medium">
-            <Link to="/" className="hover:text-gold transition-colors">{isKz ? "Басты бет" : "Главная"}</Link>
-            <Link to="/b2b" className="hover:text-gold transition-colors">{isKz ? "Бизнеске" : "Бизнес клиентам"}</Link>
-            <Link to="/career" className="hover:text-gold transition-colors">{isKz ? "Мансап" : "Вакансии"}</Link>
-            <Link to="/privacy" className="hover:text-gold transition-colors">{isKz ? "Құпиялылық" : "Конфиденциальность"}</Link>
+            <Link to="/" className="hover:text-gold transition-colors">{isKz ? "Басты бет" : isEn ? "Home" : "Главная"}</Link>
+            <Link to="/b2b" className="hover:text-gold transition-colors">{isKz ? "Бизнеске" : isEn ? "Business" : "Бизнес клиентам"}</Link>
+            <Link to="/career" className="hover:text-gold transition-colors">{isKz ? "Мансап" : isEn ? "Careers" : "Вакансии"}</Link>
+            <Link to="/privacy" className="hover:text-gold transition-colors">{isKz ? "Құпиялылық" : isEn ? "Privacy" : "Конфиденциальность"}</Link>
           </div>
         </div>
       </footer>
