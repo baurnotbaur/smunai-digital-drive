@@ -482,10 +482,10 @@ function B2BPage() {
                     </h2>
                     <p className="mt-4 text-base leading-relaxed text-slate-300">
                       {isKz
-                        ? "Бағаны бүгінгі күнмен бекітіп, инфляция мен маусымдық баға өсімінен толық қорғаныңыз. Номиналдары 10, 20 және 50 литр, барлық 9 станцияда жарамды."
+                        ? "Бағаны бүгінгі күнмен бекітіп, инфляция мен маусымдық баға өсімінен толық қорғаныңыз. Номиналдары 10, 20 және 50 литр, барлық 8 станцияда жарамды."
                         : isEn
-                        ? "Lock in fuel prices today to protect against inflation and seasonal market spikes. Available in 10, 20, and 50 liter denominations across all 9 network stations."
-                        : "Зафиксируйте цену на топливо в день покупки. Защита от колебаний тарифов, удобная выдача командировочным сотрудникам и субподрядчикам. Номиналы: 10 л, 20 л и 50 л, приём на всех 9 АЗС."}
+                        ? "Lock in fuel prices today to protect against inflation and seasonal market spikes. Available in 10, 20, and 50 liter denominations across all 8 network stations."
+                        : "Зафиксируйте цену на топливо в день покупки. Защита от колебаний тарифов, удобная выдача командировочным сотрудникам и субподрядчикам. Номиналы: 10 л, 20 л и 50 л, приём на всех 8 АЗС."}
                     </p>
 
                     <div className="mt-6 flex flex-wrap items-center gap-3">
@@ -531,9 +531,9 @@ function B2BPage() {
                         <CheckCircle2 className="size-4 text-amber-400 mt-0.5 shrink-0" />
                         <span>
                           <strong className="text-white">
-                            {isKz ? "9 станцияда қабылданады:" : isEn ? "9 Network Stations:" : "Приём на 9 АЗС:"}
+                            {isKz ? "8 станцияда қабылданады:" : isEn ? "8 Network Stations:" : "Приём на 8 АЗС:"}
                           </strong>{" "}
-                          {isKz ? "Жезқазған, Сәтбаев, Ұлытау және Астана бойынша" : isEn ? "across Zhezkazgan, Satpayev, Ulytau, and Astana" : "в Жезказгане, Сатпаеве, Ұлытау и Астане"}
+                          {isKz ? "Жезқазған, Сәтбаев және Астана бойынша" : isEn ? "across Zhezkazgan, Satpayev, and Astana" : "в Жезказгане, Сатпаеве и Астане"}
                         </span>
                       </li>
                     </ul>

@@ -300,7 +300,7 @@ function Index() {
               >
                 <span className="flex items-center gap-2">
                   <MapPin className="size-4 text-terracotta" />
-                  {isKz ? "9 АЗС картасы және мекенжайлары" : isEn ? "Interactive Map of 9 Stations" : "Карта и адреса 9 АЗС"}
+                  {isKz ? "8 АЗС картасы және мекенжайлары" : isEn ? "Interactive Map of 8 Stations" : "Карта и адреса 8 АЗС"}
                 </span>
                 <ChevronRight className="size-4 text-primary" />
               </Link>
@@ -512,7 +512,7 @@ function Index() {
                       <MapPin className="size-6" />
                     </span>
                     <span className="rounded-full bg-terracotta/15 px-3 py-1 text-[11px] font-bold text-terracotta">
-                      {isKz ? "9 АЗС" : isEn ? "9 Stations" : "9 АЗС"}
+                      {isKz ? "8 АЗС" : isEn ? "8 Stations" : "8 АЗС"}
                     </span>
                   </div>
                   <h3 className="mt-5 font-display text-xl sm:text-2xl font-bold text-primary">
@@ -520,10 +520,10 @@ function Index() {
                   </h3>
                   <p className="mt-2.5 text-xs sm:text-sm text-foreground/75 leading-relaxed">
                     {isKz
-                      ? "Жезқазған, Сәтбаев, Ұлытау және Астанадағы барлық 9 АЗС нақты мекенжайлары, қызметтері және 2ГИС бағыты."
+                      ? "Жезқазған, Сәтбаев және Астанадағы барлық 8 АЗС нақты мекенжайлары, қызметтері және 2ГИС бағыты."
                       : isEn
-                      ? "Interactive map of 9 stations across Zhezkazgan, Satpayev, Ulytau, and Astana with 24/7 hours and 2GIS navigation."
-                      : "Интерактивная карта 9 АЗС: Жезказган, Сатпаев, Ұлытау, Астана. Точные адреса, режим 24/7 и прямой маршрут в 2ГИС."}
+                      ? "Interactive map of 8 stations across Zhezkazgan, Satpayev, and Astana with 24/7 hours and 2GIS navigation."
+                      : "Интерактивная карта 8 АЗС: Жезказган, Сатпаев, Астана. Точные адреса, режим 24/7 и прямой маршрут в 2ГИС."}
                   </p>
                 </div>
 
@@ -686,10 +686,10 @@ function Index() {
                   </div>
                   <p className="mt-4 text-sm leading-relaxed text-foreground/80">
                     {isKz
-                      ? "Барлық 9 АЗС бойынша нақты ақпарат, байланыс нөмірлері және 2ГИС арқылы навигация бөлек интерактивті бетте қолжетімді."
+                      ? "Барлық 8 АЗС бойынша нақты ақпарат, байланыс нөмірлері және 2ГИС арқылы навигация бөлек интерактивті бетте қолжетімді."
                       : isEn
-                      ? "Complete information on all 9 stations, phone contacts, 24/7 hours, and 2GIS navigation are available on the interactive map page."
-                      : "Вся информация по 9 станциям сети, точные адреса, режим работы 24/7 и прямая навигация доступны на выделенной странице карты."}
+                      ? "Complete information on all 8 stations, phone contacts, 24/7 hours, and 2GIS navigation are available on the interactive map page."
+                      : "Вся информация по 8 станциям сети, точные адреса, режим работы 24/7 и прямая навигация доступны на выделенной странице карты."}
                   </p>
                 </div>
                 <div className="mt-6">
@@ -698,7 +698,7 @@ function Index() {
                     className="btn-base btn-primary inline-flex items-center gap-2 font-semibold"
                   >
                     <Navigation className="size-4" />
-                    <span>{isKz ? "Барлық 9 АЗС-ті картадан көру →" : isEn ? "View all 9 stations on map →" : "Все 9 АЗС на карте →"}</span>
+                    <span>{isKz ? "Барлық 8 АЗС-ті картадан көру →" : isEn ? "View all 8 stations on map →" : "Все 8 АЗС на карте →"}</span>
                   </Link>
                 </div>
               </div>

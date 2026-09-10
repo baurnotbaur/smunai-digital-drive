@@ -26,11 +26,11 @@ import type { Station, FuelType } from "./index";
 export const Route = createFileRoute("/stations")({
   head: () => ({
     meta: [
-      { title: "Карта и адреса АЗС С-Мунай — Жезказган, Сатпаев, Ұлытау, Астана" },
+      { title: "Карта и адреса АЗС С-Мунай — Жезказган, Сатпаев, Астана" },
       {
         name: "description",
         content:
-          "Интерактивная карта 9 автозаправочных станций сети С-Мунай в Жезказгане, Сатпаеве, Ұлытау и Астане. Круглосуточный режим 24/7, автогаз СУГ, маркеты С-Дүкен, маршруты в 2ГИС.",
+          "Интерактивная карта 8 автозаправочных станций сети С-Мунай в Жезказгане, Сатпаеве и Астане. Круглосуточный режим 24/7, автогаз СУГ, маркеты С-Дүкен, маршруты в 2ГИС.",
       },
     ],
   }),
@@ -222,30 +222,6 @@ const STATIONS_DATA: CityGroup[] = [
     ],
   },
   {
-    city: "Ұлытау",
-    cityKz: "Ұлытау",
-    cityEn: "Ulytau",
-    gisBranchesUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
-    stations: [
-      {
-        number: 10,
-        city: "Ұлытау",
-        cityKz: "Ұлытау",
-        cityEn: "Ulytau",
-        address: "село Ұлытау, улица Абая, 44",
-        addressKz: "Ұлытау ауылы, Абай көшесі, 44",
-        addressEn: "44 Abay Street, Ulytau village",
-        hours: "Круглосуточно",
-        hoursKz: "Тәулік бойы",
-        hoursEn: "24/7 (All Day)",
-        services: FUEL_ONLY,
-        fuels: ["ai92", "dt"],
-        coords: { lat: 48.6536, lng: 66.9934 },
-        gisUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
-      },
-    ],
-  },
-  {
     city: "Астана",
     cityKz: "Астана",
     cityEn: "Astana",
@@ -293,7 +269,7 @@ export function StationsPage() {
   const { lang } = useLanguage();
   const [selectedCity, setSelectedCity] = useState<string>("all");
   const [selectedStationNum, setSelectedStationNum] = useState<number>(4);
-  const [serviceFilter, setServiceFilter] = useState<"all" | "store" | "gas" | "hitech95" | "dt">("all");
+  const [serviceFilter, setServiceFilter] = useState<"all" | "store" | "flagship">("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [mobileView, setMobileView] = useState<"list" | "map">("list");
 
@@ -325,17 +301,11 @@ export function StationsPage() {
       if (selectedCity !== "all" && st.city !== selectedCity) {
         return false;
       }
-      // Service & Fuel filter
+      // Service filter
       if (serviceFilter === "store" && ![1, 3, 4, 6].includes(st.number)) {
         return false;
       }
-      if (serviceFilter === "gas" && !st.fuels.includes("gas")) {
-        return false;
-      }
-      if (serviceFilter === "hitech95" && !st.fuels.includes("hitech95")) {
-        return false;
-      }
-      if (serviceFilter === "dt" && !st.fuels.includes("dt")) {
+      if (serviceFilter === "flagship" && st.number !== 4) {
         return false;
       }
       // Search query filter
@@ -438,17 +408,17 @@ export function StationsPage() {
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/15 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-gold-foreground mb-3">
                   <MapPin className="size-3.5 text-gold" />
-                  <span>{isKz ? "9 станция · 4 өңір · 1996 жылдан бері" : isEn ? "9 Stations · 4 Regions · Since 1996" : "9 станций · 4 локации · с 1996 года"}</span>
+                  <span>{isKz ? "8 станция · 3 қала · 1996 жылдан бері" : isEn ? "8 Stations · 3 Cities · Since 1996" : "8 станций · 3 города · с 1996 года"}</span>
                 </div>
                 <h1 className="font-display text-3xl font-bold text-primary sm:text-4xl md:text-5xl">
                   {isKz ? "С-Мұнай АЗС желісі және навигация" : isEn ? "S-Munai Stations Network & Navigation" : "Карта и сеть АЗС «С-Мунай»"}
                 </h1>
                 <p className="mt-3 max-w-2xl text-sm sm:text-base leading-relaxed text-foreground/80">
                   {isKz
-                    ? "Жезқазған, Сәтбаев, Ұлытау және Астана бойынша барлық 9 АЗС. 24/7 тәулік бойы қызмет, Hi-Tech еуро-5 отыны, автогаз (СУГ), С-Дүкен маркеттері және 2ГИС арқылы 1 басумен дәл маршрут."
+                    ? "Жезқазған, Сәтбаев және Астана бойынша барлық 8 АЗС. 24/7 тәулік бойы қызмет, Hi-Tech еуро-5 отыны, автогаз (СУГ), С-Дүкен маркеттері және 2ГИС арқылы 1 басумен дәл маршрут."
                     : isEn
-                    ? "All 9 stations across Zhezkazgan, Satpayev, Ulytau, and Astana. 24/7 operations, Euro-5 Hi-Tech fuel, LPG autogas, S-Duken convenience stores, and instant 1-tap 2GIS routing."
-                    : "Все 9 станций сети в Жезказгане, Сатпаеве, Ұлытау и Астане. Круглосуточный сервис 24/7, топливо стандарта Евро-5 Hi-Tech, автогаз (СУГ), маркеты «С-Дүкен» и прямой маршрут в 2ГИС."}
+                    ? "All 8 stations across Zhezkazgan, Satpayev, and Astana. 24/7 operations, Euro-5 Hi-Tech fuel, LPG autogas, S-Duken convenience stores, and instant 1-tap 2GIS routing."
+                    : "Все 8 станций сети в Жезказгане, Сатпаеве и Астане. Круглосуточный сервис 24/7, топливо стандарта Евро-5 Hi-Tech, автогаз (СУГ), маркеты «С-Дүкен» и прямой маршрут в 2ГИС."}
                 </p>
               </div>
 
@@ -481,11 +451,11 @@ export function StationsPage() {
             <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
               <div className="soft-card p-4 flex items-center gap-3">
                 <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold">
-                  9
+                  8
                 </div>
                 <div>
                   <div className="text-xs font-bold text-primary">{isKz ? "АЗС Желісі" : isEn ? "Stations Network" : "Сеть АЗС"}</div>
-                  <div className="text-[11px] text-foreground/60">{isKz ? "4 өңірде" : isEn ? "in 4 regions" : "в 4 локациях"}</div>
+                  <div className="text-[11px] text-foreground/60">{isKz ? "3 қалада" : isEn ? "in 3 cities" : "в 3 городах"}</div>
                 </div>
               </div>
 
@@ -523,7 +493,7 @@ export function StationsPage() {
         </section>
 
         {/* Filter Toolbar: Cities, Services & Search */}
-        <section className="border-b border-primary/10 bg-background/95 backdrop-blur-sm py-4 px-5 shadow-xs">
+        <section className="border-b border-primary/10 bg-background/95 backdrop-blur-sm py-5 px-5 sticky top-[57px] z-30 shadow-xs">
           <div className="mx-auto max-w-6xl flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             {/* City Tabs */}
             <div className="flex flex-wrap items-center gap-2">
@@ -536,7 +506,7 @@ export function StationsPage() {
                     : "bg-background border border-primary/15 text-foreground/75 hover:border-primary/40 hover:bg-primary/5"
                 }`}
               >
-                {isKz ? `Барлығы (${ALL_STATIONS.length})` : isEn ? `All Cities (${ALL_STATIONS.length})` : `Все города (${ALL_STATIONS.length})`}
+                {isKz ? `Барлық қалалар (${ALL_STATIONS.length})` : isEn ? `All Cities (${ALL_STATIONS.length})` : `Все города (${ALL_STATIONS.length})`}
               </button>
 
               {STATIONS_DATA.map((c) => {
@@ -561,10 +531,10 @@ export function StationsPage() {
               })}
             </div>
 
-            {/* Filter Chips & Search Box */}
+            {/* Service Filter Chips & Search Box */}
             <div className="flex flex-wrap items-center gap-2.5">
-              {/* Filter pills */}
-              <div className="flex flex-wrap items-center rounded-xl border border-primary/15 bg-primary/5 p-0.5 text-xs font-semibold gap-0.5">
+              {/* Service filter */}
+              <div className="inline-flex rounded-xl border border-primary/15 bg-primary/5 p-0.5 text-xs font-semibold">
                 <button
                   type="button"
                   onClick={() => setServiceFilter("all")}
@@ -576,39 +546,21 @@ export function StationsPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setServiceFilter("hitech95")}
-                  className={`rounded-lg px-2.5 py-1 transition-colors ${
-                    serviceFilter === "hitech95" ? "bg-gold text-slate-950 font-bold shadow-xs" : "text-foreground/70 hover:text-primary"
-                  }`}
-                >
-                  ⚡ 95 Hi-Tech
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setServiceFilter("gas")}
-                  className={`rounded-lg px-2.5 py-1 transition-colors ${
-                    serviceFilter === "gas" ? "bg-teal-600 text-white font-bold shadow-xs" : "text-foreground/70 hover:text-primary"
-                  }`}
-                >
-                  🔥 {isKz ? "СҰГ Газ (3)" : isEn ? "LPG Gas (3)" : "Автогаз (3)"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setServiceFilter("dt")}
-                  className={`rounded-lg px-2.5 py-1 transition-colors ${
-                    serviceFilter === "dt" ? "bg-primary text-primary-foreground font-bold shadow-xs" : "text-foreground/70 hover:text-primary"
-                  }`}
-                >
-                  🚛 {isKz ? "ДТ Еуро" : isEn ? "Diesel" : "ДТ Евро"}
-                </button>
-                <button
-                  type="button"
                   onClick={() => setServiceFilter("store")}
                   className={`rounded-lg px-2.5 py-1 transition-colors ${
                     serviceFilter === "store" ? "bg-primary text-primary-foreground font-bold shadow-xs" : "text-foreground/70 hover:text-primary"
                   }`}
                 >
                   🏪 {isKz ? "С-Дүкен (4)" : isEn ? "S-Duken (4)" : "С-Дүкен (4)"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setServiceFilter("flagship")}
+                  className={`rounded-lg px-2.5 py-1 transition-colors ${
+                    serviceFilter === "flagship" ? "bg-amber-400 text-amber-950 font-bold shadow-xs" : "text-foreground/70 hover:text-primary"
+                  }`}
+                >
+                  ⭐ {isKz ? "Флагман (№4)" : isEn ? "Flagship (#4)" : "Флагман (№4)"}
                 </button>
               </div>
 
@@ -619,7 +571,7 @@ export function StationsPage() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={isKz ? "Көше, АЗС № немесе отын іздеу..." : isEn ? "Search street, station # or fuel..." : "Поиск по адресу, № или топливу..."}
+                  placeholder={isKz ? "Мекенжай немесе № бойынша іздеу..." : isEn ? "Search by address or #..." : "Поиск по адресу или №..."}
                   className="w-full rounded-xl border border-primary/20 bg-background py-1.5 pl-9 pr-8 text-xs placeholder:text-foreground/40 focus:border-primary focus:outline-hidden focus:ring-1 focus:ring-primary"
                 />
                 {searchQuery && (
@@ -656,7 +608,7 @@ export function StationsPage() {
                 }`}
               >
                 <Compass className="size-3.5" />
-                <span>{isKz ? "Интерактивті карта" : isEn ? "Station Map" : "Карта станций"}</span>
+                <span>{isKz ? "Карта станциялары" : isEn ? "Station Map" : "Карта станций"}</span>
               </button>
             </div>
           </div>
