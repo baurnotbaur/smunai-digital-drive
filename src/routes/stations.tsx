@@ -4,6 +4,7 @@ import {
   MapPin,
   Clock,
   Navigation,
+  ExternalLink,
   Fuel,
   Coffee,
   ArrowLeft,
