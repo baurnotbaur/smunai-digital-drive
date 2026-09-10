@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { Link } from "@tanstack/react-router";
 import { X, MessageCircle, ArrowUp } from "lucide-react";
 import { submitLead } from "@/lib/leads";
 
@@ -7,6 +8,41 @@ const WORKER_URL = "https://smunai-chat-worker.smunay-chat.workers.dev";
 interface Msg {
   role: "user" | "model";
   text: string;
+}
+
+/** Заявка, которую бот предложил оформить: уходит в CRM только после подтверждения. */
+interface PendingLead {
+  name: string;
+  phone: string;
+  comment: string;
+  type: "sales" | "hr";
+  position?: string;
+}
+
+/**
+ * Текст ответа модели — не источник истины: посетитель может уговорить бота
+ * выдать любой блок [LEAD]. Поэтому разбор строгий, а всё лишнее отбрасываем.
+ */
+function parseLead(raw: string): PendingLead | null {
+  let data: Record<string, unknown>;
+  try {
+    data = JSON.parse(raw) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+  const str = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
+  const phone = str(data["phone"], 40);
+  // без пригодного номера заявка бесполезна менеджеру
+  if (phone.replace(/\D+/g, "").length < 10) return null;
+  const type = data["type"] === "hr" ? "hr" : "sales";
+  const position = str(data["position"], 120);
+  return {
+    name: str(data["name"], 120) || (type === "hr" ? "Кандидат из чата" : "Клиент из чата"),
+    phone,
+    comment: str(data["comment"], 2000) || "Заявка через чат-бот Мунай",
+    type,
+    ...(position ? { position } : {}),
+  };
 }
 
 const GREETING: Record<string, string> = {
@@ -21,6 +57,9 @@ export function SupportChat() {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
+  const [pendingLead, setPendingLead] = useState<PendingLead | null>(null);
+  const [leadConsent, setLeadConsent] = useState(false);
+  const [leadState, setLeadState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Загрузка истории из localStorage
@@ -45,6 +84,32 @@ export function SupportChat() {
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, open]);
+
+  async function sendPendingLead() {
+    if (!pendingLead || !leadConsent || leadState === "sending") return;
+    setLeadState("sending");
+    try {
+      await submitLead({
+        name: pendingLead.name,
+        phone: pendingLead.phone,
+        comment: pendingLead.comment,
+        type: pendingLead.type,
+        form_id: "chat_bot",
+        // Согласие на рекламные рассылки в чате отдельно не спрашиваем —
+        // галочка выше касается только обработки данных по заявке.
+        consent: false,
+        extra: {
+          data_consent: true,
+          source: "ai_chat",
+          position: pendingLead.position,
+        },
+      });
+      setLeadState("sent");
+    } catch (err) {
+      console.error("[SupportChat] Ошибка отправки лида:", err);
+      setLeadState("error");
+    }
+  }
 
   async function send() {
     const text = input.trim();
@@ -91,31 +156,21 @@ export function SupportChat() {
             // Защита: Если ответ содержит скрытый тег [LEAD], убираем его из текста
             let visibleText = answer;
             if (visibleText.includes("[LEAD]")) {
-               visibleText = visibleText.substring(0, visibleText.indexOf("[LEAD]")).trim();
-                              if (!leadSent && answer.includes("[/LEAD]")) {
-                   const leadMatch = answer.match(/\[LEAD\]([\s\S]*?)\[\/LEAD\]/);
-                   if (leadMatch && leadMatch[1]) {
-                     try {
-                       const parsedLead = JSON.parse(leadMatch[1]);
-                       leadSent = true;
-                       submitLead({
-                         name: parsedLead.name || "Кандидат из чата",
-                         phone: parsedLead.phone,
-                         comment: parsedLead.comment || "Заявка через чат-бот Мунай",
-                         type: parsedLead.type === "hr" ? "hr" : "sales",
-                         form_id: "chat_bot",
-                         consent: true,
-                         extra: {
-                           data_consent: true,
-                           source: "ai_chat",
-                           position: parsedLead.position || (parsedLead.type === "hr" ? "Кандидат из чата" : undefined),
-                         },
-                       }).catch((err) => console.error("[SupportChat] Ошибка отправки лида:", err));
-                     } catch (err) {
-                       console.error("Failed to parse lead JSON:", err);
-                     }
-                   }
-                 }
+              visibleText = visibleText.substring(0, visibleText.indexOf("[LEAD]")).trim();
+              // Заявку не отправляем сами: показываем карточку подтверждения и
+              // ждём, пока человек поставит галочку согласия. Иначе достаточно
+              // уговорить бота выдать блок [LEAD] — и в CRM появится чужой номер
+              // с отметкой «согласие получено», которого никто не давал.
+              if (!leadSent && answer.includes("[/LEAD]")) {
+                const leadMatch = answer.match(/\[LEAD\]([\s\S]*?)\[\/LEAD\]/);
+                const parsed = leadMatch?.[1] ? parseLead(leadMatch[1]) : null;
+                if (parsed) {
+                  leadSent = true;
+                  setPendingLead(parsed);
+                  setLeadConsent(false);
+                  setLeadState("idle");
+                }
+              }
             }
             
             setMessages([...history, { role: "model", text: visibleText }]);
@@ -172,6 +227,74 @@ export function SupportChat() {
           {messages.map((m, i) => (
             <Bubble key={i} role={m.role} text={m.text} typing={busy && i === messages.length - 1 && m.text === ""} />
           ))}
+          {pendingLead && (
+            <div className="rounded-3xl border border-primary/15 bg-primary/5 px-5 py-4 text-[13px]">
+              {leadState === "sent" ? (
+                <p className="font-medium text-foreground">
+                  Заявка отправлена — менеджер свяжется с вами по номеру {pendingLead.phone}.
+                </p>
+              ) : (
+                <>
+                  <p className="font-semibold text-foreground">Оформить заявку?</p>
+                  <dl className="mt-2 space-y-0.5 text-muted-foreground">
+                    <div className="flex gap-2">
+                      <dt className="shrink-0">Имя:</dt>
+                      <dd className="text-foreground">{pendingLead.name}</dd>
+                    </div>
+                    <div className="flex gap-2">
+                      <dt className="shrink-0">Телефон:</dt>
+                      <dd className="text-foreground">{pendingLead.phone}</dd>
+                    </div>
+                    {pendingLead.position && (
+                      <div className="flex gap-2">
+                        <dt className="shrink-0">Должность:</dt>
+                        <dd className="text-foreground">{pendingLead.position}</dd>
+                      </div>
+                    )}
+                  </dl>
+                  <label className="mt-3 flex cursor-pointer select-none items-start gap-2 text-[12px] leading-snug text-muted-foreground">
+                    <input
+                      type="checkbox"
+                      checked={leadConsent}
+                      onChange={(e) => setLeadConsent(e.target.checked)}
+                      disabled={leadState === "sending"}
+                      className="mt-0.5 size-4 shrink-0 rounded accent-primary"
+                    />
+                    <span>
+                      Я даю согласие ТОО «С-Мунай» на обработку моих персональных данных согласно{" "}
+                      <Link to="/privacy" className="font-medium text-primary underline">
+                        Политике конфиденциальности
+                      </Link>
+                      .
+                    </span>
+                  </label>
+                  {leadState === "error" && (
+                    <p className="mt-2 text-[12px] text-destructive">
+                      Не удалось отправить заявку. Попробуйте ещё раз.
+                    </p>
+                  )}
+                  <div className="mt-3 flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={sendPendingLead}
+                      disabled={!leadConsent || leadState === "sending"}
+                      className="rounded-full bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground transition-opacity disabled:opacity-40"
+                    >
+                      {leadState === "sending" ? "Отправляем…" : "Отправить заявку"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPendingLead(null)}
+                      disabled={leadState === "sending"}
+                      className="rounded-full px-3 py-2 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      Не сейчас
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="border-t border-primary/5 p-4">
@@ -220,7 +343,7 @@ function Bubble({ role, text, typing }: { role: "user" | "model"; text: string; 
         {typing ? (
           <span className="flex h-5 items-center gap-1.5">
             {[0, 150, 300].map((d) => (
-              <span key={d} className="h-2 w-2 animate-bounce rounded-full bg-primary/40" style={{ animationDelay: `${d}ms` }} />
+              <span key={d} className="h-2 w-2 animate-pulse rounded-full bg-primary/60" style={{ animationDelay: `${d}ms` }} />
             ))}
           </span>
         ) : (

@@ -18,18 +18,24 @@ export function CookieConsent() {
     }
   }, []);
 
-  const handleAccept = () => {
+  // Аналитика стартует в режиме denied (см. Consent Mode в __root.tsx), поэтому
+  // решение посетителя нужно передать в gtag — иначе «Принять» ничего не меняет,
+  // а «Отклонить» выглядело бы согласием, которого человек не давал.
+  const applyConsent = (granted: boolean) => {
     try {
-      localStorage.setItem("cookie_consent", "true");
-      // Send event to Google Analytics
-      if (typeof window !== "undefined" && (window as any).gtag) {
-        (window as any).gtag("event", "cookie_consent_accepted", {
+      localStorage.setItem("cookie_consent", granted ? "true" : "false");
+    } catch (e) {
+      console.warn("Could not save cookie consent to localStorage", e);
+    }
+    const gtag = typeof window !== "undefined" ? (window as any).gtag : undefined;
+    if (gtag) {
+      gtag("consent", "update", { analytics_storage: granted ? "granted" : "denied" });
+      if (granted) {
+        gtag("event", "cookie_consent_accepted", {
           event_category: "engagement",
           event_label: "Cookie Banner",
         });
       }
-    } catch (e) {
-      console.warn("Could not save cookie consent to localStorage", e);
     }
     setIsVisible(false);
   };
@@ -74,7 +80,14 @@ export function CookieConsent() {
         <div className="flex w-full shrink-0 items-center justify-end gap-3 md:w-auto">
           <button
             type="button"
-            onClick={handleAccept}
+            onClick={() => applyConsent(false)}
+            className="btn-base w-full md:w-auto !py-2.5 !px-6 !text-xs sm:!text-sm font-semibold border border-primary/20 text-foreground/80 transition-colors hover:bg-primary/5 cursor-pointer"
+          >
+            Decline / Бас тарту
+          </button>
+          <button
+            type="button"
+            onClick={() => applyConsent(true)}
             className="btn-base btn-gold w-full md:w-auto !py-2.5 !px-6 !text-xs sm:!text-sm font-semibold shadow-md transition-transform cursor-pointer"
           >
             Accept / Қабылдау

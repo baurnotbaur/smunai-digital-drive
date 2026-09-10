@@ -19,7 +19,13 @@ const FUEL_PRICES: Record<string, { name: string; price: number; badge?: string 
 
 const QUICK_VOLUMES = [1000, 3000, 5000, 10000, 20000, 50000];
 
-export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (summary: string) => void }) {
+export function B2BCalculator({ 
+  onApplyCalculation,
+  darkTheme = false
+}: { 
+  onApplyCalculation?: (summary: string) => void;
+  darkTheme?: boolean;
+}) {
   const { lang } = useLanguage();
   const isKz = lang === "kz";
 
@@ -57,34 +63,46 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
       onApplyCalculation(summaryText);
     }
 
-    const formEl = document.getElementById("cards");
+    const formEl = document.getElementById("order-form") || document.getElementById("cards");
     if (formEl) {
       formEl.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   return (
-    <section id="calculator" className="mx-auto max-w-6xl scroll-mt-28 px-5 py-10">
-      <div className="overflow-hidden rounded-3xl border border-primary/20 bg-linear-to-b from-primary/10 via-primary/5 to-transparent p-6 shadow-xl backdrop-blur-md sm:p-10">
+    <section id="calculator" className="mx-auto max-w-6xl scroll-mt-28 px-5 py-6">
+      <div className={`overflow-hidden rounded-3xl border p-6 shadow-2xl backdrop-blur-md sm:p-10 ${
+        darkTheme 
+          ? "border-teal-500/25 bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-950 text-white" 
+          : "border-primary/20 bg-linear-to-b from-primary/10 via-primary/5 to-transparent text-foreground shadow-xl"
+      }`}>
         
         {/* Заголовок */}
         <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-3.5 py-1 text-xs font-bold text-gold-foreground uppercase tracking-wider">
+            <div className={`inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider ${
+              darkTheme ? "text-gold-bright" : "text-gold-foreground"
+            }`}>
               <Sparkles className="size-3.5 text-gold" />
               {isKz ? "Бизнеске арналған тиімділік" : "Калькулятор корпоративной выгоды"}
             </div>
-            <h2 className="mt-3 text-2xl font-bold tracking-tight text-foreground font-display sm:text-4xl">
+            <h2 className={`mt-3 text-2xl font-bold tracking-tight font-display sm:text-4xl ${
+              darkTheme ? "text-white" : "text-foreground"
+            }`}>
               {isKz ? "Жанармай шығындарын қанша үнемдейсіз?" : "Сколько сбережет ваш бизнес?"}
             </h2>
-            <p className="mt-2 max-w-2xl text-sm text-foreground/75 sm:text-base">
+            <p className={`mt-2 max-w-2xl text-sm sm:text-base ${
+              darkTheme ? "text-slate-300" : "text-foreground/75"
+            }`}>
               {isKz 
                 ? "Калькулятордағы бағалар нақты емес, шартты түрде қарапайым есептеу үшін көрсетілген. Нақты бағалар мен шарттарды менеджерден нақтылаңыз."
                 : "Цены на продукты в калькуляторе не являются публичной офертой и служат для простого подсчёта выгоды. Актуальные условия уточняйте у менеджеров."}
             </p>
           </div>
-          <div className="flex items-center gap-2 rounded-2xl border border-primary/15 bg-primary/5 px-4 py-2 text-xs font-semibold text-foreground/70">
-            <Calculator className="size-4 text-primary" />
+          <div className={`flex items-center gap-2 rounded-2xl border px-4 py-2 text-xs font-semibold ${
+            darkTheme ? "border-white/15 bg-white/5 text-slate-300" : "border-primary/15 bg-primary/5 text-foreground/70"
+          }`}>
+            <Calculator className={`size-4 ${darkTheme ? "text-teal-400" : "text-primary"}`} />
             <span>{isKz ? "Үлгілік есептеу" : "Ориентировочный расчёт"}</span>
           </div>
         </div>
@@ -96,15 +114,25 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
           <div className="space-y-6 lg:col-span-7">
             
             {/* 1. Ввод литров в месяц */}
-            <div className="rounded-2xl border border-primary/15 bg-background/60 p-5 sm:p-6">
+            <div className={`rounded-2xl border p-5 sm:p-6 ${
+              darkTheme 
+                ? "border-white/10 bg-white/[0.04]" 
+                : "border-primary/15 bg-background/60"
+            }`}>
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                <label htmlFor="fuel-volume-input" className="text-xs font-bold text-foreground/70 uppercase tracking-wider">
+                <label htmlFor="fuel-volume-input" className={`text-xs font-bold uppercase tracking-wider ${
+                  darkTheme ? "text-slate-300" : "text-foreground/70"
+                }`}>
                   {isKz ? "Айына қанша литр жанармай тұтынасыз?" : "Сколько литров в месяц вы заправляете?"}
                 </label>
                 
                 {/* Числовое поле с возможностью прямого ввода */}
-                <div className="flex items-center gap-2 rounded-xl border border-primary/20 bg-background px-3 py-1.5 focus-within:border-primary">
-                  <Fuel className="size-4 text-primary" />
+                <div className={`flex items-center gap-2 rounded-xl border px-3 py-1.5 focus-within:border-primary ${
+                  darkTheme 
+                    ? "border-teal-500/30 bg-slate-950" 
+                    : "border-primary/20 bg-background"
+                }`}>
+                  <Fuel className={`size-4 ${darkTheme ? "text-teal-400" : "text-primary"}`} />
                   <input
                     id="fuel-volume-input"
                     type="number"
@@ -116,9 +144,11 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
                       const val = Number(e.target.value);
                       setLitres(val >= 0 ? val : 0);
                     }}
-                    className="w-24 text-right font-display text-lg font-bold text-primary outline-none sm:w-28 sm:text-xl"
+                    className={`w-24 text-right font-display text-lg font-bold outline-none sm:w-28 sm:text-xl ${
+                      darkTheme ? "text-teal-300 bg-transparent" : "text-primary bg-transparent"
+                    }`}
                   />
-                  <span className="text-xs font-semibold text-foreground/60">
+                  <span className={`text-xs font-semibold ${darkTheme ? "text-slate-400" : "text-foreground/60"}`}>
                     {isKz ? "литр" : "литров"}
                   </span>
                 </div>
@@ -132,9 +162,15 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
                 step={500}
                 value={Math.min(litres, 50000)}
                 onChange={(e) => setLitres(Number(e.target.value))}
-                className="mt-6 h-2.5 w-full cursor-pointer appearance-none rounded-lg bg-primary/20 accent-primary"
+                className={`mt-6 h-2.5 w-full cursor-pointer appearance-none rounded-lg ${
+                  darkTheme 
+                    ? "bg-white/10 accent-teal-400" 
+                    : "bg-primary/20 accent-primary"
+                }`}
               />
-              <div className="mt-2 flex justify-between text-[11px] text-foreground/50">
+              <div className={`mt-2 flex justify-between text-[11px] ${
+                darkTheme ? "text-slate-400" : "text-foreground/50"
+              }`}>
                 <span>500 л</span>
                 <span>15 000 л</span>
                 <span>30 000 л</span>
@@ -142,8 +178,8 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
               </div>
 
               {/* Быстрые кнопки-пресеты объёма */}
-              <div className="mt-5 border-t border-primary/10 pt-4">
-                <span className="text-[11px] font-semibold text-foreground/50">
+              <div className={`mt-5 border-t pt-4 ${darkTheme ? "border-white/10" : "border-primary/10"}`}>
+                <span className={`text-[11px] font-semibold ${darkTheme ? "text-slate-400" : "text-foreground/50"}`}>
                   {isKz ? "Жылдам таңдау:" : "Быстрый выбор объёма:"}
                 </span>
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -154,7 +190,11 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
                       onClick={() => setLitres(v)}
                       className={`rounded-xl border px-3 py-1.5 text-xs font-semibold transition-all ${
                         litres === v
-                          ? "border-primary bg-primary text-primary-foreground shadow-xs"
+                          ? darkTheme 
+                            ? "border-teal-400 bg-teal-500 text-white font-bold shadow-sm" 
+                            : "border-primary bg-primary text-primary-foreground shadow-xs"
+                          : darkTheme
+                          ? "border-white/10 bg-white/[0.04] text-slate-300 hover:border-white/20 hover:bg-white/[0.08]"
                           : "border-primary/15 bg-background/80 text-foreground/80 hover:border-primary/40 hover:bg-primary/5"
                       }`}
                     >
@@ -167,7 +207,9 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
 
             {/* 2. Выбор вида топлива */}
             <div>
-              <label className="text-xs font-bold text-foreground/70 uppercase tracking-wider">
+              <label className={`text-xs font-bold uppercase tracking-wider ${
+                darkTheme ? "text-slate-300" : "text-foreground/70"
+              }`}>
                 {isKz ? "Негізгі жанармай түрі" : "Вид топлива"}
               </label>
               <div className="mt-2.5 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
@@ -180,7 +222,11 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
                       onClick={() => setSelectedFuel(key)}
                       className={`relative flex flex-col rounded-2xl border p-3.5 text-left transition-all cursor-pointer ${
                         isSelected
-                          ? "border-gold bg-primary text-primary-foreground shadow-md shadow-primary/20 scale-[1.02]"
+                          ? darkTheme
+                            ? "border-amber-400/60 bg-amber-400/15 text-amber-300 shadow-md ring-1 ring-amber-400/30 scale-[1.02]"
+                            : "border-gold bg-primary text-primary-foreground shadow-md shadow-primary/20 scale-[1.02]"
+                          : darkTheme
+                          ? "border-white/10 bg-white/[0.04] text-slate-300 hover:border-white/20 hover:bg-white/[0.08]"
                           : "border-primary/15 bg-background/60 text-foreground hover:border-primary/40 hover:bg-primary/5"
                       }`}
                     >
@@ -190,7 +236,11 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
                         </span>
                       )}
                       <span className="text-xs font-bold">{item.name}</span>
-                      <span className={`mt-1 font-display text-sm font-semibold ${isSelected ? "text-gold" : "text-primary"}`}>
+                      <span className={`mt-1 font-display text-sm font-semibold ${
+                        isSelected 
+                          ? darkTheme ? "text-amber-300" : "text-gold"
+                          : darkTheme ? "text-teal-300" : "text-primary"
+                      }`}>
                         {item.price} ₸/л
                       </span>
                     </button>
@@ -200,8 +250,12 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
             </div>
 
             {/* Блок преимуществ для бизнеса */}
-            <div className="flex items-start gap-3 rounded-2xl border border-primary/20 bg-primary/5 p-4 text-xs text-foreground/80">
-              <ShieldCheck className="size-4.5 shrink-0 text-primary mt-0.5" />
+            <div className={`flex items-start gap-3 rounded-2xl border p-4 text-xs ${
+              darkTheme 
+                ? "border-white/10 bg-white/[0.03] text-slate-300" 
+                : "border-primary/20 bg-primary/5 text-foreground/80"
+            }`}>
+              <ShieldCheck className={`size-4.5 shrink-0 mt-0.5 ${darkTheme ? "text-teal-400" : "text-primary"}`} />
               <p>
                 {isKz
                   ? "С-Мунай корпоративтік клиенттеріне: бірыңғай дербес шот, ЭСФ және барлық жабу құжаттары уақытында, әр картаға дербес тәуліктік лимиттер."
@@ -211,7 +265,11 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
           </div>
 
           {/* Правая колонка: Итоговая выгода и кнопка действия (5 колонок) */}
-          <div className="flex flex-col justify-between rounded-3xl border border-primary/20 bg-primary-deeper text-white p-6 shadow-2xl lg:col-span-5 sm:p-8">
+          <div className={`flex flex-col justify-between rounded-3xl border p-6 shadow-2xl lg:col-span-5 sm:p-8 ${
+            darkTheme 
+              ? "border-teal-500/30 bg-gradient-to-b from-teal-950/40 via-slate-950 to-slate-950 text-white" 
+              : "border-primary/20 bg-primary-deeper text-white"
+          }`}>
             <div>
               <span className="text-xs font-semibold text-white/60 uppercase tracking-wider">
                 {isKz ? "Айлық шығын (базалық бағамен)" : "Затраты по базовой цене"}
@@ -252,7 +310,11 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
               </div>
 
               {/* Главный блок ИТОГО */}
-              <div className="mt-8 rounded-2xl bg-white/5 border border-gold/30 p-5 text-center">
+              <div className={`mt-8 rounded-2xl border p-5 text-center ${
+                darkTheme 
+                  ? "border-gold/40 bg-gradient-to-br from-gold/20 via-gold/10 to-transparent" 
+                  : "border-gold/30 bg-white/5"
+              }`}>
                 <p className="text-xs font-bold text-gold uppercase tracking-wider">
                   {isKz ? "ЖЫЛДЫҚ ЖАЛПЫ ҮНЕМІҢІЗ:" : "ВАША ВЫГОДА В ГОД:"}
                 </p>
@@ -271,7 +333,7 @@ export function B2BCalculator({ onApplyCalculation }: { onApplyCalculation?: (su
             <button
               type="button"
               onClick={handleApply}
-              className="btn-base btn-gold glow-gold mt-8 w-full flex items-center justify-center gap-2 font-bold py-3.5 text-sm sm:text-base cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98]"
+              className="btn-base btn-gold glow-gold mt-8 w-full flex items-center justify-center gap-2 font-bold py-3.5 text-sm sm:text-base cursor-pointer text-slate-950 transition-transform hover:scale-[1.02] active:scale-[0.98]"
             >
               <span>{isKz ? "Коммерциялық ұсыныс алу" : "Получить коммерческое предложение"}</span>
               <ChevronRight className="size-4" />

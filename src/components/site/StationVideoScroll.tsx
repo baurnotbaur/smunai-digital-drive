@@ -202,7 +202,7 @@ export function StationVideoScroll({ children }: { children?: ReactNode }) {
           className="absolute inset-x-0 bottom-16 flex flex-col items-center gap-1 text-primary-foreground/80"
         >
           <span className="text-xs font-medium tracking-[0.2em] uppercase">Листайте вниз</span>
-          <span aria-hidden="true" className="animate-bounce text-lg leading-none">↓</span>
+          <span aria-hidden="true" className="text-lg leading-none transition-transform duration-700 group-hover:translate-y-1">↓</span>
         </div>
 
         <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-baseline justify-between gap-3 px-5 pb-4 sm:px-8">

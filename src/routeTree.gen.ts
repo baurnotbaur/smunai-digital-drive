@@ -10,19 +10,19 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as CardsRouteImport } from './routes/cards'
+import { Route as B2bRouteImport } from './routes/b2b'
 import { Route as CareerRouteImport } from './routes/career'
 import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as AdminAuthRouteImport } from './routes/admin/auth'
+import { Route as StationsRouteImport } from './routes/stations'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CardsRoute = CardsRouteImport.update({
-  id: '/cards',
-  path: '/cards',
+const B2bRoute = B2bRouteImport.update({
+  id: '/b2b',
+  path: '/b2b',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CareerRoute = CareerRouteImport.update({
@@ -35,48 +35,48 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminAuthRoute = AdminAuthRouteImport.update({
-  id: '/admin/auth',
-  path: '/admin/auth',
+const StationsRoute = StationsRouteImport.update({
+  id: '/stations',
+  path: '/stations',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/cards': typeof CardsRoute
+  '/b2b': typeof B2bRoute
   '/career': typeof CareerRoute
   '/privacy': typeof PrivacyRoute
-  '/admin/auth': typeof AdminAuthRoute
+  '/stations': typeof StationsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/cards': typeof CardsRoute
+  '/b2b': typeof B2bRoute
   '/career': typeof CareerRoute
   '/privacy': typeof PrivacyRoute
-  '/admin/auth': typeof AdminAuthRoute
+  '/stations': typeof StationsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/cards': typeof CardsRoute
+  '/b2b': typeof B2bRoute
   '/career': typeof CareerRoute
   '/privacy': typeof PrivacyRoute
-  '/admin/auth': typeof AdminAuthRoute
+  '/stations': typeof StationsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cards' | '/career' | '/privacy' | '/admin/auth'
+  fullPaths: '/' | '/b2b' | '/career' | '/privacy' | '/stations'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cards' | '/career' | '/privacy' | '/admin/auth'
-  id: '__root__' | '/' | '/cards' | '/career' | '/privacy' | '/admin/auth'
+  to: '/' | '/b2b' | '/career' | '/privacy' | '/stations'
+  id: '__root__' | '/' | '/b2b' | '/career' | '/privacy' | '/stations'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CardsRoute: typeof CardsRoute
+  B2bRoute: typeof B2bRoute
   CareerRoute: typeof CareerRoute
   PrivacyRoute: typeof PrivacyRoute
-  AdminAuthRoute: typeof AdminAuthRoute
+  StationsRoute: typeof StationsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -88,11 +88,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/cards': {
-      id: '/cards'
-      path: '/cards'
-      fullPath: '/cards'
-      preLoaderRoute: typeof CardsRouteImport
+    '/b2b': {
+      id: '/b2b'
+      path: '/b2b'
+      fullPath: '/b2b'
+      preLoaderRoute: typeof B2bRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/career': {
@@ -109,11 +109,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/auth': {
-      id: '/admin/auth'
-      path: '/admin/auth'
-      fullPath: '/admin/auth'
-      preLoaderRoute: typeof AdminAuthRouteImport
+    '/stations': {
+      id: '/stations'
+      path: '/stations'
+      fullPath: '/stations'
+      preLoaderRoute: typeof StationsRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -121,10 +121,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CardsRoute: CardsRoute,
+  B2bRoute: B2bRoute,
   CareerRoute: CareerRoute,
   PrivacyRoute: PrivacyRoute,
-  AdminAuthRoute: AdminAuthRoute,
+  StationsRoute: StationsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

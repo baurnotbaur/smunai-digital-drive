@@ -217,6 +217,81 @@ export type Translations = {
     tabCards: string;
     tabVouchers: string;
   };
+  anniversary: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    milestone1Year: string;
+    milestone1Title: string;
+    milestone1Desc: string;
+    milestone2Year: string;
+    milestone2Title: string;
+    milestone2Desc: string;
+    milestone3Year: string;
+    milestone3Title: string;
+    milestone3Desc: string;
+    milestone4Year: string;
+    milestone4Title: string;
+    milestone4Desc: string;
+    stat1Val: string;
+    stat1Lbl: string;
+    stat2Val: string;
+    stat2Lbl: string;
+    stat3Val: string;
+    stat3Lbl: string;
+    stat4Val: string;
+    stat4Lbl: string;
+  };
+  sduken: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    coffeeTitle: string;
+    coffeeDesc: string;
+    foodTitle: string;
+    foodDesc: string;
+    drinksTitle: string;
+    drinksDesc: string;
+    autoTitle: string;
+    autoDesc: string;
+    stationTag: string;
+    gisBtn: string;
+    locationsTitle: string;
+    zhezTitle: string;
+    satpayevTitle: string;
+  };
+  b2bHub: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    tabDelivery: string;
+    tabStorage: string;
+    tabCards: string;
+    tabVouchers: string;
+    deliveryTitle: string;
+    deliveryDesc: string;
+    deliveryFeat1: string;
+    deliveryFeat2: string;
+    deliveryFeat3: string;
+    storageTitle: string;
+    storageDesc: string;
+    storageFeat1: string;
+    storageFeat2: string;
+    storageFeat3: string;
+    orderBtn: string;
+  };
+  hiTechVideo: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    f1Title: string;
+    f1Desc: string;
+    f2Title: string;
+    f2Desc: string;
+    f3Title: string;
+    f3Desc: string;
+    actionBtn: string;
+  };
 };
 
 export const DICTIONARY: Record<Lang, Translations> = {
@@ -227,7 +302,7 @@ export const DICTIONARY: Record<Lang, Translations> = {
       vouchers: "Талондар",
       services: "Сервис",
       promo: "Акциялар",
-      b2b: "Бизнеске",
+      b2b: "Бизнес клиенттерге",
       about: "Біз туралы",
       jobs: "Бос орындар",
       contacts: "Байланыс",
@@ -246,8 +321,8 @@ export const DICTIONARY: Record<Lang, Translations> = {
       feature2: "Дүкен мен жаңа демделген кофе (негізгі станцияларда)",
       feature3: "Барлық станцияларда 24/7 үздіксіз қызмет көрсету",
       slogan: "Жанармай — көлікке, Ұлытау — жүректе",
-      yearsMetric: "24/7",
-      yearsLabel: "нарықтағы тәжірибе",
+      yearsMetric: "30 жыл",
+      yearsLabel: "1996 жылдан бері",
       stationsMetric: "8",
       stationsLabel: "жеке ЖҚС станциясы",
       citiesMetric: "3",
@@ -445,6 +520,81 @@ export const DICTIONARY: Record<Lang, Translations> = {
       tabCards: "Топливные карты",
       tabVouchers: "Талоны на топливо",
     },
+    anniversary: {
+      badge: "30 жылдық мерейтой · 1996–2026",
+      title: "30 жыл бірге: Жезқазғаннан басталған сенім жолы",
+      subtitle: "1996 жылдан бері біз Ұлытау өңірі мен елорда жүргізушілеріне адал қызмет етіп келеміз. Отбасылық құндылықтар, таза жанармай және үздіксіз даму.",
+      milestone1Year: "1996",
+      milestone1Title: "Алғашқы қадам",
+      milestone1Desc: "Жезқазған қаласында С-Мұнай желісінің алғашқы жанармай бекетінің ашылуы.",
+      milestone2Year: "2005",
+      milestone2Title: "Сәтбаевқа кеңею",
+      milestone2Desc: "Кеншілер қаласы Сәтбаевта жаңа станциялар бой көтеріп, өңірлік инфрақұрылым нығайды.",
+      milestone3Year: "2016",
+      milestone3Title: "Елордаға қадам",
+      milestone3Desc: "Астана қаласында жүргізушілер мен ірі автопарктер үшін заманауи 2 станция іске қосылды.",
+      milestone4Year: "2026",
+      milestone4Title: "30 жылдық мерейтой",
+      milestone4Desc: "8 заманауи бекет, цифрлық отын карталары, QR-купондар және 24/7 мызғымас сенім.",
+      stat1Val: "30 жыл",
+      stat1Lbl: "Нарықтағы тұрақтылық",
+      stat2Val: "8 ЖҚС",
+      stat2Lbl: "3 қаладағы желі",
+      stat3Val: "100%",
+      stat3Lbl: "Зертханалық бақылау",
+      stat4Val: "24/7",
+      stat4Lbl: "Үздіксіз қызмет",
+    },
+    sduken: {
+      badge: "С-Дүкен · Жолдағы жайлы аялдама",
+      title: "Жол бойындағы жайлылық, ыстық тағам мен балғын кофе",
+      subtitle: "Жезқазғандағы АЗС №4 және Сәтбаев қаласындағы АЗС №1, №3, №6 станцияларындағы заманауи «С-Дүкен» желісі. Жолға қажеттінің бәрі тәулік бойы бір жерде.",
+      coffeeTitle: "100% Зерновой кофе 24/7",
+      coffeeDesc: "Итальяндық қуырылған американо, капучино немесе латте — сапарыңызға сергектік сыйлайды.",
+      foodTitle: "Ыстық хот-догтар мен балғын пісірілімдер",
+      foodDesc: "Тез әрі тойымды тіскебасар: сапалы шұжықтар, жаңа піскен тоқаштар.",
+      drinksTitle: "Салқын сусындар мен жеңіл снектер",
+      drinksDesc: "Шөл қандыратын шырындар, минералды су, энергетиктер мен тәттілердің кең таңдауы.",
+      autoTitle: "Автокөлік бұйымдары мен мотор майлары",
+      autoDesc: "Әйнек жуғыш сұйықтықтар, антифриз, майлар және жолға ең қажетті автокерек-жарақтар.",
+      stationTag: "4 станцияда: Жезқазған (№4) және Сәтбаев (№1, №3, №6)",
+      gisBtn: "2ГИС арқылы маршрут",
+      locationsTitle: "«С-Дүкен» орналасқан АЗС мекенжайлары:",
+      zhezTitle: "Жезқазған қаласы",
+      satpayevTitle: "Сәтбаев қаласы",
+    },
+    b2bHub: {
+      badge: "Бизнес клиенттерге",
+      title: "Бизнеске арналған кешенді жанармай шешімдері",
+      subtitle: "Ұлытау облысы, Жезқазған, Сәтбаев және Астана қалаларындағы автопарктер, карьерлер мен өндірістік кәсіпорындарға сенімді серіктес.",
+      tabDelivery: "Жанармай жеткізу",
+      tabStorage: "Мұнай өнімдерін сақтау",
+      tabCards: "Отын карталары",
+      tabVouchers: "Талондар",
+      deliveryTitle: "Бензовоздармен жанармайды тікелей жеткізу",
+      deliveryDesc: "Жеке бензовоз паркі арқылы 5 000 литрден бастап кез келген кәсіпорынға, карьерге, құрылыс нысанына тікелей жеткіземіз. Калибрленген цистерналар, зауыттық пломбалау және нақты көлем кепілдігі.",
+      deliveryFeat1: "5 000 л бастап көлемдер",
+      deliveryFeat2: "Калибрленген заманауи бензовоздар",
+      deliveryFeat3: "Қатаң кесте бойынша жеткізу",
+      storageTitle: "Мұнай өнімдерін жауапты сақтау (Нефтебаза)",
+      storageDesc: "С-Мұнай резервуарлық паркі: отын сапасын сақтау, зертханалық тексеру, GasNet жүйесі арқылы грамға дейін цифрлық есеп және бекітілген кесте бойынша құю.",
+      storageFeat1: "Сәйкестік сертификаттары бар резервуарлар",
+      storageFeat2: "Тәулік бойы күзет және сандық бақылау",
+      storageFeat3: "Бухгалтерия үшін толық ЭСФ және есептер",
+      orderBtn: "B2B қызметке өтінім беру",
+    },
+    hiTechVideo: {
+      badge: "Премиум формула",
+      title: "Hi-Tech 95 & 92 — Қозғалтқышты сапамен қуатта",
+      subtitle: "Үйкелісті азайту, цилиндрлерді қорғау және отын шығынын 5%-ға дейін үнемдеуге арналған белсенді қоспалар кешені бар премиалды жанармай.",
+      f1Title: "Қорғайды",
+      f1Desc: "Үйкеліс модификаторы және поршень мен цилиндрлерді тозудан қорғау",
+      f2Title: "5%-ға дейін",
+      f2Desc: "Отын үнемдеу және динамиканың артуы",
+      f3Title: "Тазалайды",
+      f3Desc: "Форсункалар мен клапандарды нагардан 100% тазарту",
+      actionBtn: "Hi-Tech жанармайын құю",
+    },
   },
   ru: {
     nav: {
@@ -453,7 +603,7 @@ export const DICTIONARY: Record<Lang, Translations> = {
       vouchers: "Талоны",
       services: "Сервис",
       promo: "Акции",
-      b2b: "Бизнесу",
+      b2b: "Бизнес клиентам",
       about: "О нас",
       jobs: "Вакансии",
       contacts: "Контакты",
@@ -472,8 +622,8 @@ export const DICTIONARY: Record<Lang, Translations> = {
       feature2: "Магазин и свежий кофе с собой (на основных АЗС)",
       feature3: "Круглосуточное обслуживание на всех станциях",
       slogan: "Жанармай — көлікке, Ұлытау — жүректе",
-      yearsMetric: "24/7",
-      yearsLabel: "режим работы",
+      yearsMetric: "30 лет",
+      yearsLabel: "в пути (с 1996 года)",
       stationsMetric: "8",
       stationsLabel: "собственных АЗС",
       citiesMetric: "3",
@@ -671,6 +821,81 @@ export const DICTIONARY: Record<Lang, Translations> = {
       tabCards: "Топливные карты",
       tabVouchers: "Талоны на топливо",
     },
+    anniversary: {
+      badge: "30-летний юбилей · 1996–2026",
+      title: "30 лет в пути: история доверия родом из Жезказгана",
+      subtitle: "С 1996 года мы ежедневно заправляем автомобили жителей региона Улытау и столицы. Семейные стандарты качества, честный литраж и забота о каждом водителе.",
+      milestone1Year: "1996",
+      milestone1Title: "Первая колонка",
+      milestone1Desc: "Открытие первой станции сети «С-Мунай» в Жезказгане. Начало 30-летней истории.",
+      milestone2Year: "2005",
+      milestone2Title: "Развитие в Сатпаеве",
+      milestone2Desc: "Строительство станций в шахтёрском Сатпаеве, расширение надёжного снабжения региона.",
+      milestone3Year: "2016",
+      milestone3Title: "Выход в столицу",
+      milestone3Desc: "Запуск двух современных станций в Астане для жителей столицы и транзитных автопарков.",
+      milestone4Year: "2026",
+      milestone4Title: "30 лет вместе",
+      milestone4Desc: "8 собственных АЗС, цифровые топливные карты, QR-купоны и круглосуточная поддержка.",
+      stat1Val: "30 лет",
+      stat1Lbl: "Безупречной репутации",
+      stat2Val: "8 АЗС",
+      stat2Lbl: "В Жезказгане, Сатпаеве и Астане",
+      stat3Val: "100%",
+      stat3Lbl: "Лабораторный контроль",
+      stat4Val: "24/7",
+      stat4Lbl: "Круглосуточный сервис",
+    },
+    sduken: {
+      badge: "С-Дүкен · Сеть фирменных маркетов",
+      title: "Уют в дороге, горячая выпечка и свежий кофе",
+      subtitle: "Сеть круглосуточных маркетов «С-Дүкен» на АЗС №4 в Жезказгане, а также на станциях АЗС №1, №3 и №6 в Сатпаеве. Зерновой кофе 100% Арабика, свежая выпечка, горячие хот-доги и всё необходимое в пути.",
+      coffeeTitle: "100% Зерновой кофе 24/7",
+      coffeeDesc: "Итальянская обжарка: американо, капучино или латте — заряд бодрости перед дальней дорогой.",
+      foodTitle: "Горячие хот-доги и свежая выпечка",
+      foodDesc: "Сытный и быстрый перекус: качественные колбаски, свежие булочки и авторские соусы.",
+      drinksTitle: "Охлаждённые напитки и снеки",
+      drinksDesc: "Большой выбор соков, минеральной воды, энергетиков, шоколада и дорожных снеков.",
+      autoTitle: "Автотовары и моторные масла",
+      autoDesc: "Стеклоомыватели, антифриз, сертифицированные моторные масла и необходимые автоаксессуары.",
+      stationTag: "На 4 АЗС: Жезказган (№4) и Сатпаев (№1, №3, №6)",
+      gisBtn: "Маршрут в 2ГИС",
+      locationsTitle: "Адреса АЗС с магазинами «С-Дүкен»:",
+      zhezTitle: "г. Жезказган",
+      satpayevTitle: "г. Сатпаев",
+    },
+    b2bHub: {
+      badge: "Бизнес клиентам",
+      title: "Комплексное топливное снабжение для бизнеса",
+      subtitle: "Надёжный партнёр для автопарков, промышленных карьеров, строительных компаний и предприятий в Жезказгане, Сатпаеве, области Улытау и Астане.",
+      tabDelivery: "Доставка ГСМ",
+      tabStorage: "Хранение топлива",
+      tabCards: "Топливные карты",
+      tabVouchers: "Талоны",
+      deliveryTitle: "Оптовая доставка топлива бензовозами",
+      deliveryDesc: "Собственный парк современных калиброванных бензовозов. Доставляем сертифицированное топливо от 5 000 литров напрямую на ваши базы, карьеры, строительные площадки и предприятия. Заводское пломбирование и гарантия точного литража.",
+      deliveryFeat1: "Поставки от 5 000 л до автопоездов",
+      deliveryFeat2: "Собственные поверенные бензовозы",
+      deliveryFeat3: "Точная доставка по согласованному графику",
+      storageTitle: "Ответственное хранение нефтепродуктов (Нефтебаза)",
+      storageDesc: "Резервуарный парк сети С-Мунай: приёмка ЖД и автоцистернами, сертифицированные резервуары, сохранение качества, лабораторный контроль каждой партии и автоматизированный налив через систему GasNet.",
+      storageFeat1: "Сертифицированный резервуарный парк",
+      storageFeat2: "Круглосуточный приём и цифровой учёт",
+      storageFeat3: "Полный пакет закрывающих документов и ЭСФ",
+      orderBtn: "Оставить заявку на B2B-обслуживание",
+    },
+    hiTechVideo: {
+      badge: "Премиальная формула",
+      title: "Hi-Tech 95 & 92 — Заряжай двигатель качеством",
+      subtitle: "Премиальное топливо с комплексом активных модификаторов трения: защита деталей от износа, снижение расхода до 5% и удаление нагара с форсунок.",
+      f1Title: "Защищает",
+      f1Desc: "Модификатор трения и защита цилиндров и клапанов от износа",
+      f2Title: "До 5%",
+      f2Desc: "Снижает расход топлива и увеличивает приёмистость",
+      f3Title: "Очищает",
+      f3Desc: "Удаляет нагар с форсунок и восстанавливает заводскую мощность",
+      actionBtn: "Заправиться Hi-Tech",
+    },
   },
   en: {
     nav: {
@@ -679,7 +904,7 @@ export const DICTIONARY: Record<Lang, Translations> = {
       vouchers: "Vouchers",
       services: "Services",
       promo: "Offers",
-      b2b: "Business",
+      b2b: "Business Clients",
       about: "About",
       jobs: "Careers",
       contacts: "Contacts",
@@ -698,8 +923,8 @@ export const DICTIONARY: Record<Lang, Translations> = {
       feature2: "Convenience store and fresh bean coffee 24/7",
       feature3: "24/7 continuous friendly service at all stations",
       slogan: "Fuel for the car, Ulytau in the heart",
-      yearsMetric: "24/7",
-      yearsLabel: "working hours",
+      yearsMetric: "30 Years",
+      yearsLabel: "heritage since 1996",
       stationsMetric: "8",
       stationsLabel: "network stations",
       citiesMetric: "3",
@@ -896,6 +1121,81 @@ export const DICTIONARY: Record<Lang, Translations> = {
       f3Desc: "Monthly fueling statement registries, electronic tax invoices (ESF), and reconciliation acts on schedule.",
       tabCards: "Fuel Cards",
       tabVouchers: "Fuel Vouchers",
+    },
+    anniversary: {
+      badge: "30th Anniversary · 1996–2026",
+      title: "30 Years on the Road: A Legacy of Trust from Zhezkazgan",
+      subtitle: "Since 1996, we have been fueling drivers across the Ulytau region and the capital. Family values, refinery-grade certified fuel, and continuous digital innovation.",
+      milestone1Year: "1996",
+      milestone1Title: "First Station",
+      milestone1Desc: "The launch of the very first S-Munai gas station in Zhezkazgan.",
+      milestone2Year: "2005",
+      milestone2Title: "Satpayev Expansion",
+      milestone2Desc: "Expanding our footprint to Satpayev, powering the industrial heartland.",
+      milestone3Year: "2016",
+      milestone3Title: "Capital City Entry",
+      milestone3Desc: "Opening two key urban stations in Astana for regional and corporate fleets.",
+      milestone4Year: "2026",
+      milestone4Title: "30 Years Strong",
+      milestone4Desc: "8 modern stations, smart fleet cards, QR coupons, and 24/7 customer care.",
+      stat1Val: "30 Years",
+      stat1Lbl: "Continuous Trust",
+      stat2Val: "8 Stations",
+      stat2Lbl: "Across 3 Key Cities",
+      stat3Val: "100%",
+      stat3Lbl: "Lab-Tested Quality",
+      stat4Val: "24/7",
+      stat4Lbl: "Always Open",
+    },
+    sduken: {
+      badge: "S-Duken · Convenience Store Network",
+      title: "«С-Дүкен» — Comfort, Fresh Coffee & Flavor on the Go",
+      subtitle: "Network of 24/7 «S-Duken» convenience stores at Station #4 in Zhezkazgan, plus Stations #1, #3, and #6 in Satpayev. Fresh 100% Arabica coffee, hot snacks, baked goods, and car essentials.",
+      coffeeTitle: "100% Arabica Fresh Coffee",
+      coffeeDesc: "Freshly roasted specialty coffee ground and brewed on professional Swiss machines.",
+      foodTitle: "Hot Dogs & Fresh Pastries",
+      foodDesc: "Quick and hearty road bites: gourmet hot dogs, fresh baked goods, and signature sauces.",
+      drinksTitle: "Chilled Drinks & Snacks",
+      drinksDesc: "Wide assortment of bottled waters, juices, energy drinks, chocolates, and travel treats.",
+      autoTitle: "Car Care & Motor Oils",
+      autoDesc: "Windshield washer fluids, certified European motor oils, and essential travel accessories.",
+      stationTag: "At 4 Stations: Zhezkazgan (#4) & Satpayev (#1, #3, #6)",
+      gisBtn: "Route in 2GIS",
+      locationsTitle: "Stations featuring «S-Duken» stores:",
+      zhezTitle: "Zhezkazgan",
+      satpayevTitle: "Satpayev",
+    },
+    b2bHub: {
+      badge: "Business Clients",
+      title: "Comprehensive Fuel Solutions for Business",
+      subtitle: "Trusted energy partner for fleets, mining companies, construction contractors, and enterprises across Ulytau region and Astana.",
+      tabDelivery: "Fuel Delivery",
+      tabStorage: "Fuel Storage",
+      tabCards: "Fuel Cards",
+      tabVouchers: "Vouchers",
+      deliveryTitle: "Bulk Fuel Delivery by Road Tankers",
+      deliveryDesc: "Our own fleet of certified, calibrated road tankers. Direct delivery from 5,000 liters straight to your depots, quarries, and construction sites with factory seal guarantees.",
+      deliveryFeat1: "Orders from 5,000 L to full tanker loads",
+      deliveryFeat2: "Certified & metrology-verified tankers",
+      deliveryFeat3: "On-schedule dispatch and precision metering",
+      storageTitle: "Commercial Petroleum Storage (Depot)",
+      storageDesc: "S-Munai petroleum tank farm: receipt via rail and road, lab-tested quality assurance, digital GasNet volume control, and automated dispatch.",
+      storageFeat1: "Standard-certified bulk storage tanks",
+      storageFeat2: "24/7 security & automated inventory logging",
+      storageFeat3: "Full accounting reconciliation & electronic invoices",
+      orderBtn: "Request B2B Service Quote",
+    },
+    hiTechVideo: {
+      badge: "Premium Formula",
+      title: "Hi-Tech 95 & 92 — Power Your Engine with Quality",
+      subtitle: "Premium fuel engineered with active friction modifiers: protects engine components, cuts consumption up to 5%, and eliminates deposits.",
+      f1Title: "Protects",
+      f1Desc: "Friction modifier shields cylinder walls and valves from wear",
+      f2Title: "Up to 5%",
+      f2Desc: "Improves fuel economy and sharpens throttle response",
+      f3Title: "Cleanses",
+      f3Desc: "Purges fuel injectors and restores original factory horsepower",
+      actionBtn: "Fuel Up with Hi-Tech",
     },
   },
 };

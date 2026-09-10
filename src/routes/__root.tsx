@@ -89,8 +89,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Сатпаеве и Астане: качественное топливо, магазин и кофе с собой." },
       { property: "og:description", content: "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Сатпаеве и Астане: качественное топливо, магазин и кофе с собой." },
       { name: "twitter:description", content: "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Сатпаеве и Астане: качественное топливо, магазин и кофе с собой." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/198522ec-efeb-434a-b981-7876e0d9b3cd/id-preview-c4cea230--59eeb293-96df-41d7-95a9-607edab5076d.lovable.app-1785768443057.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/198522ec-efeb-434a-b981-7876e0d9b3cd/id-preview-c4cea230--59eeb293-96df-41d7-95a9-607edab5076d.lovable.app-1785768443057.png" },
+      { property: "og:image", content: "/images/station-hero.jpg" },
+      { name: "twitter:image", content: "/images/station-hero.jpg" },
     ],
     links: [
       {
@@ -103,19 +103,35 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Oswald:wght@400;500;600;700&display=swap",
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.ico", sizes: "any" },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "icon", href: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png", sizes: "180x180" },
     ],
     scripts: [
-      {
-        src: "https://www.googletagmanager.com/gtag/js?id=G-30E1D5EVGJ",
-        async: true,
-      },
+      // Consent Mode: до нажатия «Принять» аналитика не пишет ни куки, ни
+      // идентификаторы. Сам gtag.js подключаем отсюда же, а не отдельным тегом:
+      // React поднимает <script async src> в начало <head>, и при двух тегах
+      // аналитика успевала стартовать раньше, чем выставлен режим согласия.
       {
         children: `
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
+          var granted = false;
+          try { granted = localStorage.getItem('cookie_consent') === 'true'; } catch (e) {}
+          gtag('consent', 'default', {
+            ad_storage: 'denied',
+            ad_user_data: 'denied',
+            ad_personalization: 'denied',
+            analytics_storage: granted ? 'granted' : 'denied',
+            wait_for_update: 500
+          });
           gtag('js', new Date());
           gtag('config', 'G-30E1D5EVGJ');
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=G-30E1D5EVGJ';
+          document.head.appendChild(s);
         `,
       },
     ],

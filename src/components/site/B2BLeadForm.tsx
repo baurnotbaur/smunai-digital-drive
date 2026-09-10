@@ -92,9 +92,9 @@ export function B2BLeadForm({
   if (success) {
     return (
       <div
-        className={`rounded-2xl p-6 sm:p-8 text-center transition-all ${
+        className={`rounded-3xl p-6 sm:p-8 text-center transition-all ${
           darkTheme
-            ? "bg-primary text-primary-foreground border border-primary-foreground/15"
+            ? "border border-teal-500/30 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 text-white shadow-2xl"
             : "soft-card border border-primary/20 bg-primary/5"
         } ${className}`}
       >
@@ -104,7 +104,7 @@ export function B2BLeadForm({
         <h3 className="mt-4 text-xl font-bold font-display">{f.successTitle}</h3>
         <p
           className={`mt-2 text-sm max-w-md mx-auto ${
-            darkTheme ? "text-primary-foreground/80" : "text-foreground/75"
+            darkTheme ? "text-slate-300" : "text-foreground/75"
           }`}
         >
           {f.successDesc}
@@ -112,7 +112,7 @@ export function B2BLeadForm({
         <button
           type="button"
           onClick={() => setSuccess(false)}
-          className="btn-base btn-gold mt-6 !py-2 !px-6 !text-xs font-semibold"
+          className="btn-base btn-gold mt-6 !py-2 !px-6 !text-xs font-semibold text-slate-950"
         >
           {f.submitAgain}
         </button>
@@ -123,9 +123,9 @@ export function B2BLeadForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className={`rounded-2xl p-6 sm:p-8 transition-all ${
+      className={`rounded-3xl p-6 sm:p-8 transition-all ${
         darkTheme
-          ? "bg-primary text-primary-foreground"
+          ? "border border-white/15 bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-950 text-white shadow-2xl backdrop-blur-md"
           : "soft-card border border-primary/15 bg-card"
       } ${className}`}
     >
@@ -135,7 +135,7 @@ export function B2BLeadForm({
         </h3>
         <p
           className={`mt-1 text-xs sm:text-sm ${
-            darkTheme ? "text-primary-foreground/70" : "text-foreground/65"
+            darkTheme ? "text-slate-400" : "text-foreground/65"
           }`}
         >
           {f.subtitle}
@@ -147,20 +147,22 @@ export function B2BLeadForm({
         <div className="space-y-1.5">
           <Label
             className={`text-xs font-semibold uppercase tracking-wider ${
-              darkTheme ? "text-primary-foreground/80" : "text-foreground/80"
+              darkTheme ? "text-slate-300" : "text-foreground/80"
             }`}
           >
             {f.productLabel}
           </Label>
-          <div className="grid grid-cols-3 gap-1.5 rounded-xl border border-current/15 p-1 bg-current/5">
+          <div className={`grid grid-cols-3 gap-1.5 rounded-xl border p-1 ${
+            darkTheme ? "border-white/15 bg-white/5" : "border-current/15 bg-current/5"
+          }`}>
             <button
               type="button"
               onClick={() => setSelectedProduct("cards")}
               className={`flex items-center justify-center gap-1 rounded-lg py-1.5 px-2 text-[11px] font-semibold transition-all ${
                 selectedProduct === "cards"
-                  ? "bg-gold text-gold-foreground shadow-xs font-bold"
+                  ? "bg-gold text-slate-950 shadow-xs font-bold"
                   : darkTheme
-                  ? "text-primary-foreground/75 hover:bg-white/10"
+                  ? "text-slate-300 hover:bg-white/10"
                   : "text-foreground/75 hover:bg-primary/10"
               }`}
             >
@@ -172,9 +174,9 @@ export function B2BLeadForm({
               onClick={() => setSelectedProduct("vouchers")}
               className={`flex items-center justify-center gap-1 rounded-lg py-1.5 px-2 text-[11px] font-semibold transition-all ${
                 selectedProduct === "vouchers"
-                  ? "bg-gold text-gold-foreground shadow-xs font-bold"
+                  ? "bg-gold text-slate-950 shadow-xs font-bold"
                   : darkTheme
-                  ? "text-primary-foreground/75 hover:bg-white/10"
+                  ? "text-slate-300 hover:bg-white/10"
                   : "text-foreground/75 hover:bg-primary/10"
               }`}
             >
@@ -186,9 +188,9 @@ export function B2BLeadForm({
               onClick={() => setSelectedProduct("both")}
               className={`flex items-center justify-center gap-1 rounded-lg py-1.5 px-2 text-[11px] font-semibold transition-all ${
                 selectedProduct === "both"
-                  ? "bg-gold text-gold-foreground shadow-xs font-bold"
+                  ? "bg-gold text-slate-950 shadow-xs font-bold"
                   : darkTheme
-                  ? "text-primary-foreground/75 hover:bg-white/10"
+                  ? "text-slate-300 hover:bg-white/10"
                   : "text-foreground/75 hover:bg-primary/10"
               }`}
             >
@@ -203,7 +205,7 @@ export function B2BLeadForm({
           <Label
             htmlFor={`${formId}-name`}
             className={`text-xs font-semibold uppercase tracking-wider ${
-              darkTheme ? "text-primary-foreground/80" : "text-foreground/80"
+              darkTheme ? "text-slate-300" : "text-foreground/80"
             }`}
           >
             {f.nameLabel} <span className="text-terracotta">*</span>
@@ -216,7 +218,7 @@ export function B2BLeadForm({
             placeholder={f.namePlaceholder}
             className={
               darkTheme
-                ? "border-primary-foreground/20 bg-primary/40 text-primary-foreground placeholder:text-primary-foreground/40 focus:border-gold"
+                ? "border-white/15 bg-slate-950/80 text-white placeholder:text-white/40 focus:border-gold"
                 : "border-primary/20 bg-background text-foreground placeholder:text-foreground/40 focus:border-primary"
             }
           />
@@ -227,7 +229,7 @@ export function B2BLeadForm({
           <Label
             htmlFor={`${formId}-phone`}
             className={`text-xs font-semibold uppercase tracking-wider ${
-              darkTheme ? "text-primary-foreground/80" : "text-foreground/80"
+              darkTheme ? "text-slate-300" : "text-foreground/80"
             }`}
           >
             {f.phoneLabel} <span className="text-terracotta">*</span>
@@ -246,7 +248,7 @@ export function B2BLeadForm({
             maxLength={18}
             className={
               darkTheme
-                ? "border-primary-foreground/20 bg-primary/40 text-primary-foreground placeholder:text-primary-foreground/40 focus:border-gold"
+                ? "border-white/15 bg-slate-950/80 text-white placeholder:text-white/40 focus:border-gold"
                 : "border-primary/20 bg-background text-foreground placeholder:text-foreground/40 focus:border-primary"
             }
           />
@@ -257,7 +259,7 @@ export function B2BLeadForm({
           <Label
             htmlFor={`${formId}-org`}
             className={`text-xs font-semibold uppercase tracking-wider ${
-              darkTheme ? "text-primary-foreground/80" : "text-foreground/80"
+              darkTheme ? "text-slate-300" : "text-foreground/80"
             }`}
           >
             {f.orgLabel} <span className="text-terracotta">*</span>
@@ -270,7 +272,7 @@ export function B2BLeadForm({
             placeholder={f.orgPlaceholder}
             className={
               darkTheme
-                ? "border-primary-foreground/20 bg-primary/40 text-primary-foreground placeholder:text-primary-foreground/40 focus:border-gold"
+                ? "border-white/15 bg-slate-950/80 text-white placeholder:text-white/40 focus:border-gold"
                 : "border-primary/20 bg-background text-foreground placeholder:text-foreground/40 focus:border-primary"
             }
           />
@@ -282,7 +284,7 @@ export function B2BLeadForm({
           <Label
             htmlFor={`${formId}-comment`}
             className={`text-xs font-semibold uppercase tracking-wider ${
-              darkTheme ? "text-primary-foreground/80" : "text-foreground/80"
+              darkTheme ? "text-slate-300" : "text-foreground/80"
             }`}
           >
             {f.commentLabel}
@@ -296,7 +298,7 @@ export function B2BLeadForm({
             placeholder={f.commentPlaceholder}
             className={
               darkTheme
-                ? "border-primary-foreground/20 bg-primary/40 text-primary-foreground placeholder:text-primary-foreground/40 focus:border-gold"
+                ? "border-white/15 bg-slate-950/80 text-white placeholder:text-white/40 focus:border-gold"
                 : "border-primary/20 bg-background text-foreground placeholder:text-foreground/40 focus:border-primary"
             }
           />
@@ -315,9 +317,9 @@ export function B2BLeadForm({
               className="mt-0.5 size-4 shrink-0 rounded accent-gold"
             />
             <span
-              className={darkTheme ? "text-primary-foreground/85" : "text-foreground/80"}
+              className={darkTheme ? "text-slate-300" : "text-foreground/80"}
             >
-              Я даю согласие ТОО «С-Мунай» на сбор и обработку моих персональных данных в соответствии с <Link to="/privacy" className={darkTheme ? "text-gold font-medium underline" : "text-primary font-medium underline"}>Политикой конфиденциальности</Link>. <span className="text-terracotta">*</span>
+              Я даю согласие ТОО «С-Мунай» на сбор и обработку моих персональных данных в соответствии с <Link to="/privacy" className={darkTheme ? "text-gold-bright font-medium underline" : "text-primary font-medium underline"}>Политикой конфиденциальности</Link>. <span className="text-terracotta">*</span>
             </span>
           </label>
 
@@ -331,7 +333,7 @@ export function B2BLeadForm({
               className="mt-0.5 size-4 shrink-0 rounded accent-gold"
             />
             <span
-              className={darkTheme ? "text-primary-foreground/70" : "text-foreground/65"}
+              className={darkTheme ? "text-slate-400" : "text-foreground/65"}
             >
               {f.marketingConsentText}
             </span>
@@ -350,7 +352,7 @@ export function B2BLeadForm({
         <button
           type="submit"
           disabled={isBusy}
-          className="btn-base btn-gold w-full mt-3 !py-3 font-bold flex items-center justify-center gap-2 shadow-sm disabled:opacity-60"
+          className="btn-base btn-gold w-full mt-3 !py-3 font-bold flex items-center justify-center gap-2 shadow-sm disabled:opacity-60 text-slate-950"
         >
           {isBusy ? (
             <>
@@ -367,7 +369,7 @@ export function B2BLeadForm({
 
         <p
           className={`text-center text-[11px] ${
-            darkTheme ? "text-primary-foreground/50" : "text-foreground/50"
+            darkTheme ? "text-slate-400" : "text-foreground/50"
           }`}
         >
           {f.privacyNote}

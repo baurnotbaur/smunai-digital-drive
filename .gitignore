@@ -30,3 +30,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Binaries & local harness configs
+*.exe
+.claude/
+.codex/
+.agents/
+.impeccable/
+replace_logo.cjs

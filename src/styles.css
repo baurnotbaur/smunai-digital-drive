@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Oswald:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,500;1,400;1,500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Oswald:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,500;1,400;1,500&display=swap"); /* impeccable-disable-line overused-font -- Brand guidelines specify Montserrat */
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
@@ -253,16 +253,13 @@
   color: var(--primary-foreground);
 }
 
-/* Тонкая «инженерная» сетка поверх тёмного фона — намёк на технологичность топлива. */
-@utility grid-overlay {
+/* Мягкая атмосферная подсветка поверх тёмного фона без искусственных линеек. */
+@utility ambient-overlay {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background-image:
-    linear-gradient(color-mix(in oklab, white 5%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in oklab, white 5%, transparent) 1px, transparent 1px);
-  background-size: 46px 46px;
-  mask-image: radial-gradient(120% 90% at 50% 0%, black 40%, transparent 78%);
+  background-image: radial-gradient(circle at 50% 0%, color-mix(in oklab, var(--gold) 12%, transparent) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 /* Стеклянная плашка на тёмном фоне (метрики, чипы в hero). */
@@ -339,36 +336,56 @@
   display: flex !important;
   align-items: center;
   justify-content: center;
-  width: 32px !important;
-  height: 32px !important;
+  width: 36px !important;
+  height: 36px !important;
   border-radius: 50%;
   background: #0D6C89;
   color: #ffffff;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 13px;
-  box-shadow: 0 3px 10px rgba(13, 108, 137, 0.4);
-  border: 2px solid #ffffff;
-  transition: transform 0.2s ease, background 0.2s ease;
+  box-shadow: 0 4px 14px rgba(13, 108, 137, 0.5);
+  border: 2.5px solid #ffffff;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease, box-shadow 0.25s ease;
   cursor: pointer;
+  position: relative;
+}
+
+.custom-leaflet-pin.has-store::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #D4AF37;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.35);
 }
 
 .custom-leaflet-pin.active-pin {
   background: #D4AF37;
-  color: #1A1A1A;
-  transform: scale(1.22);
+  color: #0f172a;
+  transform: scale(1.28);
   border-color: #0D6C89;
-  box-shadow: 0 6px 16px rgba(212, 175, 55, 0.6);
+  box-shadow: 0 0 0 5px rgba(212, 175, 55, 0.4), 0 8px 24px rgba(212, 175, 55, 0.6);
   z-index: 1000 !important;
 }
 
 .leaflet-popup-content-wrapper {
-  border-radius: 12px !important;
-  padding: 2px !important;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 16px !important;
+  padding: 0 !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(13, 108, 137, 0.15) !important;
+  overflow: hidden;
 }
 
 .leaflet-popup-content {
-  margin: 10px 12px !important;
+  margin: 0 !important;
   line-height: 1.4 !important;
+}
+
+.leaflet-container {
+  font-family: var(--font-sans, system-ui, sans-serif) !important;
 }
 
