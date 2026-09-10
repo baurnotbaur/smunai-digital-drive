@@ -25,11 +25,11 @@ import type { Station } from "./index";
 export const Route = createFileRoute("/stations")({
   head: () => ({
     meta: [
-      { title: "Карта и адреса АЗС С-Мунай — Жезказган, Сатпаев, Астана" },
+      { title: "Карта и адреса АЗС С-Мунай — Жезказган, Сатпаев, Ұлытау, Астана" },
       {
         name: "description",
         content:
-          "Интерактивная карта 8 автозаправочных станций сети С-Мунай в Жезказгане, Сатпаеве и Астане. Круглосуточный режим 24/7, маркеты С-Дүкен, маршруты в 2ГИС.",
+          "Интерактивная карта 9 автозаправочных станций сети С-Мунай в Жезказгане, Сатпаеве, Ұлытау и Астане. Круглосуточный режим 24/7, автогаз СУГ, маркеты С-Дүкен, маршруты в 2ГИС.",
       },
     ],
   }),
@@ -46,6 +46,7 @@ type CityGroup = {
 
 const ALL_SERVICES: Station["services"] = ["fuel", "shop", "coffee"];
 const FUEL_ONLY: Station["services"] = ["fuel"];
+const GAS_AND_SHOP: Station["services"] = ["fuel", "shop", "coffee", "gas"];
 
 const STATIONS_DATA: CityGroup[] = [
   {
@@ -54,21 +55,6 @@ const STATIONS_DATA: CityGroup[] = [
     cityEn: "Zhezkazgan",
     gisBranchesUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
     stations: [
-      {
-        number: 7,
-        city: "Жезказган",
-        cityKz: "Жезқазған",
-        cityEn: "Zhezkazgan",
-        address: "проспект Мира, 39",
-        addressKz: "Бейбітшілік даңғылы, 39",
-        addressEn: "39 Mira Avenue",
-        hours: "Круглосуточно",
-        hoursKz: "Тәулік бойы",
-        hoursEn: "24/7 (All Day)",
-        services: FUEL_ONLY,
-        coords: { lat: 47.802055, lng: 67.714752 },
-        gisUrl: "https://2gis.kz/zhezkazgan/firm/70000001068498088",
-      },
       {
         number: 4,
         city: "Жезказган",
@@ -80,7 +66,7 @@ const STATIONS_DATA: CityGroup[] = [
         hours: "Круглосуточно",
         hoursKz: "Тәулік бойы",
         hoursEn: "24/7 (All Day)",
-        services: ALL_SERVICES,
+        services: GAS_AND_SHOP,
         coords: { lat: 47.783971, lng: 67.696561 },
         gisUrl: "https://2gis.kz/zhezkazgan/firm/70000001068949327",
       },
@@ -99,6 +85,21 @@ const STATIONS_DATA: CityGroup[] = [
         coords: { lat: 47.784135, lng: 67.694417 },
         gisUrl: "https://2gis.kz/zhezkazgan/firm/70000001070980296",
       },
+      {
+        number: 7,
+        city: "Жезказган",
+        cityKz: "Жезқазған",
+        cityEn: "Zhezkazgan",
+        address: "проспект Мира, 39",
+        addressKz: "Бейбітшілік даңғылы, 39",
+        addressEn: "39 Mira Avenue",
+        hours: "Круглосуточно",
+        hoursKz: "Тәулік бойы",
+        hoursEn: "24/7 (All Day)",
+        services: FUEL_ONLY,
+        coords: { lat: 47.802055, lng: 67.714752 },
+        gisUrl: "https://2gis.kz/zhezkazgan/firm/70000001068498088",
+      },
     ],
   },
   {
@@ -112,13 +113,13 @@ const STATIONS_DATA: CityGroup[] = [
         city: "Сатпаев",
         cityKz: "Сәтбаев",
         cityEn: "Satpayev",
-        address: "улица Улытауская, 115",
-        addressKz: "Ұлытау көшесі, 115",
-        addressEn: "115 Ulytauskaya Street",
+        address: "улица Улытауская, 114",
+        addressKz: "Ұлытау көшесі, 114",
+        addressEn: "114 Ulytauskaya Street",
         hours: "Круглосуточно",
         hoursKz: "Тәулік бойы",
         hoursEn: "24/7 (All Day)",
-        services: ALL_SERVICES,
+        services: GAS_AND_SHOP,
         coords: { lat: 47.901277, lng: 67.517376 },
         gisUrl: "https://2gis.kz/zhezkazgan/firm/70000001070540201",
       },
@@ -148,9 +149,32 @@ const STATIONS_DATA: CityGroup[] = [
         hours: "Круглосуточно",
         hoursKz: "Тәулік бойы",
         hoursEn: "24/7 (All Day)",
-        services: ALL_SERVICES,
+        services: GAS_AND_SHOP,
         coords: { lat: 47.898436, lng: 67.528117 },
         gisUrl: "https://2gis.kz/zhezkazgan/firm/70000001069917278",
+      },
+    ],
+  },
+  {
+    city: "Ұлытау",
+    cityKz: "Ұлытау",
+    cityEn: "Ulytau",
+    gisBranchesUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
+    stations: [
+      {
+        number: 10,
+        city: "Ұлытау",
+        cityKz: "Ұлытау",
+        cityEn: "Ulytau",
+        address: "село Ұлытау, улица Абая, 44",
+        addressKz: "Ұлытау ауылы, Абай көшесі, 44",
+        addressEn: "44 Abay Street, Ulytau village",
+        hours: "Круглосуточно",
+        hoursKz: "Тәулік бойы",
+        hoursEn: "24/7 (All Day)",
+        services: FUEL_ONLY,
+        coords: { lat: 48.6536, lng: 66.9934 },
+        gisUrl: "https://2gis.kz/zhezkazgan/branches/70000001068949326",
       },
     ],
   },
@@ -165,30 +189,30 @@ const STATIONS_DATA: CityGroup[] = [
         city: "Астана",
         cityKz: "Астана",
         cityEn: "Astana",
-        address: "шоссе Каркаралы, 7",
-        addressKz: "Қарқаралы тас жолы, 7",
-        addressEn: "7 Karkaraly Highway",
+        address: "улица Ондерис, 48",
+        addressKz: "Өндіріс көшесі, 48",
+        addressEn: "48 Ondiris Street",
         hours: "Круглосуточно",
         hoursKz: "Тәулік бойы",
         hoursEn: "24/7 (All Day)",
-        services: ALL_SERVICES,
-        coords: { lat: 51.065141, lng: 71.392492 },
-        gisUrl: "https://2gis.kz/astana/firm/70000001023880615",
+        services: FUEL_ONLY,
+        coords: { lat: 51.232479, lng: 71.384983 },
+        gisUrl: "https://2gis.kz/astana/firm/70000001023880627",
       },
       {
         number: 9,
         city: "Астана",
         cityKz: "Астана",
         cityEn: "Astana",
-        address: "шоссе Ондирис, 42",
-        addressKz: "Өндіріс тас жолы, 42",
-        addressEn: "42 Ondiris Highway",
+        address: "шоссе Каркаралы, 7",
+        addressKz: "Қарқаралы тас жолы, 7",
+        addressEn: "7 Karkaraly Highway",
         hours: "Круглосуточно",
         hoursKz: "Тәулік бойы",
         hoursEn: "24/7 (All Day)",
-        services: ALL_SERVICES,
-        coords: { lat: 51.232479, lng: 71.384983 },
-        gisUrl: "https://2gis.kz/astana/firm/70000001023880627",
+        services: FUEL_ONLY,
+        coords: { lat: 51.065141, lng: 71.392492 },
+        gisUrl: "https://2gis.kz/astana/firm/70000001023880615",
       },
     ],
   },
@@ -322,17 +346,17 @@ export function StationsPage() {
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/15 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-gold-foreground mb-3">
                   <MapPin className="size-3.5 text-gold" />
-                  <span>{isKz ? "8 станция · 3 қала · 1996 жылдан бері" : isEn ? "8 Stations · 3 Cities · Since 1996" : "8 станций · 3 города · с 1996 года"}</span>
+                  <span>{isKz ? "9 станция · 4 өңір · 1996 жылдан бері" : isEn ? "9 Stations · 4 Regions · Since 1996" : "9 станций · 4 локации · с 1996 года"}</span>
                 </div>
                 <h1 className="font-display text-3xl font-bold text-primary sm:text-4xl md:text-5xl">
                   {isKz ? "С-Мұнай АЗС желісі және навигация" : isEn ? "S-Munai Stations Network & Navigation" : "Карта и сеть АЗС «С-Мунай»"}
                 </h1>
                 <p className="mt-3 max-w-2xl text-sm sm:text-base leading-relaxed text-foreground/80">
                   {isKz
-                    ? "Жезқазған, Сәтбаев және Астана қалаларындағы барлық 8 АЗС. 24/7 тәулік бойы қызмет, Hi-Tech еуро-5 отыны, С-Дүкен маркеттері және 2ГИС арқылы 1 басумен дәл маршрут."
+                    ? "Жезқазған, Сәтбаев, Ұлытау және Астана бойынша барлық 9 АЗС. 24/7 тәулік бойы қызмет, Hi-Tech еуро-5 отыны, автогаз (СУГ), С-Дүкен маркеттері және 2ГИС арқылы 1 басумен дәл маршрут."
                     : isEn
-                    ? "All 8 stations across Zhezkazgan, Satpayev, and Astana. 24/7 operations, Euro-5 Hi-Tech fuel, S-Duken convenience stores, and instant 1-tap 2GIS routing."
-                    : "Все 8 станций сети в Жезказгане, Сатпаеве и Астане. Круглосуточный сервис 24/7, топливо стандарта Евро-5 Hi-Tech, маркеты «С-Дүкен» и прямой маршрут в 2ГИС."}
+                    ? "All 9 stations across Zhezkazgan, Satpayev, Ulytau, and Astana. 24/7 operations, Euro-5 Hi-Tech fuel, LPG autogas, S-Duken convenience stores, and instant 1-tap 2GIS routing."
+                    : "Все 9 станций сети в Жезказгане, Сатпаеве, Ұлытау и Астане. Круглосуточный сервис 24/7, топливо стандарта Евро-5 Hi-Tech, автогаз (СУГ), маркеты «С-Дүкен» и прямой маршрут в 2ГИС."}
                 </p>
               </div>
 
@@ -365,11 +389,11 @@ export function StationsPage() {
             <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
               <div className="soft-card p-4 flex items-center gap-3">
                 <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold">
-                  8
+                  9
                 </div>
                 <div>
                   <div className="text-xs font-bold text-primary">{isKz ? "АЗС Желісі" : "Сеть АЗС"}</div>
-                  <div className="text-[11px] text-foreground/60">{isKz ? "3 қалада" : "в 3 городах"}</div>
+                  <div className="text-[11px] text-foreground/60">{isKz ? "4 өңірде" : "в 4 локациях"}</div>
                 </div>
               </div>
 
@@ -407,7 +431,7 @@ export function StationsPage() {
         </section>
 
         {/* Filter Toolbar: Cities, Services & Search */}
-        <section className="border-b border-primary/10 bg-background/95 backdrop-blur-sm py-5 px-5 sticky top-[57px] z-30 shadow-xs">
+        <section className="border-b border-primary/10 bg-background/95 backdrop-blur-sm py-4 px-5 shadow-xs">
           <div className="mx-auto max-w-6xl flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             {/* City Tabs */}
             <div className="flex flex-wrap items-center gap-2">
@@ -420,7 +444,7 @@ export function StationsPage() {
                     : "bg-background border border-primary/15 text-foreground/75 hover:border-primary/40 hover:bg-primary/5"
                 }`}
               >
-                {isKz ? "Барлығы (8)" : isEn ? "All Cities (8)" : "Все города (8)"}
+                {isKz ? `Барлығы (${ALL_STATIONS.length})` : isEn ? `All Cities (${ALL_STATIONS.length})` : `Все города (${ALL_STATIONS.length})`}
               </button>
 
               {STATIONS_DATA.map((c) => {
@@ -666,6 +690,11 @@ export function StationsPage() {
                           <span className="rounded-lg border border-primary/15 bg-primary/5 px-2 py-0.5 text-[11px] font-medium text-foreground/80">
                             ДТ Евро
                           </span>
+                          {st.services.includes("gas") && (
+                            <span className="rounded-lg border border-teal-500/40 bg-teal-500/15 px-2 py-0.5 text-[11px] font-bold text-teal-700 dark:text-teal-300">
+                              Автогаз (СУГ)
+                            </span>
+                          )}
                         </div>
                       </div>
 
@@ -675,6 +704,12 @@ export function StationsPage() {
                           <Fuel className="size-3 text-primary" />
                           <span>{isKz ? "Дәл құю" : "Точный налив"}</span>
                         </span>
+                        {st.services.includes("gas") && (
+                          <span className="inline-flex items-center gap-1 rounded-md bg-foreground/5 px-2 py-0.5">
+                            <Flame className="size-3 text-teal-600" />
+                            <span>{isKz ? "СУГ Газ" : "Автогаз (LPG)"}</span>
+                          </span>
+                        )}
                         {hasStore && (
                           <span className="inline-flex items-center gap-1 rounded-md bg-foreground/5 px-2 py-0.5">
                             <Store className="size-3 text-amber-500" />
@@ -717,7 +752,7 @@ export function StationsPage() {
               </div>
 
               {/* Right Column: Sticky Interactive Leaflet Map */}
-              <div className={`sticky top-24 rounded-3xl overflow-hidden border border-primary/20 shadow-2xl bg-slate-950/5 flex flex-col h-[calc(100vh-8rem)] min-h-[560px] max-h-[780px] ${
+              <div className={`sticky top-20 rounded-3xl overflow-hidden border border-primary/20 shadow-2xl bg-slate-950/5 flex flex-col h-[calc(100vh-6.5rem)] min-h-[560px] max-h-[820px] ${
                 mobileView === "list" ? "hidden lg:flex" : "flex"
               }`}>
                 {/* Map Area */}

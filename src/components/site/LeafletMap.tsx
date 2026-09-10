@@ -111,9 +111,18 @@ export function LeafletMap({ stations, activeStationNum, onStationSelect, lang =
           </div>
         `;
 
+        const popup = L.popup({
+          autoPan: true,
+          autoPanPaddingTopLeft: L.point(20, 85),
+          autoPanPaddingBottomRight: L.point(20, 80),
+          offset: L.point(0, -12),
+          closeButton: false,
+          className: "custom-smunai-popup",
+        });
+
         const marker = L.marker([st.coords.lat, st.coords.lng], { icon })
           .addTo(map)
-          .bindPopup(popupContent, { closeButton: false, offset: [0, -10] });
+          .bindPopup(popupContent, popup);
 
         marker.on("click", () => {
           onStationSelect(st.number);
@@ -122,7 +131,7 @@ export function LeafletMap({ stations, activeStationNum, onStationSelect, lang =
         markersRef.current[st.number] = marker;
       });
 
-      // Fly to active station smoothly
+      // Fly to active station smoothly with headroom offset to prevent top cutoff
       const targetSt = stations.find((s) => s.number === activeStationNum) || stations[0];
       if (
         targetSt?.coords &&
@@ -132,12 +141,36 @@ export function LeafletMap({ stations, activeStationNum, onStationSelect, lang =
         !isNaN(targetSt.coords.lng)
       ) {
         map.invalidateSize();
-        map.flyTo([targetSt.coords.lat, targetSt.coords.lng], 15, { duration: 0.7 });
+        const zoom = 15;
+        // Project target coordinates to pixel space
+        const targetPoint = map.project([targetSt.coords.lat, targetSt.coords.lng], zoom);
+        // Shift camera North by 85px so station sits lower in viewport, guaranteeing ample popup headroom
+        const offsetCenterPoint = L.point(targetPoint.x, targetPoint.y - 85);
+        const offsetCenterLatLng = map.unproject(offsetCenterPoint, zoom);
+
         const targetMarker = markersRef.current[targetSt.number];
         if (targetMarker) {
-          setTimeout(() => {
+          const currentCenter = map.getCenter();
+          const dist = currentCenter.distanceTo(offsetCenterLatLng);
+
+          if (dist < 15) {
             targetMarker.openPopup();
-          }, 250);
+          } else {
+            let popupOpened = false;
+            const openCleanPopup = () => {
+              if (!popupOpened) {
+                popupOpened = true;
+                targetMarker.openPopup();
+              }
+            };
+            map.once("moveend", openCleanPopup);
+            setTimeout(openCleanPopup, 650);
+
+            map.flyTo(offsetCenterLatLng, zoom, {
+              duration: 0.65,
+              easeLinearity: 0.25,
+            });
+          }
         }
       }
     });
