@@ -570,6 +570,7 @@ export function StationsPage() {
                   const isCurrent = st.number === activeStation.number;
                   const hasStore = [1, 3, 4, 6].includes(st.number);
                   const isFlagship = st.number === 4;
+                  const hasCoffee = st.services.includes("coffee");
 
                   return (
                     <article
@@ -680,10 +681,12 @@ export function StationsPage() {
                             <span>{isKz ? "С-Дүкен" : "Маркет"}</span>
                           </span>
                         )}
-                        <span className="inline-flex items-center gap-1 rounded-md bg-foreground/5 px-2 py-0.5">
-                          <Coffee className="size-3 text-amber-600" />
-                          <span>{isKz ? "Арабика кофе" : "Кофе с собой"}</span>
-                        </span>
+                        {hasCoffee && (
+                          <span className="inline-flex items-center gap-1 rounded-md bg-foreground/5 px-2 py-0.5">
+                            <Coffee className="size-3 text-amber-600" />
+                            <span>{isKz ? "Арабика кофе" : "Кофе с собой"}</span>
+                          </span>
+                        )}
                         <span className="inline-flex items-center gap-1 rounded-md bg-foreground/5 px-2 py-0.5">
                           <CreditCard className="size-3 text-emerald-600" />
                           <span>Kaspi QR</span>
