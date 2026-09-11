@@ -6,9 +6,16 @@ type LeafletMapProps = {
   activeStationNum: number;
   onStationSelect: (stationNum: number) => void;
   lang?: "kz" | "ru" | "en";
+  isVisible?: boolean;
 };
 
-export function LeafletMap({ stations, activeStationNum, onStationSelect, lang = "kz" }: LeafletMapProps) {
+export function LeafletMap({
+  stations,
+  activeStationNum,
+  onStationSelect,
+  lang = "kz",
+  isVisible = true,
+}: LeafletMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const markersRef = useRef<Record<number, any>>({});
@@ -129,13 +136,11 @@ export function LeafletMap({ stations, activeStationNum, onStationSelect, lang =
         `;
 
         const popup = L.popup({
-          autoPan: true,
-          autoPanPaddingTopLeft: L.point(20, 85),
-          autoPanPaddingBottomRight: L.point(20, 80),
-          offset: L.point(0, -12),
+          autoPan: false,
           closeButton: false,
-          minWidth: 255,
-          maxWidth: 280,
+          minWidth: 256,
+          maxWidth: 256,
+          offset: L.point(0, -6),
           className: "custom-smunai-popup",
         });
 
@@ -150,7 +155,7 @@ export function LeafletMap({ stations, activeStationNum, onStationSelect, lang =
         markersRef.current[st.number] = marker;
       });
 
-      // Fly to active station smoothly with headroom offset to prevent top cutoff
+      // Position camera and open active station popup cleanly
       const targetSt = stations.find((s) => s.number === activeStationNum) || stations[0];
       if (
         targetSt?.coords &&
@@ -161,36 +166,23 @@ export function LeafletMap({ stations, activeStationNum, onStationSelect, lang =
       ) {
         map.invalidateSize();
         const zoom = 15;
-        // Project target coordinates to pixel space
-        const targetPoint = map.project([targetSt.coords.lat, targetSt.coords.lng], zoom);
         // Shift camera North by 85px so station sits lower in viewport, guaranteeing ample popup headroom
+        const targetPoint = map.project([targetSt.coords.lat, targetSt.coords.lng], zoom);
         const offsetCenterPoint = L.point(targetPoint.x, targetPoint.y - 85);
         const offsetCenterLatLng = map.unproject(offsetCenterPoint, zoom);
 
         const targetMarker = markersRef.current[targetSt.number];
         if (targetMarker) {
+          targetMarker.openPopup();
+          const p = targetMarker.getPopup();
+          if (p) p.update();
+
           const currentCenter = map.getCenter();
           const dist = currentCenter.distanceTo(offsetCenterLatLng);
 
-          if (dist < 15) {
-            targetMarker.openPopup();
-            const p = targetMarker.getPopup();
-            if (p) p.update();
-          } else {
-            let popupOpened = false;
-            const openCleanPopup = () => {
-              if (!popupOpened) {
-                popupOpened = true;
-                targetMarker.openPopup();
-                const p = targetMarker.getPopup();
-                if (p) p.update();
-              }
-            };
-            map.once("moveend", openCleanPopup);
-            setTimeout(openCleanPopup, 650);
-
+          if (dist > 15) {
             map.flyTo(offsetCenterLatLng, zoom, {
-              duration: 0.65,
+              duration: 0.5,
               easeLinearity: 0.25,
             });
           }
@@ -203,19 +195,54 @@ export function LeafletMap({ stations, activeStationNum, onStationSelect, lang =
     };
   }, [stations, activeStationNum, onStationSelect, lang]);
 
+  // Handle visibility changes (e.g. mobile switching from list to map tab)
+  useEffect(() => {
+    if (!mapInstanceRef.current || isVisible === false) return;
+    const map = mapInstanceRef.current;
+    const timer = setTimeout(() => {
+      map.invalidateSize();
+      const targetSt = stations.find((s) => s.number === activeStationNum) || stations[0];
+      if (
+        targetSt?.coords &&
+        typeof targetSt.coords.lat === "number" &&
+        typeof targetSt.coords.lng === "number"
+      ) {
+        const zoom = 15;
+        const targetPoint = map.project([targetSt.coords.lat, targetSt.coords.lng], zoom);
+        const offsetCenterPoint = L.point(targetPoint.x, targetPoint.y - 85);
+        const offsetCenterLatLng = map.unproject(offsetCenterPoint, zoom);
+        map.setView(offsetCenterLatLng, zoom, { animate: false });
+        const targetMarker = markersRef.current[targetSt.number];
+        if (targetMarker) {
+          targetMarker.openPopup();
+          const p = targetMarker.getPopup();
+          if (p) p.update();
+        }
+      }
+    }, 60);
+    return () => clearTimeout(timer);
+  }, [isVisible, activeStationNum, stations]);
+
   // Handle container resize & mobile tab switching (hidden -> visible)
   useEffect(() => {
     if (!mapContainerRef.current) return;
-    const observer = new ResizeObserver(() => {
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.invalidateSize();
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.contentRect.width > 0 && mapInstanceRef.current) {
+          mapInstanceRef.current.invalidateSize();
+          const targetMarker = markersRef.current[activeStationNum];
+          if (targetMarker && targetMarker.isPopupOpen && targetMarker.isPopupOpen()) {
+            const p = targetMarker.getPopup();
+            if (p) p.update();
+          }
+        }
       }
     });
     observer.observe(mapContainerRef.current);
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [activeStationNum]);
 
   useEffect(() => {
     return () => {

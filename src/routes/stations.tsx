@@ -828,6 +828,7 @@ export function StationsPage() {
                     activeStationNum={activeStation.number}
                     onStationSelect={setSelectedStationNum}
                     lang={lang}
+                    isVisible={mobileView === "map"}
                   />
                 </div>
 
