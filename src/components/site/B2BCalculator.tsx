@@ -352,6 +352,6 @@ export function B2BCalculator({
         </div>
 
       </div>
-    </section>
+    </div>
   );
 }
