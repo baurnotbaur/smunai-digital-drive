@@ -106,9 +106,9 @@ export function LeafletMap({ stations, activeStationNum, onStationSelect, lang =
           : "";
 
         const popupContent = `
-          <div style="font-family: system-ui, -apple-system, sans-serif; width: 255px; overflow: hidden; border-radius: 16px;">
+          <div style="font-family: system-ui, -apple-system, sans-serif; width: 255px; min-width: 255px; max-width: 275px; box-sizing: border-box; overflow: hidden; border-radius: 16px;">
             <div style="background: linear-gradient(135deg, #0D6C89, #094a5e); color: #ffffff; padding: 12px 14px;">
-              <div style="font-weight: 800; font-size: 14px; letter-spacing: -0.01em;">${brandTitle}</div>
+              <div style="font-weight: 800; font-size: 14px; letter-spacing: -0.01em; white-space: nowrap;">${brandTitle}</div>
               <div style="font-size: 11px; opacity: 0.85; margin-top: 2px;">${cityName}</div>
             </div>
             <div style="padding: 12px 14px; background: #ffffff;">
@@ -120,7 +120,7 @@ export function LeafletMap({ stations, activeStationNum, onStationSelect, lang =
               </div>
               ${fuelsHtml}
               <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #f1f5f9;">
-                <a href="${st.gisUrl}" target="_blank" rel="noreferrer" style="display: block; text-align: center; background: #D4AF37; color: #1e293b; text-decoration: none; font-size: 11px; font-weight: 700; padding: 8px 12px; border-radius: 8px; box-shadow: 0 2px 6px rgba(212,175,55,0.35);">
+                <a href="${st.gisUrl}" target="_blank" rel="noreferrer" style="display: block; text-align: center; background: #D4AF37; color: #1e293b; text-decoration: none; font-size: 11px; font-weight: 700; padding: 8px 12px; border-radius: 8px; box-shadow: 0 2px 6px rgba(212,175,55,0.35); white-space: nowrap;">
                   ${gisBtnText}
                 </a>
               </div>
@@ -134,6 +134,8 @@ export function LeafletMap({ stations, activeStationNum, onStationSelect, lang =
           autoPanPaddingBottomRight: L.point(20, 80),
           offset: L.point(0, -12),
           closeButton: false,
+          minWidth: 255,
+          maxWidth: 280,
           className: "custom-smunai-popup",
         });
 
@@ -172,12 +174,16 @@ export function LeafletMap({ stations, activeStationNum, onStationSelect, lang =
 
           if (dist < 15) {
             targetMarker.openPopup();
+            const p = targetMarker.getPopup();
+            if (p) p.update();
           } else {
             let popupOpened = false;
             const openCleanPopup = () => {
               if (!popupOpened) {
                 popupOpened = true;
                 targetMarker.openPopup();
+                const p = targetMarker.getPopup();
+                if (p) p.update();
               }
             };
             map.once("moveend", openCleanPopup);
