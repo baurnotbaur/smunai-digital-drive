@@ -402,7 +402,9 @@ export function StationsPage() {
       {/* Main Content */}
       <main className="flex-1 pb-16">
         {/* Page Hero & Quick Stats */}
-        <section className="border-b border-primary/10 bg-gradient-to-b from-primary/10 via-primary/5 to-background py-10 px-5">
+        <section className={`border-b border-primary/10 bg-gradient-to-b from-primary/10 via-primary/5 to-background py-8 sm:py-10 px-5 transition-all ${
+          mobileView === "map" ? "hidden lg:block" : "block"
+        }`}>
           <div className="mx-auto max-w-6xl">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
@@ -493,7 +495,7 @@ export function StationsPage() {
         </section>
 
         {/* Filter Toolbar: Cities, Services & Search */}
-        <section className="border-b border-primary/10 bg-background/95 backdrop-blur-sm py-5 px-5 sticky top-[57px] z-30 shadow-xs">
+        <section className="border-b border-primary/10 bg-background/95 backdrop-blur-sm py-3.5 sm:py-4 px-4 sm:px-5 sticky top-[53px] sm:top-[64px] z-30 shadow-xs">
           <div className="mx-auto max-w-6xl flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             {/* City Tabs */}
             <div className="flex flex-wrap items-center gap-2">
@@ -602,7 +604,10 @@ export function StationsPage() {
               </button>
               <button
                 type="button"
-                onClick={() => setMobileView("map")}
+                onClick={() => {
+                  setMobileView("map");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
                 className={`flex items-center justify-center gap-1.5 rounded-lg py-2 transition-all ${
                   mobileView === "map" ? "bg-primary text-primary-foreground shadow-sm" : "text-foreground/70 hover:text-primary"
                 }`}
@@ -615,7 +620,7 @@ export function StationsPage() {
         </section>
 
         {/* Main Station Work Area (List + Map) */}
-        <section className="mx-auto max-w-6xl px-5 mt-8">
+        <section id="stations-work-area" className="mx-auto max-w-6xl px-4 sm:px-5 mt-4 sm:mt-8">
           {filteredStations.length === 0 ? (
             <div className="soft-card p-12 text-center my-8">
               <MapPin className="size-10 text-primary/30 mx-auto mb-3" />
@@ -812,12 +817,12 @@ export function StationsPage() {
                 })}
               </div>
 
-              {/* Right Column: Sticky Interactive Leaflet Map */}
-              <div className={`sticky top-20 rounded-3xl overflow-hidden border border-primary/20 shadow-2xl bg-slate-950/5 flex flex-col h-[calc(100vh-6.5rem)] min-h-[560px] max-h-[820px] ${
+              {/* Right Column: Interactive Leaflet Map (Fixed below toolbar on desktop, rock-solid on mobile) */}
+              <div className={`rounded-2xl sm:rounded-3xl overflow-hidden border border-primary/20 shadow-2xl bg-slate-950/5 flex flex-col ${
                 mobileView === "list" ? "hidden lg:flex" : "flex"
-              }`}>
+              } relative z-10 w-full h-[calc(100dvh-230px)] min-h-[460px] max-h-[660px] lg:sticky lg:top-[144px] lg:z-20 lg:h-[calc(100dvh-165px)] lg:min-h-[580px] lg:max-h-[860px]`}>
                 {/* Map Area */}
-                <div className="relative flex-1 min-h-[420px]">
+                <div className="relative flex-1 min-h-[380px]">
                   <LeafletMap
                     stations={filteredStations}
                     activeStationNum={activeStation.number}
@@ -827,9 +832,9 @@ export function StationsPage() {
                 </div>
 
                 {/* Bottom Bar: Active Station Focus & 1-Tap Navigation */}
-                <div className="p-4 bg-background/95 backdrop-blur-md border-t border-primary/15 flex flex-wrap items-center justify-between gap-3 shadow-sm">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-gold text-slate-950 font-black text-xs shadow-xs">
+                <div className="p-3 sm:p-4 bg-background/95 backdrop-blur-md border-t border-primary/15 flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 shadow-sm">
+                  <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                    <span className="flex size-7 sm:size-8 shrink-0 items-center justify-center rounded-lg bg-gold text-slate-950 font-black text-xs shadow-xs">
                       {activeStation.number}
                     </span>
                     <div className="min-w-0 truncate">
@@ -848,12 +853,12 @@ export function StationsPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 shrink-0">
                     <a
                       href={activeStation.gisUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="btn-base btn-gold inline-flex items-center gap-1.5 !px-4 !py-2 !text-xs font-bold shadow-md"
+                      className="btn-base btn-gold inline-flex items-center gap-1.5 !px-3.5 !py-1.5 sm:!px-4 sm:!py-2 !text-xs font-bold shadow-md"
                     >
                       <Navigation className="size-3.5" />
                       <span>{isKz ? "2ГИС Бағыты →" : isEn ? "Drive with 2GIS →" : "Поехать в 2ГИС →"}</span>

@@ -387,5 +387,7 @@
 
 .leaflet-container {
   font-family: var(--font-sans, system-ui, sans-serif) !important;
+  touch-action: pan-x pan-y !important;
+  isolation: isolate;
 }
 
