@@ -46,6 +46,7 @@ export function SDukenSection() {
       desc: t.sduken.coffeeDesc,
       tag: lang === "kz" ? "100% Арабика" : lang === "en" ? "100% Arabica" : "100% Арабика",
       accent: "from-amber-500/20 to-amber-700/10 text-amber-300 border-amber-500/30",
+      image: "/images/espresso-macro.webp",
     },
     {
       icon: UtensilsCrossed,
@@ -53,6 +54,7 @@ export function SDukenSection() {
       desc: t.sduken.foodDesc,
       tag: lang === "kz" ? "Ыстық тағамдар" : lang === "en" ? "Hot Bites" : "Свежая выпечка",
       accent: "from-orange-500/20 to-orange-700/10 text-orange-300 border-orange-500/30",
+      image: "/images/croissants-tray.webp",
     },
     {
       icon: Sparkles,
@@ -60,6 +62,7 @@ export function SDukenSection() {
       desc: t.sduken.drinksDesc,
       tag: lang === "kz" ? "24/7 Салқын сусындар" : lang === "en" ? "Cold Drinks 24/7" : "Холодные напитки",
       accent: "from-teal-500/20 to-teal-700/10 text-teal-300 border-teal-500/30",
+      image: "/images/coffee-paper-cup.webp",
     },
     {
       icon: Droplets,
@@ -67,6 +70,7 @@ export function SDukenSection() {
       desc: t.sduken.autoDesc,
       tag: lang === "kz" ? "Түпнұсқа майлар" : lang === "en" ? "OEM Motor Oils" : "Оригинальные масла",
       accent: "from-blue-500/20 to-blue-700/10 text-blue-300 border-blue-500/30",
+      image: "/images/latte-turquoise.webp",
     },
   ];
 
@@ -79,17 +83,18 @@ export function SDukenSection() {
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Brand Banner Card */}
         <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-b from-slate-800/80 via-slate-900/90 to-slate-950 p-8 shadow-2xl backdrop-blur-xl md:p-12">
-          {/* Night Store Background */}
-          <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden opacity-20">
+          {/* Store Facade Background: clear view of "С ДҮКЕН" sign */}
+          <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
             <picture>
               <source srcSet="/images/sduken-night.webp" type="image/webp" />
               <img
                 src="/images/sduken-night.jpg"
-                alt=""
-                className="h-full w-full object-cover object-center"
+                alt="Вывеска С-Дүкен"
+                className="h-full w-full object-cover object-[center_20%] md:object-[right_25%] opacity-45 md:opacity-55"
               />
             </picture>
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-900/60" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/30" />
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/60 to-slate-950/15" />
           </div>
           {/* Top Row: Logo & Badges */}
           <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
@@ -196,6 +201,16 @@ export function SDukenSection() {
                   className={`group relative flex flex-col justify-between rounded-2xl border bg-gradient-to-b ${item.accent} p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/30`}
                 >
                   <div>
+                    {item.image && (
+                      <div className="mb-4 aspect-[16/10] w-full overflow-hidden rounded-xl bg-slate-950/40">
+                        <img
+                          src={item.image}
+                          alt=""
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      </div>
+                    )}
                     <div className="flex items-center justify-between">
                       <div className="rounded-xl border border-white/10 bg-slate-950/60 p-3">
                         <Icon className="h-6 w-6 text-white transition-transform group-hover:scale-110" />
