@@ -66,7 +66,7 @@ export function SDukenSection() {
       title: t.sduken.autoTitle,
       desc: t.sduken.autoDesc,
       tag: lang === "kz" ? "Түпнұсқа майлар" : lang === "en" ? "OEM Motor Oils" : "Оригинальные масла",
-      image: "/images/latte-turquoise.webp",
+      image: "/images/motor-oil.webp",
     },
   ];
 

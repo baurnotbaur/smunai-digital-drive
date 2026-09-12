@@ -30,7 +30,7 @@ media-pack/
 | `images/web/heritage-1996.jpg/.webp` | секция «О нас» (`index.tsx:631`) / карточка «1996» в `AnniversaryTimeline.tsx` | Архивный кадр первой станции, 30 лет |
 | `images/web/career-operator.jpg/.webp` | hero страницы `career.tsx:135` | Кассир подаёт кофе — для вакансий |
 | `images/web/sduken-banner.jpg/.webp` | баннер в `SDukenSection.tsx` | Флагманский маркет АЗС №4 (реальный фасад) |
-| `images/web/espresso-macro.webp`, `coffee-paper-cup.webp`, `croissants-tray.webp`, `croissants-rack.webp`, `latte-turquoise.webp` | карточки услуг «Кофе с собой» / «Магазин» в `SDukenSection.tsx`, `index.tsx` (fuel/services) | Стоковые food-карточки 1280×720 |
+| `images/web/espresso-macro.webp`, `coffee-paper-cup.webp`, `croissants-tray.webp`, `croissants-rack.webp`, `motor-oil.webp` | карточки услуг «Кофе с собой» / «Магазин» / «Автотовары и масла» в `SDukenSection.tsx` | Стоковые карточки 1280×800 |
 | `images/web/tanker-steppe.jpg/.webp` | hero/баннер `b2b.tsx` | Бензовозы в степи — блок «Бизнесу» |
 | `images/web/stela-night.jpg/.webp` | шапка/заглушка карты `stations.tsx` | Стела ночью, панели БЕЗ цен (политика соблюдена) |
 | `images/web/road-fields.webp`, `road-golden-hour.webp` | фоны секций, `AnniversaryTimeline`, блог/Instagram | Степная дорога |
