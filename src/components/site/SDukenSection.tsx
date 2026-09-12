@@ -51,8 +51,8 @@ export function SDukenSection() {
       icon: UtensilsCrossed,
       title: t.sduken.foodTitle,
       desc: t.sduken.foodDesc,
-      tag: lang === "kz" ? "Ыстық тағамдар" : lang === "en" ? "Hot Bites" : "Свежая выпечка",
-      image: "/images/croissants-tray.webp",
+      tag: lang === "kz" ? "Ыстық хот-догтар" : lang === "en" ? "Hot Dogs & Bites" : "Хот-доги и выпечка",
+      image: "/images/hotdogs-bistro.webp",
     },
     {
       icon: Sparkles,
