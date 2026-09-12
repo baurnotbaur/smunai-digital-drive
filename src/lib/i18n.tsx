@@ -582,7 +582,7 @@ export const DICTIONARY: Record<Lang, Translations> = {
       storageFeat1: "Сәйкестік сертификаттары бар резервуарлар",
       storageFeat2: "Тәулік бойы күзет және сандық бақылау",
       storageFeat3: "Бухгалтерия үшін толық ЭСФ және есептер",
-      orderBtn: "B2B қызметке өтінім беру",
+      orderBtn: "Өтінім қалдыру",
     },
     hiTechVideo: {
       badge: "Премиум формула",
@@ -883,7 +883,7 @@ export const DICTIONARY: Record<Lang, Translations> = {
       storageFeat1: "Сертифицированный резервуарный парк",
       storageFeat2: "Круглосуточный приём и цифровой учёт",
       storageFeat3: "Полный пакет закрывающих документов и ЭСФ",
-      orderBtn: "Оставить заявку на B2B-обслуживание",
+      orderBtn: "Оставить заявку",
     },
     hiTechVideo: {
       badge: "Премиальная формула",
@@ -1184,7 +1184,7 @@ export const DICTIONARY: Record<Lang, Translations> = {
       storageFeat1: "Standard-certified bulk storage tanks",
       storageFeat2: "24/7 security & automated inventory logging",
       storageFeat3: "Full accounting reconciliation & electronic invoices",
-      orderBtn: "Request B2B Service Quote",
+      orderBtn: "Submit Request",
     },
     hiTechVideo: {
       badge: "Premium Formula",
