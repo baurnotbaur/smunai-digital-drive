@@ -44,7 +44,7 @@ export function HiTechVideoBanner() {
 
   return (
     <section className="relative overflow-hidden bg-slate-950 py-20 text-white md:py-28" id="hitech">
-      {/* Video Background with Fallback Poster */}
+      {/* Video Background */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <video
           ref={videoRef}
@@ -52,11 +52,10 @@ export function HiTechVideoBanner() {
           loop
           muted
           playsInline
-          poster="/images/station-hero.webp"
           className="h-full w-full object-cover opacity-35"
         >
-          <source src="/videos/loop-hero-1080.webm" type="video/webm" />
-          <source src="/videos/loop-hero-1080.mp4" type="video/mp4" />
+          <source src="/videos/station-1080.webm" type="video/webm" />
+          <source src="/videos/station-720.webm" type="video/webm" />
         </video>
         {/* Cinematic Vignette Overlays */}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/90" />
