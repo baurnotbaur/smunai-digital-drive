@@ -627,12 +627,15 @@ function Index() {
             </Reveal>
             <Reveal delay={0.15}>
               <figure className="lift overflow-hidden rounded-3xl shadow-[0_30px_60px_-30px_color-mix(in_oklab,var(--primary)_60%,transparent)]">
-                <img
-                  src="/images/station-hero.jpg"
-                  alt="АЗС С-Мунай на закате"
-                  className="aspect-[16/10] w-full object-cover"
-                  loading="lazy"
-                />
+                <picture>
+                  <source srcSet="/images/heritage-1996.webp" type="image/webp" />
+                  <img
+                    src="/images/heritage-1996.jpg"
+                    alt="АЗС С-Мунай на закате"
+                    className="aspect-[16/10] w-full object-cover"
+                    loading="lazy"
+                  />
+                </picture>
               </figure>
             </Reveal>
           </div>

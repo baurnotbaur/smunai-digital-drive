@@ -78,6 +78,14 @@ function B2BPage() {
 
       {/* Hero Section */}
       <section className="hero-surface relative overflow-hidden py-16 sm:py-24 text-white border-b border-white/10">
+        <picture className="pointer-events-none absolute inset-0 z-0 overflow-hidden opacity-25">
+          <source srcSet="/images/tanker-steppe.webp" type="image/webp" />
+          <img
+            src="/images/tanker-steppe.jpg"
+            alt=""
+            className="h-full w-full object-cover object-center"
+          />
+        </picture>
         <div className="ambient-overlay" aria-hidden="true" />
         <div className="relative mx-auto max-w-6xl px-5 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-teal-400/30 bg-teal-500/15 px-4 py-1.5 text-xs font-semibold tracking-wider text-teal-300 backdrop-blur-md">

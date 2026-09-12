@@ -55,8 +55,8 @@ export function HiTechVideoBanner() {
           poster="/images/station-hero.webp"
           className="h-full w-full object-cover opacity-35"
         >
-          <source src="/videos/station-1080.webm" type="video/webm" />
-          <source src="/videos/station-720.webm" type="video/webm" />
+          <source src="/videos/loop-hero-1080.webm" type="video/webm" />
+          <source src="/videos/loop-hero-1080.mp4" type="video/mp4" />
         </video>
         {/* Cinematic Vignette Overlays */}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/90" />

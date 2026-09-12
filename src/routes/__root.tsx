@@ -89,8 +89,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Сатпаеве и Астане: качественное топливо, магазин и кофе с собой." },
       { property: "og:description", content: "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Сатпаеве и Астане: качественное топливо, магазин и кофе с собой." },
       { name: "twitter:description", content: "С-Мунай — семейная сеть из 8 АЗС в Жезказгане, Сатпаеве и Астане: качественное топливо, магазин и кофе с собой." },
-      { property: "og:image", content: "/images/station-hero.jpg" },
-      { name: "twitter:image", content: "/images/station-hero.jpg" },
+      { property: "og:image", content: "/images/og-1200x630.jpg" },
+      { name: "twitter:image", content: "/images/og-1200x630.jpg" },
     ],
     links: [
       {

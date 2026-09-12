@@ -132,9 +132,9 @@ function CareerPage() {
       {/* Hero */}
       <section className="relative isolate overflow-hidden bg-primary-deeper text-white">
         <picture>
-          <source srcSet="/images/station-hero.webp" type="image/webp" />
+          <source srcSet="/images/career-operator.webp" type="image/webp" />
           <img
-            src="/images/station-hero.jpg"
+            src="/images/career-operator.jpg"
             alt="АЗС С-Мунай"
             className="absolute inset-0 size-full object-cover object-[35%_center]"
             fetchPriority="high"
