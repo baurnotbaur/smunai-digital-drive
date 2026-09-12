@@ -142,8 +142,8 @@ function HeroPhoto() {
         <source srcSet="/images/station-hero.webp" type="image/webp" />
         <img
           src="/images/station-hero.jpg"
-          alt="АЗС С-Мунай на закате — визуализация станции"
-          className="absolute inset-0 size-full object-cover object-[30%_center] lg:object-[22%_center]"
+          alt="АЗС С-Мунай"
+          className="absolute inset-0 size-full object-cover object-[center_35%] lg:object-[center_30%]"
           fetchPriority="high"
         />
       </picture>
