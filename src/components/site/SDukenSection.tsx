@@ -1,5 +1,5 @@
 import { useLanguage } from "@/lib/i18n";
-import { Coffee, UtensilsCrossed, Sparkles, Droplets, MapPin, ExternalLink, Clock, Compass, Store } from "lucide-react";
+import { Coffee, UtensilsCrossed, Sparkles, Droplets, MapPin, ExternalLink, Clock, Compass, Store, QrCode, CreditCard } from "lucide-react";
 
 export function SDukenSection() {
   const { t, lang } = useLanguage();
@@ -45,7 +45,6 @@ export function SDukenSection() {
       title: t.sduken.coffeeTitle,
       desc: t.sduken.coffeeDesc,
       tag: lang === "kz" ? "100% Арабика" : lang === "en" ? "100% Arabica" : "100% Арабика",
-      accent: "from-amber-500/20 to-amber-700/10 text-amber-300 border-amber-500/30",
       image: "/images/espresso-macro.webp",
     },
     {
@@ -53,7 +52,6 @@ export function SDukenSection() {
       title: t.sduken.foodTitle,
       desc: t.sduken.foodDesc,
       tag: lang === "kz" ? "Ыстық тағамдар" : lang === "en" ? "Hot Bites" : "Свежая выпечка",
-      accent: "from-orange-500/20 to-orange-700/10 text-orange-300 border-orange-500/30",
       image: "/images/croissants-tray.webp",
     },
     {
@@ -61,7 +59,6 @@ export function SDukenSection() {
       title: t.sduken.drinksTitle,
       desc: t.sduken.drinksDesc,
       tag: lang === "kz" ? "24/7 Салқын сусындар" : lang === "en" ? "Cold Drinks 24/7" : "Холодные напитки",
-      accent: "from-teal-500/20 to-teal-700/10 text-teal-300 border-teal-500/30",
       image: "/images/coffee-paper-cup.webp",
     },
     {
@@ -69,185 +66,216 @@ export function SDukenSection() {
       title: t.sduken.autoTitle,
       desc: t.sduken.autoDesc,
       tag: lang === "kz" ? "Түпнұсқа майлар" : lang === "en" ? "OEM Motor Oils" : "Оригинальные масла",
-      accent: "from-blue-500/20 to-blue-700/10 text-blue-300 border-blue-500/30",
       image: "/images/latte-turquoise.webp",
     },
   ];
 
   return (
-    <section className="relative overflow-hidden bg-slate-900 py-20 text-white md:py-28 scroll-mt-20 sm:scroll-mt-24" id="sduken">
-      {/* Warm Ambient Backlight */}
-      <div className="pointer-events-none absolute -top-40 right-1/4 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-40 left-1/4 h-96 w-96 rounded-full bg-teal-500/10 blur-3xl" />
+    <section
+      className="relative overflow-hidden bg-slate-950 py-20 text-white md:py-28 scroll-mt-20 sm:scroll-mt-24"
+      id="sduken"
+      aria-label="С-Дүкен"
+    >
+      {/* Subtle brand ambient lighting */}
+      <div className="pointer-events-none absolute -top-32 right-1/4 h-96 w-96 rounded-full bg-amber-500/10 blur-[120px]" />
+      <div className="pointer-events-none absolute -bottom-32 left-1/4 h-96 w-96 rounded-full bg-teal-500/10 blur-[120px]" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Brand Banner Card */}
-        <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-b from-slate-800/80 via-slate-900/90 to-slate-950 p-8 shadow-2xl backdrop-blur-xl md:p-12">
-          {/* Store Facade Background: clear view of "С ДҮКЕН" sign */}
-          <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-            <picture>
-              <source srcSet="/images/sduken-night.webp" type="image/webp" />
-              <img
-                src="/images/sduken-night.jpg"
-                alt="Вывеска С-Дүкен"
-                className="h-full w-full object-cover object-[center_20%] md:object-[right_25%] opacity-45 md:opacity-55"
-              />
-            </picture>
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/30" />
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/60 to-slate-950/15" />
-          </div>
-          {/* Top Row: Logo & Badges */}
-          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
-            <div className="flex items-center gap-4">
-              <div className="flex size-14 items-center justify-center rounded-2xl border border-amber-500/30 bg-amber-500/10 text-amber-400 shadow-inner">
-                <Store className="size-7" />
-              </div>
-              <div>
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-amber-300">
-                  <Store className="h-3.5 w-3.5" />
-                  <span>{t.sduken.badge}</span>
-                </div>
-                <h2 className="mt-2 font-heading text-2xl font-bold uppercase tracking-tight text-white sm:text-3xl md:text-4xl">
-                  {t.sduken.title}
-                </h2>
-              </div>
+        {/* 1. Hero Showcase: Brand Info & Real Store Façade */}
+        <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
+          {/* Left: Brand Presentation */}
+          <div className="lg:col-span-7">
+            <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1 text-xs font-semibold tracking-wider text-amber-300">
+              <Store className="size-3.5 text-amber-400" />
+              <span>{t.sduken.badge}</span>
             </div>
 
-            {/* Network Indicator */}
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium text-slate-300 backdrop-blur-sm">
-                <MapPin className="h-4 w-4 text-amber-400" />
-                <span>{t.sduken.stationTag}</span>
-              </div>
+            <h2 className="mt-4 font-heading text-3xl font-bold uppercase tracking-tight text-white sm:text-4xl md:text-5xl lg:text-[2.75rem] leading-[1.08]">
+              {t.sduken.title}
+            </h2>
+
+            <p className="mt-4 max-w-2xl text-base sm:text-lg leading-relaxed text-slate-300">
+              {t.sduken.subtitle}
+            </p>
+
+            {/* Actions & Quick Indicators */}
+            <div className="mt-8 flex flex-wrap items-center gap-4">
               <a
                 href="https://2gis.kz/zhezkazgan/branches/70000001068949326"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 px-4 py-2 text-xs font-semibold text-slate-950 shadow-md shadow-amber-500/20 transition-all hover:from-amber-400 hover:to-amber-500"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-amber-500/20 transition-all hover:from-amber-400 hover:to-amber-500 hover:shadow-amber-500/30"
               >
-                <Compass className="h-4 w-4" />
+                <Compass className="size-4" />
                 <span>{t.sduken.gisBtn}</span>
-                <ExternalLink className="h-3 w-3 opacity-70" />
+                <ExternalLink className="size-3.5 opacity-75" />
               </a>
+
+              <div className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-xs font-medium text-slate-300 backdrop-blur-sm">
+                <MapPin className="size-4 text-amber-400" />
+                <span>{t.sduken.stationTag}</span>
+              </div>
             </div>
           </div>
 
-          <p className="mt-6 max-w-3xl text-base text-slate-300 sm:text-lg">
-            {t.sduken.subtitle}
-          </p>
+          {/* Right: Architectural Façade Showcase */}
+          <div className="lg:col-span-5">
+            <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-slate-900 shadow-2xl aspect-[4/3] lg:aspect-[5/4]">
+              <picture>
+                <source srcSet="/images/sduken-night.webp" type="image/webp" />
+                <img
+                  src="/images/sduken-night.jpg"
+                  alt="Фирменный маркет С-Дүкен"
+                  className="h-full w-full object-cover object-center"
+                  loading="lazy"
+                />
+              </picture>
 
-          {/* 4 Station Locations Grid */}
-          <div className="mt-8">
-            <div className="text-xs font-semibold uppercase tracking-wider text-amber-400">
-              {t.sduken.locationsTitle}
-            </div>
-            <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {dukenStations.map((st) => (
-                <div
-                  key={st.number}
-                  className={`relative flex flex-col justify-between rounded-2xl border p-4 backdrop-blur-md transition-all hover:border-white/30 ${
-                    st.isFlagship
-                      ? "border-amber-500/40 bg-gradient-to-b from-amber-500/10 to-slate-950/80 shadow-lg shadow-amber-500/5"
-                      : "border-white/10 bg-slate-950/60"
-                  }`}
-                >
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <span className="font-heading text-lg font-bold text-white">
-                        {lang === "kz" ? `№${st.number} ЖҚС` : lang === "en" ? `Station #${st.number}` : `АЗС №${st.number}`}
-                      </span>
-                      <span
-                        className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
-                          st.isFlagship
-                            ? "bg-amber-400 text-amber-950 font-bold"
-                            : "bg-white/10 text-teal-300 border border-teal-500/30"
-                        }`}
-                      >
-                        {st.badge}
-                      </span>
-                    </div>
-                    <div className="mt-2 text-xs font-medium text-slate-300">
-                      <span className="text-amber-300 font-semibold">{st.city}:</span> {st.address}
-                    </div>
+              {/* Cinematic Vignette Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+
+              {/* Bottom Caption Pill */}
+              <div className="absolute inset-x-4 bottom-4 flex items-center justify-between rounded-xl border border-white/15 bg-slate-950/80 p-3 backdrop-blur-md">
+                <div>
+                  <div className="text-xs font-bold uppercase tracking-wider text-white">
+                    {lang === "kz" ? "АЗС №4 · Ұлытау к-сі, 4/2" : lang === "en" ? "Station #4 · 4/2 Ulytau St" : "АЗС №4 · ул. Ұлытау, 4/2"}
                   </div>
+                  <div className="text-[11px] text-slate-300">
+                    {lang === "kz" ? "Жезқазған қаласы" : lang === "en" ? "Zhezkazgan City" : "г. Жезказган"}
+                  </div>
+                </div>
+                <span className="rounded-full bg-amber-400 px-2.5 py-0.5 text-[10px] font-bold text-slate-950">
+                  {lang === "kz" ? "Флагман" : lang === "en" ? "Flagship" : "Флагман"}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-                  <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3">
-                    <span className="inline-flex items-center gap-1 text-[11px] text-slate-400">
-                      <Clock className="h-3 w-3 text-emerald-400" />
-                      24/7
+        {/* 2. Stations Addresses Grid (4 Locations) */}
+        <div className="mt-16">
+          <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            <h3 className="flex items-center gap-2.5 font-heading text-lg font-bold uppercase tracking-tight text-white sm:text-xl">
+              <MapPin className="size-5 text-amber-400" />
+              <span>{t.sduken.locationsTitle}</span>
+            </h3>
+            <span className="hidden text-xs font-medium text-slate-400 sm:inline">
+              {lang === "kz" ? "4 нүкте · Тәулік бойы 24/7" : lang === "en" ? "4 Locations · Open 24/7" : "4 маркета · Круглосуточно 24/7"}
+            </span>
+          </div>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {dukenStations.map((st) => (
+              <div
+                key={st.number}
+                className={`relative flex flex-col justify-between rounded-2xl border p-5 backdrop-blur-sm transition-all duration-200 ${
+                  st.isFlagship
+                    ? "border-amber-500/40 bg-gradient-to-b from-amber-500/10 via-slate-900/60 to-slate-950 shadow-lg shadow-amber-500/5 hover:border-amber-400/60"
+                    : "border-white/10 bg-slate-900/50 hover:border-teal-500/30 hover:bg-slate-900/80"
+                }`}
+              >
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-heading text-xl font-bold text-white">
+                      {lang === "kz" ? `АЗС №${st.number}` : lang === "en" ? `Station #${st.number}` : `АЗС №${st.number}`}
                     </span>
-                    <a
-                      href={st.gisUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-teal-400 hover:text-teal-300 transition-colors"
+                    <span
+                      className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
+                        st.isFlagship
+                          ? "bg-amber-400 text-slate-950"
+                          : "border border-teal-500/30 bg-teal-500/10 text-teal-300"
+                      }`}
                     >
-                      <span>2ГИС</span>
-                      <ExternalLink className="h-3 w-3" />
-                    </a>
+                      {st.badge}
+                    </span>
+                  </div>
+
+                  <div className="mt-3 text-xs text-slate-300">
+                    <div className="font-semibold text-amber-300">{st.city}</div>
+                    <div className="mt-0.5 text-slate-300">{st.address}</div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
 
-          {/* 4 Feature Cards */}
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {services.map((item, idx) => {
-              const Icon = item.icon;
-              return (
-                <div
-                  key={idx}
-                  className={`group relative flex flex-col justify-between rounded-2xl border bg-gradient-to-b ${item.accent} p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/30`}
-                >
-                  <div>
-                    {item.image && (
-                      <div className="mb-4 aspect-[16/10] w-full overflow-hidden rounded-xl bg-slate-950/40">
-                        <img
-                          src={item.image}
-                          alt=""
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          loading="lazy"
-                        />
-                      </div>
-                    )}
-                    <div className="flex items-center justify-between">
-                      <div className="rounded-xl border border-white/10 bg-slate-950/60 p-3">
-                        <Icon className="h-6 w-6 text-white transition-transform group-hover:scale-110" />
-                      </div>
-                      <span className="rounded-full border border-white/10 bg-white/10 px-2.5 py-0.5 text-[11px] font-medium text-white/90">
-                        {item.tag}
-                      </span>
+                <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-3">
+                  <span className="inline-flex items-center gap-1.5 text-[11px] text-slate-400">
+                    <Clock className="size-3 text-emerald-400" />
+                    <span>24/7</span>
+                  </span>
+
+                  <a
+                    href={st.gisUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-teal-400 transition-colors hover:text-teal-300"
+                  >
+                    <span>2ГИС</span>
+                    <ExternalLink className="size-3" />
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 3. Signature Products & Services (4 Cards) */}
+        <div className="mt-16">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {services.map((item, idx) => (
+              <div
+                key={idx}
+                className="flex flex-col justify-between rounded-2xl border border-white/10 bg-slate-900/50 p-5 transition-all duration-200 hover:border-amber-500/30 hover:bg-slate-900/80"
+              >
+                <div>
+                  <div className="relative mb-4 aspect-[16/10] w-full overflow-hidden rounded-xl bg-slate-950">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                    <div className="absolute bottom-2.5 left-2.5 rounded-full border border-white/15 bg-slate-950/80 px-2.5 py-0.5 text-[11px] font-semibold text-white backdrop-blur-md">
+                      {item.tag}
                     </div>
-
-                    <h3 className="mt-4 font-heading text-lg font-bold text-white">
-                      {item.title}
-                    </h3>
-                    <p className="mt-2 text-xs leading-relaxed text-slate-300">
-                      {item.desc}
-                    </p>
                   </div>
+
+                  <h4 className="font-heading text-lg font-bold text-white tracking-tight">
+                    {item.title}
+                  </h4>
+
+                  <p className="mt-2 text-xs sm:text-sm leading-relaxed text-slate-300">
+                    {item.desc}
+                  </p>
                 </div>
-              );
-            })}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 4. Traveler Comfort & Payment Reassurance Strip */}
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 rounded-2xl border border-white/10 bg-slate-900/60 p-5 backdrop-blur-sm sm:flex-row">
+          <div className="flex items-center gap-3 text-xs sm:text-sm text-slate-300">
+            <span className="relative flex size-2.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex size-2.5 rounded-full bg-emerald-500" />
+            </span>
+            <span>
+              {lang === "kz"
+                ? "С-Дүкен желісінің барлық 4 маркеті тәулік бойы (24/7) жұмыс істейді. Барлық банк карталары мен Kaspi QR қабылданады."
+                : lang === "en"
+                ? "All 4 «S-Duken» convenience stores operate 24/7. All bank cards and Kaspi QR accepted."
+                : "Все 4 маркета сети «С-Дүкен» работают круглосуточно 24/7. Принимаем все банковские карты и Kaspi QR."}
+            </span>
           </div>
 
-          {/* Bottom Bar: Traveler Comfort Guarantee */}
-          <div className="mt-10 flex flex-col items-center justify-between gap-4 rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:flex-row">
-            <div className="flex items-center gap-3 text-sm text-slate-300">
-              <span className="flex h-3 w-3 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-              <span>
-                {lang === "kz"
-                  ? "С-Дүкен желісінің барлық 4 маркеті тәулік бойы (24/7) жұмыс істейді. Қазақстанның барлық банк карталары мен Kaspi QR қабылданады."
-                  : lang === "en"
-                  ? "All 4 «S-Duken» convenience stores operate 24/7. All local bank cards and Kaspi QR accepted."
-                  : "Все 4 маркета сети «С-Дүкен» работают круглосуточно 24/7. Принимаем все банковские карты и Kaspi QR."}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2 text-xs text-amber-400 font-medium">
-              <span>{lang === "kz" ? "4 маркет: Жезқазған және Сәтбаев" : lang === "en" ? "4 Stores: Zhezkazgan & Satpayev" : "Сеть из 4 маркетов: Жезказган и Сатпаев"}</span>
-            </div>
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-300">
+              <QrCode className="size-3.5 text-amber-400" />
+              <span>Kaspi QR</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-300">
+              <CreditCard className="size-3.5 text-teal-400" />
+              <span>Visa / Mastercard</span>
+            </span>
           </div>
         </div>
       </div>
