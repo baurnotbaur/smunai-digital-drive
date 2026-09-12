@@ -81,72 +81,73 @@ export function SDukenSection() {
       <div className="pointer-events-none absolute -bottom-32 left-1/4 h-96 w-96 rounded-full bg-teal-500/10 blur-[120px]" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* 1. Hero Showcase: Brand Info & Real Store Façade */}
-        <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
-          {/* Left: Brand Presentation */}
-          <div className="lg:col-span-7">
-            <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1 text-xs font-semibold tracking-wider text-amber-300">
-              <Store className="size-3.5 text-amber-400" />
-              <span>{t.sduken.badge}</span>
+        {/* 1. Brand Banner Card with Panoramic Night Façade Backdrop */}
+        <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-slate-950 p-6 sm:p-8 md:p-12 lg:p-14 shadow-2xl">
+          {/* Panoramic Night Store Façade across the full card */}
+          <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+            <picture>
+              <source srcSet="/images/sduken-night.webp" type="image/webp" />
+              <img
+                src="/images/sduken-night.jpg"
+                alt="Фирменный маркет С-Дүкен"
+                className="h-full w-full object-cover object-[center_35%] md:object-[right_center] opacity-80 md:opacity-90"
+              />
+            </picture>
+
+            {/* Seamless gradients: left dark film for text readability, right illuminated storefront preserved */}
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/40 md:hidden" />
+            <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent" />
+            <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-slate-950/20" />
+          </div>
+
+          {/* Banner Content */}
+          <div className="relative z-10 flex flex-col justify-between min-h-[380px] sm:min-h-[420px] md:min-h-[460px]">
+            {/* Top row: Brand Badge & Flagship indicator */}
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/40 bg-amber-500/15 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-amber-300 backdrop-blur-md">
+                <Store className="size-3.5 text-amber-400" />
+                <span>{t.sduken.badge}</span>
+              </div>
+
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-slate-950/75 px-3.5 py-1 text-xs font-medium text-slate-200 backdrop-blur-md">
+                <span className="size-2 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]" />
+                <span>
+                  {lang === "kz"
+                    ? "Флагмандық маркет · АЗС №4 (Ұлытау к-сі, 4/2)"
+                    : lang === "en"
+                    ? "Flagship Store · Station #4 (4/2 Ulytau St)"
+                    : "Флагманский маркет · АЗС №4 (ул. Ұлытау, 4/2)"}
+                </span>
+              </div>
             </div>
 
-            <h2 className="mt-4 font-heading text-3xl font-bold uppercase tracking-tight text-white sm:text-4xl md:text-5xl lg:text-[2.75rem] leading-[1.08]">
-              {t.sduken.title}
-            </h2>
+            {/* Middle: Headline & Subtitle */}
+            <div className="my-auto max-w-2xl py-6">
+              <h2 className="font-heading text-3xl font-bold uppercase tracking-tight text-white sm:text-4xl md:text-5xl lg:text-[2.85rem] leading-[1.08] drop-shadow-md">
+                {t.sduken.title}
+              </h2>
 
-            <p className="mt-4 max-w-2xl text-base sm:text-lg leading-relaxed text-slate-300">
-              {t.sduken.subtitle}
-            </p>
+              <p className="mt-4 text-base sm:text-lg leading-relaxed text-slate-200/90 max-w-xl drop-shadow">
+                {t.sduken.subtitle}
+              </p>
+            </div>
 
-            {/* Actions & Quick Indicators */}
-            <div className="mt-8 flex flex-wrap items-center gap-4">
+            {/* Bottom: Action CTA & Station count tag */}
+            <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-white/10 md:border-transparent md:pt-0">
               <a
                 href="https://2gis.kz/zhezkazgan/branches/70000001068949326"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-amber-500/20 transition-all hover:from-amber-400 hover:to-amber-500 hover:shadow-amber-500/30"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-amber-500/25 transition-all hover:from-amber-400 hover:to-amber-500 hover:shadow-amber-500/35"
               >
                 <Compass className="size-4" />
                 <span>{t.sduken.gisBtn}</span>
                 <ExternalLink className="size-3.5 opacity-75" />
               </a>
 
-              <div className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-xs font-medium text-slate-300 backdrop-blur-sm">
+              <div className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-slate-950/70 px-4 py-3 text-xs font-medium text-slate-200 backdrop-blur-md">
                 <MapPin className="size-4 text-amber-400" />
                 <span>{t.sduken.stationTag}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Right: Architectural Façade Showcase */}
-          <div className="lg:col-span-5">
-            <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-slate-900 shadow-2xl aspect-[4/3] lg:aspect-[5/4]">
-              <picture>
-                <source srcSet="/images/sduken-night.webp" type="image/webp" />
-                <img
-                  src="/images/sduken-night.jpg"
-                  alt="Фирменный маркет С-Дүкен"
-                  className="h-full w-full object-cover object-center"
-                  loading="lazy"
-                />
-              </picture>
-
-              {/* Cinematic Vignette Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
-
-              {/* Bottom Caption Pill */}
-              <div className="absolute inset-x-4 bottom-4 flex items-center justify-between rounded-xl border border-white/15 bg-slate-950/80 p-3 backdrop-blur-md">
-                <div>
-                  <div className="text-xs font-bold uppercase tracking-wider text-white">
-                    {lang === "kz" ? "АЗС №4 · Ұлытау к-сі, 4/2" : lang === "en" ? "Station #4 · 4/2 Ulytau St" : "АЗС №4 · ул. Ұлытау, 4/2"}
-                  </div>
-                  <div className="text-[11px] text-slate-300">
-                    {lang === "kz" ? "Жезқазған қаласы" : lang === "en" ? "Zhezkazgan City" : "г. Жезказган"}
-                  </div>
-                </div>
-                <span className="rounded-full bg-amber-400 px-2.5 py-0.5 text-[10px] font-bold text-slate-950">
-                  {lang === "kz" ? "Флагман" : lang === "en" ? "Flagship" : "Флагман"}
-                </span>
               </div>
             </div>
           </div>
