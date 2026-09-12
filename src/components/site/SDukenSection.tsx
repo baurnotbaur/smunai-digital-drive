@@ -81,28 +81,37 @@ export function SDukenSection() {
       <div className="pointer-events-none absolute -bottom-32 left-1/4 h-96 w-96 rounded-full bg-teal-500/10 blur-[120px]" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* 1. Brand Banner Card with Panoramic Night Façade Backdrop */}
+        {/* 1. Brand Banner Card with Real Store Façade & Sign */}
         <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-slate-950 p-6 sm:p-8 md:p-12 lg:p-14 shadow-2xl">
-          {/* Panoramic Night Store Façade with glowing С-ДҮКЕН sign on the right */}
-          <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+          {/* Desktop Panoramic Backdrop with real [C] ДҮКЕН sign on the right */}
+          <div className="pointer-events-none absolute inset-0 z-0 hidden overflow-hidden md:block">
             <picture>
-              <source srcSet="/images/sduken-night.webp" type="image/webp" />
+              <source srcSet="/images/sduken-banner.webp" type="image/webp" />
               <img
-                src="/images/sduken-night.jpg"
+                src="/images/sduken-banner.jpg"
                 alt="Фирменный маркет С-Дүкен"
-                className="h-full w-full object-cover object-[80%_center] md:object-[85%_center] opacity-90"
+                className="h-full w-full object-cover object-right lg:object-center"
               />
             </picture>
-
-            {/* Gradients: dark film on the left so copy is 100% legible; transparent on the right so glowing С-ДҮКЕН sign is 100% visible */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-950/30 md:hidden" />
-            <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/85 to-transparent" />
-            <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-slate-950/20" />
+            {/* Subtle top/bottom edge softening */}
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-slate-950/30" />
           </div>
 
           {/* Banner Content */}
-          <div className="relative z-10 flex flex-col justify-between min-h-[380px] sm:min-h-[420px] md:min-h-[460px]">
-            {/* Top row: Brand Badge & Flagship indicator grouped on left, leaving the right side with С-ДҮКЕН sign completely open */}
+          <div className="relative z-10 flex flex-col justify-between min-h-0 md:min-h-[460px]">
+            {/* Mobile-only Real Sign Photo Header (100% visible, crisp daylight sign) */}
+            <div className="mb-6 block overflow-hidden rounded-2xl border border-white/15 shadow-xl md:hidden aspect-[16/9] w-full">
+              <picture>
+                <source srcSet="/images/sduken-mobile.webp" type="image/webp" />
+                <img
+                  src="/images/sduken-mobile.jpg"
+                  alt="Вывеска С-Дүкен"
+                  className="h-full w-full object-cover object-center"
+                />
+              </picture>
+            </div>
+
+            {/* Top row: Brand Badge & Flagship indicator */}
             <div className="flex flex-wrap items-center gap-3">
               <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/40 bg-amber-500/15 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-amber-300 backdrop-blur-md">
                 <Store className="size-3.5 text-amber-400" />
@@ -121,13 +130,13 @@ export function SDukenSection() {
               </div>
             </div>
 
-            {/* Middle: Headline & Subtitle (high contrast, drop-shadow for crystal-clear readability) */}
+            {/* Middle: Headline & Subtitle (high contrast, crisp typography on dark slate) */}
             <div className="my-auto max-w-xl py-6">
               <h2 className="font-heading text-3xl font-bold uppercase tracking-tight text-white sm:text-4xl md:text-5xl leading-[1.08] drop-shadow-lg">
                 {t.sduken.title}
               </h2>
 
-              <p className="mt-4 text-base sm:text-lg leading-relaxed text-slate-100 max-w-lg drop-shadow-md">
+              <p className="mt-4 text-base sm:text-lg leading-relaxed text-slate-200 max-w-lg drop-shadow-md">
                 {t.sduken.subtitle}
               </p>
             </div>

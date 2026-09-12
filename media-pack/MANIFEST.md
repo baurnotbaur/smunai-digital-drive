@@ -29,7 +29,7 @@ media-pack/
 | `images/web/pumps-night.jpg/.webp` | `public/images/station-pumps.jpg` (секция «Топливо», `index.tsx:364`) | Ночные ТРК крупным планом |
 | `images/web/heritage-1996.jpg/.webp` | секция «О нас» (`index.tsx:631`) / карточка «1996» в `AnniversaryTimeline.tsx` | Архивный кадр первой станции, 30 лет |
 | `images/web/career-operator.jpg/.webp` | hero страницы `career.tsx:135` | Кассир подаёт кофе — для вакансий |
-| `images/web/sduken-night.jpg/.webp` | новый баннер в `SDukenSection.tsx` | Флагманский магазин ночью |
+| `images/web/sduken-banner.jpg/.webp` | баннер в `SDukenSection.tsx` | Флагманский маркет АЗС №4 (реальный фасад) |
 | `images/web/espresso-macro.webp`, `coffee-paper-cup.webp`, `croissants-tray.webp`, `croissants-rack.webp`, `latte-turquoise.webp` | карточки услуг «Кофе с собой» / «Магазин» в `SDukenSection.tsx`, `index.tsx` (fuel/services) | Стоковые food-карточки 1280×720 |
 | `images/web/tanker-steppe.jpg/.webp` | hero/баннер `b2b.tsx` | Бензовозы в степи — блок «Бизнесу» |
 | `images/web/stela-night.jpg/.webp` | шапка/заглушка карты `stations.tsx` | Стела ночью, панели БЕЗ цен (политика соблюдена) |
