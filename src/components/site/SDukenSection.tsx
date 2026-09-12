@@ -58,8 +58,8 @@ export function SDukenSection() {
       icon: Sparkles,
       title: t.sduken.drinksTitle,
       desc: t.sduken.drinksDesc,
-      tag: lang === "kz" ? "24/7 Салқын сусындар" : lang === "en" ? "Cold Drinks 24/7" : "Холодные напитки",
-      image: "/images/coffee-paper-cup.webp",
+      tag: lang === "kz" ? "Сусындар мен снектер" : lang === "en" ? "Drinks & Snacks" : "Напитки и снеки",
+      image: "/images/chilled-drinks-snacks.webp",
     },
     {
       icon: Droplets,
