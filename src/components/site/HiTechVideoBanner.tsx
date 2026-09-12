@@ -44,15 +44,24 @@ export function HiTechVideoBanner() {
 
   return (
     <section className="relative overflow-hidden bg-slate-950 py-20 text-white md:py-28" id="hitech">
-      {/* Video Background */}
+      {/* 3D Station Video Background with 3D Poster Fallback */}
       <div className="absolute inset-0 z-0 overflow-hidden">
+        <picture>
+          <source srcSet="/images/station-3d.webp" type="image/webp" />
+          <img
+            src="/images/station-3d.jpg"
+            alt="3D станция С-Мунай"
+            className="absolute inset-0 h-full w-full object-cover opacity-35"
+          />
+        </picture>
         <video
           ref={videoRef}
           autoPlay
           loop
           muted
           playsInline
-          className="h-full w-full object-cover opacity-35"
+          poster="/images/station-3d.webp"
+          className="h-full w-full object-cover opacity-45"
         >
           <source src="/videos/station-1080.webm" type="video/webm" />
           <source src="/videos/station-720.webm" type="video/webm" />

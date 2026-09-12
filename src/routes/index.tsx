@@ -360,13 +360,16 @@ function Index() {
           id="fuel"
           className="relative isolate scroll-mt-28 overflow-hidden bg-primary-deeper py-20 text-white sm:py-28"
         >
-          <img
-            src="/images/station-pumps.jpg"
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 size-full object-cover object-center opacity-45"
-            loading="lazy"
-          />
+          <picture>
+            <source srcSet="/images/station-pumps.webp" type="image/webp" />
+            <img
+              src="/images/station-pumps.jpg"
+              alt="Топливораздаточные колонки С-Мунай"
+              aria-hidden="true"
+              className="absolute inset-0 size-full object-cover object-center opacity-50"
+              loading="lazy"
+            />
+          </picture>
           <div
             className="absolute inset-0 bg-linear-to-b from-primary-deeper/60 via-primary-deeper/85 to-primary-deeper"
             aria-hidden="true"

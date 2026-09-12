@@ -83,33 +83,33 @@ export function SDukenSection() {
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* 1. Brand Banner Card with Panoramic Night Façade Backdrop */}
         <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-slate-950 p-6 sm:p-8 md:p-12 lg:p-14 shadow-2xl">
-          {/* Panoramic Night Store Façade across the full card */}
+          {/* Panoramic Night Store Façade with glowing С-ДҮКЕН sign on the right */}
           <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
             <picture>
               <source srcSet="/images/sduken-night.webp" type="image/webp" />
               <img
                 src="/images/sduken-night.jpg"
                 alt="Фирменный маркет С-Дүкен"
-                className="h-full w-full object-cover object-[center_35%] md:object-[right_center] opacity-80 md:opacity-90"
+                className="h-full w-full object-cover object-[80%_center] md:object-[85%_center] opacity-90"
               />
             </picture>
 
-            {/* Seamless gradients: left dark film for text readability, right illuminated storefront preserved */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/40 md:hidden" />
-            <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent" />
+            {/* Gradients: dark film on the left so copy is 100% legible; transparent on the right so glowing С-ДҮКЕН sign is 100% visible */}
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-950/30 md:hidden" />
+            <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/85 to-transparent" />
             <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-slate-950/20" />
           </div>
 
           {/* Banner Content */}
           <div className="relative z-10 flex flex-col justify-between min-h-[380px] sm:min-h-[420px] md:min-h-[460px]">
-            {/* Top row: Brand Badge & Flagship indicator */}
-            <div className="flex flex-wrap items-center justify-between gap-4">
+            {/* Top row: Brand Badge & Flagship indicator grouped on left, leaving the right side with С-ДҮКЕН sign completely open */}
+            <div className="flex flex-wrap items-center gap-3">
               <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/40 bg-amber-500/15 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-amber-300 backdrop-blur-md">
                 <Store className="size-3.5 text-amber-400" />
                 <span>{t.sduken.badge}</span>
               </div>
 
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-slate-950/75 px-3.5 py-1 text-xs font-medium text-slate-200 backdrop-blur-md">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-slate-950/80 px-3.5 py-1 text-xs font-medium text-slate-200 backdrop-blur-md">
                 <span className="size-2 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]" />
                 <span>
                   {lang === "kz"
@@ -121,13 +121,13 @@ export function SDukenSection() {
               </div>
             </div>
 
-            {/* Middle: Headline & Subtitle */}
-            <div className="my-auto max-w-2xl py-6">
-              <h2 className="font-heading text-3xl font-bold uppercase tracking-tight text-white sm:text-4xl md:text-5xl lg:text-[2.85rem] leading-[1.08] drop-shadow-md">
+            {/* Middle: Headline & Subtitle (high contrast, drop-shadow for crystal-clear readability) */}
+            <div className="my-auto max-w-xl py-6">
+              <h2 className="font-heading text-3xl font-bold uppercase tracking-tight text-white sm:text-4xl md:text-5xl leading-[1.08] drop-shadow-lg">
                 {t.sduken.title}
               </h2>
 
-              <p className="mt-4 text-base sm:text-lg leading-relaxed text-slate-200/90 max-w-xl drop-shadow">
+              <p className="mt-4 text-base sm:text-lg leading-relaxed text-slate-100 max-w-lg drop-shadow-md">
                 {t.sduken.subtitle}
               </p>
             </div>
@@ -145,7 +145,7 @@ export function SDukenSection() {
                 <ExternalLink className="size-3.5 opacity-75" />
               </a>
 
-              <div className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-slate-950/70 px-4 py-3 text-xs font-medium text-slate-200 backdrop-blur-md">
+              <div className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-slate-950/80 px-4 py-3 text-xs font-medium text-slate-200 backdrop-blur-md">
                 <MapPin className="size-4 text-amber-400" />
                 <span>{t.sduken.stationTag}</span>
               </div>
